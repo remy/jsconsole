@@ -81,12 +81,10 @@ function changeView(event){
   if (event.which == 38 && event.shiftKey == true) {
     body.className = '';
     exec.focus();
-    // setTimeout(function () { body.className = body.className; }, 13);
     return false;
   } else if (event.which == 40 && event.shiftKey == true) {
     body.className = 'large';
     exec.focus();
-    // setTimeout(function () { body.className = body.className; }, 13);
     return false;
   }
 }
@@ -136,7 +134,7 @@ exec.onkeydown = function (event) {
         return false;
       }      
     }
-  } else if (event.which == 13) { // enter (what about the other one)
+  } else if (event.which == 13 || event.which == 10) { // enter (what about the other one)
     if (event.shiftKey == true || event.metaKey || event.ctrlKey || !body.className) {
       post(exec.value);
       return false;      
