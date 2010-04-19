@@ -43,14 +43,15 @@ function stringify(o, simple) {
 
 function run(cmd) {
   // debugger;
-  var rawoutput = null;
+  var rawoutput = null, className = 'prompt';
   try {
     rawoutput = sandboxframe.contentWindow.eval(cmd);
   } catch (e) {
     rawoutput = e.message;
+    className = 'error';
   }
 
-  return stringify(rawoutput).replace(/[<>&]/g, function (m) { return {'&':'&amp;','>':'&gt;','<':'&lt;'}[m];});
+  return [className, stringify(rawoutput).replace(/[<>&]/g, function (m) { return {'&':'&amp;','>':'&gt;','<':'&lt;'}[m];})];
 }
 
 function post(cmd) {
@@ -58,10 +59,11 @@ function post(cmd) {
   
   // order so it appears at the top  
   var li = document.createElement('li'),
-      parent = output.parentNode;
+      parent = output.parentNode, 
+      response = run(cmd);
       
-  li.className = 'prompt';
-  li.innerHTML = '<strong>' + cmd + '</strong><br /><span>'  + run(cmd) + '</span>';
+  li.className = response[0];
+  li.innerHTML = '<strong>' + cmd + '</strong><br /><span>'  + response[1] + '</span>';
   prettyPrint([li]);
 
   if (!output.firstChild) {
