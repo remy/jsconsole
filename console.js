@@ -79,11 +79,12 @@ function post(cmd) {
 }
 
 function changeView(event){
-  if (event.which == 38 && event.shiftKey == true) {
+  var which = event.which || event.keyCode;
+  if (which == 38 && event.shiftKey == true) {
     body.className = '';
     exec.focus();
     return false;
-  } else if (event.which == 40 && event.shiftKey == true) {
+  } else if (which == 40 && event.shiftKey == true) {
     body.className = 'large';
     exec.focus();
     return false;
@@ -190,16 +191,16 @@ setTimeout(function () {
 
 exec.onkeydown = function (event) {
   event = event || window.event;
-  var keys = {38:1, 40:1}, wide = body.className == 'large';
+  var keys = {38:1, 40:1}, wide = body.className == 'large', which = event.which || event.keyCode;
   
-  if (keys[event.which] && !iphone) {
+  if (keys[which] && !iphone) {
     if (event.shiftKey) {
       changeView(event);
     } else if (!wide) {
-      if (event.which == 38) { // cycle up
+      if (which == 38) { // cycle up
         pos--;
         if (pos < 0) pos = history.length - 1;
-      } else if (event.which == 40) { // down
+      } else if (which == 40) { // down
         pos++;
         if (pos >= history.length) pos = 0;
       } 
@@ -209,14 +210,14 @@ exec.onkeydown = function (event) {
         return false;
       }
     }
-  } else if (event.which == 13 || event.which == 10) { // enter (what about the other one)
+  } else if (which == 13 || which == 10) { // enter (what about the other one)
     if (event.shiftKey == true || event.metaKey || event.ctrlKey || !wide) {
       post(exec.value);
       return false;
     }
-  } else if (event.which == 9 && wide) {
+  } else if (which == 9 && wide) {
     checkTab(event);
-  } else if (event.shiftKey && event.metaKey && event.which == 8) {
+  } else if (event.shiftKey && event.metaKey && which == 8) {
     output.innerHTML = '';
   }
 };
@@ -230,8 +231,9 @@ form.onsubmit = function (event) {
 
 document.onkeydown = function (event) {
   event = event || window.event;
+  var which = event.which || event.keyCode;
   
-  if (event.shiftKey && event.metaKey && event.which == 8) {
+  if (event.shiftKey && event.metaKey && which == 8) {
     output.innerHTML = '';
     exec.focus();
   }
