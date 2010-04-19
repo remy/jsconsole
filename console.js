@@ -174,16 +174,19 @@ var exec = document.getElementById('exec'),
     history = [],
     pos = 0,
     wide = true,
-    body = document.body,
+    body = document.getElementsByTagName('body')[0],
     // this sucks, but the iPhone is reporting '&' as up cursor and '(' as down
     iphone = (/iphone/i).test(window.navigator.userAgent);
- 
+
 body.appendChild(sandboxframe);
 sandboxframe.setAttribute('id', 'sandbox');
 sandbox = sandboxframe.contentDocument || sandboxframe.contentWindow.document;
-sandbox.open();
-sandbox.write('<script>var console = ' + stringify(_console).replace(/\\n/g, ' ') + ';</script>');
-sandbox.close();
+// required in Firefox, because it needs a moment to drop the iframe into the doc
+setTimeout(function () {
+  sandbox.open();
+  sandbox.write('<script>var console = ' + stringify(_console).replace(/\\n/g, ' ') + ';</script>');
+  sandbox.close();  
+}, 13);
 
 exec.onkeydown = function (event) {
   event = event || window.event;
