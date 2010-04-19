@@ -1,5 +1,4 @@
 /* allow the debug to be printed */
-@media print {
-  body { overflow: auto; }
-  #console { overflow: visible; }
-}
+body { overflow: auto; }
+#console { overflow: visible; }
+input,textarea { -webkit-border-radius: 0; }
