@@ -1,0 +1,59 @@
+* { margin: 0; padding: 0; }
+html { height: 100%; background: #fff; }
+body { height: 100%; overflow: hidden; border: 0; margin: 0; padding: 0; }
+input, textarea { margin: 0; padding: 0; position: relative; font-family: "helvetica neue", arial, helvetica; font-size: 18px; padding: 2px; }
+#output { font-family: monospace; list-style: none; }
+#output li { margin: 5px 0; padding: 10px; border-bottom: 5px solid #EEEFEE; white-space: pre-wrap; }
+#output li.prompt:before { content: '> '; color: #3583FC; font-size: 18px; font-weight: bold; }
+.error { color: #B32200; }
+form { position: absolute; top: 0; width: 100%;}
+/*form p { font-family: monospace; font-weight: bold; background: #A9A9A8; color: #fff; text-shadow: 1px 1px 0 #000; padding: 5px; font-size: 28px; height: 34px;}*/
+#console { position: absolute; left: 0; right: 0; width: 100%; bottom: 0; overflow: auto; }
+#exec { font-family: monospace; width: 100%; font-weight: bold; border: 0; padding: 5px; outline: 0; background: #eee; -webkit-box-shadow: 0px 2px 10px rgba(0,0,0,.3); }
+iframe { display: none; }
+#exec { background: #1F53B0; color: #fff;}
+#exec { background: #E6E8F2; color: #000; }
+
+/* font size control */
+#console { top: 34px; }
+#output li, #exec { min-height: 24px; font-size: 18px; padding: 5px; }
+
+body.large #console { top: 0; right: 400px; width: auto; }
+body.large form { right: 0; width: 400px; bottom: 0; }
+body.large #exec { display: block; top: 0; bottom: 0; height: 100%; z-index: 10; background: #E6E8F2; color: #000; -webkit-box-shadow: none; border-left: 1px solid #AAABB8; }
+
+/* allow the debug to be printed */
+@media print {
+  body { overflow: auto; }
+  #console { overflow: visible; }
+}
+
+/* code */
+/** Pretty printing styles. Used with prettify.js. */
+
+.str { color: #080; }
+.kwd { color: #008; }
+.com { color: #800; }
+.typ { color: #606; }
+.lit { color: #066; }
+.pun { color: #660; }
+.pln { color: #000; }
+.tag { color: #008; }
+.atn { color: #606; }
+.atv { color: #080; }
+.dec { color: #606; }
+pre.prettyprint { padding: 2px; border: 1px solid #888; }
+
+@media print {
+  .str { color: #060; }
+  .kwd { color: #006; font-weight: bold; }
+  .com { color: #600; font-style: italic; }
+  .typ { color: #404; font-weight: bold; }
+  .lit { color: #044; }
+  .pun { color: #440; }
+  .pln { color: #000; }
+  .tag { color: #006; font-weight: bold; }
+  .atn { color: #404; }
+  .atv { color: #060; }
+}
+
