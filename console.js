@@ -59,6 +59,7 @@ function post(cmd) {
   // order so it appears at the top  
   var li = document.createElement('li'),
       parent = output.parentNode;
+      
   li.className = 'prompt';
   li.innerHTML = '<strong>' + cmd + '</strong><br /><span>'  + run(cmd) + '</span>';
   prettyPrint([li]);
@@ -158,5 +159,3 @@ if (window.location.search) {
 }
 
 })(this);
-
-var remy = 31;
