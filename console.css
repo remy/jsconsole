@@ -11,6 +11,7 @@ form { position: absolute; top: 0; width: 100%;}
 #console { position: absolute; left: 0; right: 0; width: 100%; bottom: 0; overflow: auto; }
 #exec { font-family: monospace; width: 100%; font-weight: bold; border: 0; padding: 5px; outline: 0; background: #eee; -webkit-box-shadow: 0px 2px 10px rgba(0,0,0,.3); }
 iframe { display: none; }
+#exec { background: #E6E8F2; color: #000; }
 #exec { border-bottom: 1px solid #AAABB8; }
 
 /* font size control */
@@ -19,7 +20,7 @@ iframe { display: none; }
 
 body.large #console { top: 0; right: 400px; width: auto; }
 body.large form { right: 0; width: 400px; bottom: 0; }
-body.large #exec { display: block; top: 0; bottom: 0; height: 100%; z-index: 10; background: #E6E8F2; color: #000; -webkit-box-shadow: none; border-left: 1px solid #AAABB8; }
+body.large #exec { width: 390px; border-bottom: 0; top: 0; bottom: 0; height: 100%; z-index: 10; background: #E6E8F2; color: #000; -webkit-box-shadow: none; border-left: 1px solid #AAABB8; }
 
 /* allow the debug to be printed */
 @media print {

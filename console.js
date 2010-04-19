@@ -66,17 +66,26 @@ function post(cmd) {
   if (!output.firstChild) {
     output.appendChild(li);
   } else {
-    console.log(output.parentNode, output.firstChild);
-    // debugger;
     output.insertBefore(li, output.firstChild);
   }
-  
-  
-  // output.innerHTML = output.innerHTML;
   
   output.parentNode.scrollTop = 0;
   exec.value = '';
   pos = history.length;
+}
+
+function changeView(event){
+  if (event.which == 38 && event.shiftKey == true) {
+    body.className = '';
+    exec.focus();
+    // setTimeout(function () { body.className = body.className; }, 13);
+    return false;
+  } else if (event.which == 40 && event.shiftKey == true) {
+    body.className = 'large';
+    exec.focus();
+    // setTimeout(function () { body.className = body.className; }, 13);
+    return false;
+  }
 }
 
 var _console = {
@@ -108,18 +117,22 @@ sandbox.close();
 exec.onkeydown = function (event) {
   var keys = {38:1, 40:1};
   if (keys[event.which]) {
-    if (event.which == 38) { // cycle up
-      pos--;
-      if (pos < 0) pos = history.length - 1;
-    } else if (event.which == 40) { // down
-      pos++;
-      if (pos >= history.length) pos = 0;
-    } 
-    if (history[pos]) {
-      exec.value = history[pos];
-      // event.preventDefault && event.preventDefault();
-      return false;
-    } 
+    if (event.shiftKey) {
+      changeView(event);
+    } else {
+      if (event.which == 38) { // cycle up
+        pos--;
+        if (pos < 0) pos = history.length - 1;
+      } else if (event.which == 40) { // down
+        pos++;
+        if (pos >= history.length) pos = 0;
+      } 
+      if (history[pos]) {
+        exec.value = history[pos];
+        // event.preventDefault && event.preventDefault();
+        return false;
+      }      
+    }
   } else if (event.which == 13) { // enter (what about the other one)
     if (event.shiftKey == true || event.metaKey || event.ctrlKey || !body.className) {
       post(exec.value);
@@ -137,15 +150,7 @@ form.onsubmit = function (event) {
 
 document.onkeydown = function (event) {
   event = event || window.event;
-  if (event.which == 38 && event.shiftKey == true) {
-    body.className = '';
-    exec.focus();
-    return false;
-  } else if (event.which == 40 && event.shiftKey == true) {
-    body.className = 'large';
-    exec.focus();
-    return false;
-  }
+  return changeView(event);
 }
 
 if (window.location.search) {
