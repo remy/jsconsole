@@ -1,20 +1,25 @@
 * { margin: 0; padding: 0; }
 html { height: 100%; background: #fff; }
-body { height: 100%; overflow: hidden; border: 0; margin: 0; padding: 0; }
-input, textarea { margin: 0; padding: 0; position: relative; font-family: "helvetica neue", arial, helvetica; font-size: 18px; padding: 2px; }
+body { height: 100%; overflow: hidden; border: 0; margin: 0; padding: 0; font-family: "helvetica neue", arial, helvetica;  }
+input, textarea { margin: 0; padding: 0; position: relative; font-size: 18px; padding: 2px; }
 #output { font-family: monospace; list-style: none; }
 #output li { margin: 5px 0; padding: 10px; border-bottom: 5px solid #EEEFEE; white-space: pre-wrap; }
+#output li:last-child { border-bottom: 0;}
 #output li.prompt:before { content: '> '; color: #3583FC; font-size: 18px; font-weight: bold; }
 #output li.error:before { content: '⨯ '; color: #E81D20; font-size: 28px; font-weight: bold; margin-right: -10px; line-height: 18px; }
 form { position: absolute; top: 0; width: 100%;}
-#console { position: absolute; left: 0; right: 0; width: 100%; bottom: 0; overflow: auto; }
-#exec { font-family: monospace; width: 100%; font-weight: bold; border: 0; padding: 5px; outline: 0; background: #eee; -webkit-box-shadow: 0px 2px 10px rgba(0,0,0,.3); }
+#console { position: absolute; left: 0; right: 0; width: 100%; bottom: 0; overflow: auto; border-bottom: 1px solid #5B5C5B; }
+#exec { font-family: monospace; width: 100%; border: 0; padding: 5px; outline: 0; background: #eee; -webkit-box-shadow: 0px 2px 10px rgba(0,0,0,.3); }
 iframe { display: none; }
 #exec { background: #E6E8F2; color: #000; }
 #exec { border-bottom: 1px solid #AAABB8; }
 
+#footer { position: absolute; bottom: 0; left: 0; right: 0; height: 24px; background: #000; background-color: rgba(158, 158, 158, 0.8); color: #9E9F9E; color: rgba(158, 158, 158, 0.5); width: 100%; padding: 5px; color: #fff;  text-shadow: 1px 1px 0 #000; line-height: 24px; border-top: 1px solid #CED1CE; -webkit-transition: background-color ease-out 100ms; -moz-transition: background-color ease-out 100ms; -o-transition: background-color ease-out 100ms; transition: background-color ease-out 100ms; }
+#footer:hover { background: #9E9F9E; }
+#footer a { text-transform: lowercase; margin: 0 5px; color: #fff; text-decoration: none; text-shadow: 1px 1px 0 #000; }
+
 /* font size control */
-#console { top: 34px; }
+#console { top: 35px; bottom: 35px; }
 #output li, #exec { min-height: 24px; font-size: 18px; padding: 5px; }
 
 body.large #console { top: 0; right: 400px; width: auto; }
