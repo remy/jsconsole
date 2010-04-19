@@ -158,4 +158,8 @@ if (window.location.search) {
   post(decodeURIComponent(window.location.search.substr(1)));
 }
 
+setTimeout(function () {
+  window.scrollTo(0, 1);
+}, 13);
+
 })(this);
