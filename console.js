@@ -139,10 +139,12 @@ document.onkeydown = function (event) {
   event = event || window.event;
   if (event.which == 38 && event.shiftKey == true) {
     body.className = '';
-    setTimeout(function () { exec.focus(); console.log('ok'); }, 200);
+    exec.focus();
+    return false;
   } else if (event.which == 40 && event.shiftKey == true) {
     body.className = 'large';
-    setTimeout(function () { exec.focus(); console.log(exec); }, 200);
+    exec.focus();
+    return false;
   }
 }
 
