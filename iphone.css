@@ -1,0 +1,5 @@
+/* allow the debug to be printed */
+@media print {
+  body { overflow: auto; }
+  #console { overflow: visible; }
+}
