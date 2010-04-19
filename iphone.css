@@ -1,4 +1,5 @@
 /* allow the debug to be printed */
-body { overflow: auto; }
-#console { overflow: visible; }
+/*body { overflow: auto; }*/
+#console { overflow: visible; bottom: 0; border-bottom: 0; }
 input,textarea { -webkit-border-radius: 0; }
+#footer { display: none; }

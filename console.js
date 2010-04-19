@@ -174,7 +174,9 @@ var exec = document.getElementById('exec'),
     history = [],
     pos = 0,
     wide = true,
-    body = document.body;
+    body = document.body,
+    // this sucks, but the iPhone is reporting '&' as up cursor and '(' as down
+    iphone = (/iphone/i).test(window.navigator.userAgent);
  
 body.appendChild(sandboxframe);
 sandboxframe.setAttribute('id', 'sandbox');
@@ -186,7 +188,8 @@ sandbox.close();
 exec.onkeydown = function (event) {
   event = event || window.event;
   var keys = {38:1, 40:1}, wide = body.className == 'large';
-  if (keys[event.which]) {
+  
+  if (keys[event.which] && !iphone) {
     if (event.shiftKey) {
       changeView(event);
     } else if (!wide) {
