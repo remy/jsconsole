@@ -30,7 +30,7 @@ function stringify(o, simple) {
   } else if (o == undefined) {
     json = 'undefined';
   } else if (simple == undefined) {
-    json = o.toString() + '{\n';
+    json = type + '{\n';
     for (i in o) {
       parts.push(i + ': ' + stringify(o[i], true)); // safety from max stack
     }
