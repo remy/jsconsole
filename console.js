@@ -41,6 +41,10 @@ function stringify(o, simple) {
   return json; //.replace(/\n/g, '\\n');
 }
 
+function cleanse(s) {
+  return s.replace(/[<>&]/g, function (m) { return {'&':'&amp;','>':'&gt;','<':'&lt;'}[m];});
+}
+
 function run(cmd) {
   // debugger;
   var rawoutput = null, className = 'prompt';
@@ -51,7 +55,7 @@ function run(cmd) {
     className = 'error';
   }
 
-  return [className, stringify(rawoutput).replace(/[<>&]/g, function (m) { return {'&':'&amp;','>':'&gt;','<':'&lt;'}[m];})];
+  return [className, cleanse(stringify(rawoutput))];
 }
 
 function post(cmd) {
@@ -59,13 +63,22 @@ function post(cmd) {
   history.push(cmd);
   
   // order so it appears at the top  
-  var li = document.createElement('li'),
+  var el = document.createElement('div'),
+      li = document.createElement('li'),
+      span = document.createElement('span'),
       parent = output.parentNode, 
       response = run(cmd);
       
-  li.className = response[0];
-  li.innerHTML = '<strong>' + cmd + '</strong><br /><span>'  + response[1] + '</span>';
-  prettyPrint([li]);
+  el.className = 'response ' + response[0];
+  el.innerHTML = '<strong>' + cleanse(cmd) + '</strong><br />';
+  
+  span.innerHTML = response[1];
+  
+  prettyPrint([span]);
+  el.appendChild(span);
+  
+  li.innerHTML = '<span class="gutter ' + response[0] + '"></span>';
+  li.appendChild(el);
 
   if (!output.firstChild) {
     output.appendChild(li);
@@ -172,35 +185,34 @@ var exec = document.getElementById('exec'),
     output = document.getElementById('output'),
     sandboxframe = document.createElement('iframe'),
     sandbox = null,
+    fakeConsole = stringify(_console).replace(/\\n/g, ' '),
     history = [],
     pos = 0,
     wide = true,
-    body = document.getElementsByTagName('body')[0],
-    // this sucks, but the iPhone is reporting '&' as up cursor and '(' as down
-    iphone = (/iphone/i).test(window.navigator.userAgent);
+    body = document.getElementsByTagName('body')[0];
 
 body.appendChild(sandboxframe);
 sandboxframe.setAttribute('id', 'sandbox');
 sandbox = sandboxframe.contentDocument || sandboxframe.contentWindow.document;
-// required in Firefox, because it needs a moment to drop the iframe into the doc
-setTimeout(function () {
-  sandbox.open();
-  sandbox.write('<script>var console = ' + stringify(_console).replace(/\\n/g, ' ') + ';</script>');
-  sandbox.close();  
-}, 13);
+sandbox.open();
+// stupid jumping through hoops if Firebug is open, since overwriting console throws error
+sandbox.write('<script>if (console != undefined) { console.log = ' + fakeConsole + '.log; console.dir = ' + fakeConsole + '.dir; } else { console = ' + fakeConsole + ';}</script>');
+sandbox.close();
 
 exec.onkeydown = function (event) {
   event = event || window.event;
-  var keys = {38:1, 40:1}, wide = body.className == 'large', which = event.which || event.keyCode;
-  
-  if (keys[which] && !iphone) {
+  var keys = {38:1, 40:1, Up:1, Down:1}, 
+      wide = body.className == 'large', 
+      which = event.keyIdentifier || event.which || event.keyCode;
+  if (typeof which == 'string') which = which.replace(/\/U\+/, '\\u');
+  if (keys[which]) {
     if (event.shiftKey) {
       changeView(event);
     } else if (!wide) {
-      if (which == 38) { // cycle up
+      if (which == 38 || which == 'Up') { // cycle up
         pos--;
         if (pos < 0) pos = history.length - 1;
-      } else if (which == 40) { // down
+      } else if (which == 40 || which == 'Down') { // down
         pos++;
         if (pos >= history.length) pos = 0;
       } 
@@ -210,14 +222,14 @@ exec.onkeydown = function (event) {
         return false;
       }
     }
-  } else if (which == 13 || which == 10) { // enter (what about the other one)
+  } else if (which == 13 || which == 10 || which == 'Enter') { // enter (what about the other one)
     if (event.shiftKey == true || event.metaKey || event.ctrlKey || !wide) {
       post(exec.value);
       return false;
     }
-  } else if (which == 9 && wide) {
+  } else if ((which == 9 || which == 'U+0009') && wide) {
     checkTab(event);
-  } else if (event.shiftKey && event.metaKey && which == 8) {
+  } else if (event.shiftKey && event.metaKey && (which == 8 || which == 'U+0008')) {
     output.innerHTML = '';
   }
 };
