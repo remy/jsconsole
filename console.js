@@ -25,9 +25,9 @@ function stringify(o, simple) {
     json = o ? 'true' : 'false';
   } else if (type == '[object Function]') {
     json = o.toString();
-  } else if (o == null) {
+  } else if (o === null) {
     json = 'null';
-  } else if (o == undefined) {
+  } else if (o === undefined) {
     json = 'undefined';
   } else if (simple == undefined) {
     json = type + '{\n';
@@ -36,9 +36,9 @@ function stringify(o, simple) {
     }
     json += parts.join(',\n') + '\n}';
   } else {
-    json = '"' + o + '"';
+    json = o+''; // should look like an object
   }
-  return json; //.replace(/\n/g, '\\n');
+  return json;
 }
 
 function cleanse(s) {
@@ -46,8 +46,8 @@ function cleanse(s) {
 }
 
 function run(cmd) {
-  // debugger;
-  var rawoutput = null, className = 'prompt';
+  var rawoutput = null, className = 'response';
+
   try {
     rawoutput = sandboxframe.contentWindow.eval(cmd);
   } catch (e) {
@@ -62,33 +62,65 @@ function post(cmd) {
   cmd = trim(cmd);
   history.push(cmd);
   
+  echo(cmd);
+  
   // order so it appears at the top  
   var el = document.createElement('div'),
       li = document.createElement('li'),
       span = document.createElement('span'),
       parent = output.parentNode, 
       response = run(cmd);
-      
-  el.className = 'response ' + response[0];
-  el.innerHTML = '<strong>' + cleanse(cmd) + '</strong><br />';
-  
+    
+  el.className = 'response';
   span.innerHTML = response[1];
-  
+
   prettyPrint([span]);
   el.appendChild(span);
-  
-  li.innerHTML = '<span class="gutter ' + response[0] + '"></span>';
+
+  li.className = response[0];
+  li.innerHTML = '<span class="gutter"></span>';
   li.appendChild(el);
 
-  if (!output.firstChild) {
-    output.appendChild(li);
-  } else {
-    output.insertBefore(li, output.firstChild);
-  }
-  
+  appendLog(li);
+    
   output.parentNode.scrollTop = 0;
   if (!body.className) exec.value = '';
   pos = history.length;
+}
+
+function log(msg) {
+  var li = document.createElement('li'),
+      div = document.createElement('div');
+
+  div.innerHTML = msg;
+  prettyPrint([div]);
+  li.className = 'log';
+  li.innerHTML = '<span class="gutter"></span>';
+  li.appendChild(div);
+
+  appendLog(li);
+}
+
+function echo(cmd) {
+  var li = document.createElement('li');
+
+  li.className = 'echo';
+  li.innerHTML = '<span class="gutter"></span><div>' + cleanse(cmd) + '</div>';
+
+  logAfter = output.querySelectorAll('li.echo')[0] || null;
+  appendLog(li, true);
+}
+
+function appendLog(el, echo) {
+  if (echo) {
+    if (!output.firstChild) {
+      output.appendChild(el);
+    } else {
+      output.insertBefore(el, output.firstChild);
+    }      
+  } else {
+    output.insertBefore(el, logAfter ? logAfter : output.lastChild.nextSibling);
+  }
 }
 
 function changeView(event){
@@ -171,12 +203,18 @@ function trim(s) {
   return (s||"").replace(/^\s+|\s+$/g,"");
 }
 
-var _console = {
-  log: function (s) {
-    return s;
+window._console = {
+  log: function () {
+    var l = arguments.length, i = 0;
+    for (; i < l; i++) {
+      log(stringify(arguments[i], true));
+    }
   },
-  dir: function (s) {
-    return s;
+  dir: function () {
+    var l = arguments.length, i = 0;
+    for (; i < l; i++) {
+      log(stringify(arguments[i]));
+    }
   }
 };
 
@@ -185,18 +223,20 @@ var exec = document.getElementById('exec'),
     output = document.getElementById('output'),
     sandboxframe = document.createElement('iframe'),
     sandbox = null,
-    fakeConsole = stringify(_console).replace(/\\n/g, ' '),
-    history = [],
+    // fakeConsole = stringify(_console).replace(/\\n/g, ' '),
+    fakeConsole = 'window.top._console',
+    history = [''],
     pos = 0,
     wide = true,
-    body = document.getElementsByTagName('body')[0];
+    body = document.getElementsByTagName('body')[0],
+    logAfter = null;
 
 body.appendChild(sandboxframe);
 sandboxframe.setAttribute('id', 'sandbox');
 sandbox = sandboxframe.contentDocument || sandboxframe.contentWindow.document;
 sandbox.open();
 // stupid jumping through hoops if Firebug is open, since overwriting console throws error
-sandbox.write('<script>if (console != undefined) { console.log = ' + fakeConsole + '.log; console.dir = ' + fakeConsole + '.dir; } else { console = ' + fakeConsole + ';}</script>');
+sandbox.write('<script>(function () { var fakeConsole = ' + fakeConsole + '; if (console != undefined) { for (var k in fakeConsole) { console[k] = fakeConsole[k]; } } else { console = fakeConsole; } })();</script>');
 sandbox.close();
 
 exec.onkeydown = function (event) {
