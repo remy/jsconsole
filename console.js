@@ -48,14 +48,19 @@ function cleanse(s) {
 function run(cmd) {
   var rawoutput = null, className = 'response';
 
-  try {
-    rawoutput = sandboxframe.contentWindow.eval(cmd);
-  } catch (e) {
-    rawoutput = e.message;
-    className = 'error';
+  if (!help.test(cmd)) {
+    try {
+      rawoutput = sandboxframe.contentWindow.eval(cmd);
+    } catch (e) {
+      rawoutput = e.message;
+      className = 'error';
+    }
+    return [className, cleanse(stringify(rawoutput))];
+  } else {
+    return [className, showhelp()];
   }
 
-  return [className, cleanse(stringify(rawoutput))];
+  // return [className, cleanse(stringify(rawoutput))];
 }
 
 function post(cmd) {
@@ -74,7 +79,7 @@ function post(cmd) {
   el.className = 'response';
   span.innerHTML = response[1];
 
-  prettyPrint([span]);
+  if (!help.test(cmd)) prettyPrint([span]);
   el.appendChild(span);
 
   li.className = response[0];
@@ -134,6 +139,10 @@ function changeView(event){
     exec.focus();
     return false;
   }
+}
+
+function showhelp() {
+  return 'up/down - cycle history<br />\nshift+up - single line command<br />\nshift+down - multiline command<br />\nshift+enter - to run command in multiline mode';
 }
 
 function checkTab(evt) {
@@ -223,13 +232,13 @@ var exec = document.getElementById('exec'),
     output = document.getElementById('output'),
     sandboxframe = document.createElement('iframe'),
     sandbox = null,
-    // fakeConsole = stringify(_console).replace(/\\n/g, ' '),
     fakeConsole = 'window.top._console',
     history = [''],
     pos = 0,
     wide = true,
     body = document.getElementsByTagName('body')[0],
-    logAfter = null;
+    logAfter = null,
+    help = /^:help$/i;
 
 body.appendChild(sandboxframe);
 sandboxframe.setAttribute('id', 'sandbox');
@@ -239,37 +248,41 @@ sandbox.open();
 sandbox.write('<script>(function () { var fakeConsole = ' + fakeConsole + '; if (console != undefined) { for (var k in fakeConsole) { console[k] = fakeConsole[k]; } } else { console = fakeConsole; } })();</script>');
 sandbox.close();
 
+// tweaks to interface to allow focus
+if (!('autofocus' in document.createElement('input'))) exec.focus();
+output.parentNode.tabIndex = 0;
+
 exec.onkeydown = function (event) {
   event = event || window.event;
-  var keys = {38:1, 40:1, Up:1, Down:1}, 
+  var keys = {38:1, 40:1, Up:38, Down:40, Enter:10, 'U+0009':9, 'U+0008':8}, 
       wide = body.className == 'large', 
-      which = event.keyIdentifier || event.which || event.keyCode;
+      which = keys[event.keyIdentifier] || event.which || event.keyCode;
   if (typeof which == 'string') which = which.replace(/\/U\+/, '\\u');
   if (keys[which]) {
     if (event.shiftKey) {
       changeView(event);
     } else if (!wide) {
-      if (which == 38 || which == 'Up') { // cycle up
+      if (which == 38) { // cycle up
         pos--;
         if (pos < 0) pos = history.length - 1;
-      } else if (which == 40 || which == 'Down') { // down
+      } else if (which == 40) { // down
         pos++;
         if (pos >= history.length) pos = 0;
       } 
-      if (history[pos]) {
+      if (history[pos] != undefined) {
         exec.value = history[pos];
         // event.preventDefault && event.preventDefault();
         return false;
       }
     }
-  } else if (which == 13 || which == 10 || which == 'Enter') { // enter (what about the other one)
+  } else if (which == 13 || which == 10) { // enter (what about the other one)
     if (event.shiftKey == true || event.metaKey || event.ctrlKey || !wide) {
       post(exec.value);
       return false;
     }
-  } else if ((which == 9 || which == 'U+0009') && wide) {
+  } else if (which == 9 && wide) {
     checkTab(event);
-  } else if (event.shiftKey && event.metaKey && (which == 8 || which == 'U+0008')) {
+  } else if (event.shiftKey && event.metaKey && which == 8) {
     output.innerHTML = '';
   }
 };
@@ -288,7 +301,10 @@ document.onkeydown = function (event) {
   if (event.shiftKey && event.metaKey && which == 8) {
     output.innerHTML = '';
     exec.focus();
+  } else if (event.target != exec && which == 32) { // space
+    output.parentNode.scrollTop += 5 + output.parentNode.offsetHeight * (event.shiftKey ? -1 : 1);
   }
+  
   return changeView(event);
 };
 
