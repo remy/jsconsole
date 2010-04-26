@@ -48,7 +48,7 @@ function cleanse(s) {
 function run(cmd) {
   var rawoutput = null, className = 'response';
 
-  if (!help.test(cmd)) {
+  if (!commands[cmd]) {
     try {
       rawoutput = sandboxframe.contentWindow.eval(cmd);
     } catch (e) {
@@ -57,7 +57,7 @@ function run(cmd) {
     }
     return [className, cleanse(stringify(rawoutput))];
   } else {
-    return [className, showhelp()];
+    return [className, commands[cmd]()];
   }
 
   // return [className, cleanse(stringify(rawoutput))];
@@ -79,7 +79,7 @@ function post(cmd) {
   el.className = 'response';
   span.innerHTML = response[1];
 
-  if (!help.test(cmd)) prettyPrint([span]);
+  if (!commands[cmd]) prettyPrint([span]);
   el.appendChild(span);
 
   li.className = response[0];
@@ -227,6 +227,14 @@ window._console = {
   }
 };
 
+document.addEventListener ? 
+  window.addEventListener('message', function (event) {
+    post(event.data);
+  }, false) : 
+  window.attachEvent('onmessage', function () {
+    post(window.event.data);
+  });
+
 var exec = document.getElementById('exec'),
     form = exec.form,
     output = document.getElementById('output'),
@@ -238,7 +246,7 @@ var exec = document.getElementById('exec'),
     wide = true,
     body = document.getElementsByTagName('body')[0],
     logAfter = null,
-    help = /^:help$/i;
+    commands = { ':help' : showhelp, ':load' : function () {} };
 
 body.appendChild(sandboxframe);
 sandboxframe.setAttribute('id', 'sandbox');
