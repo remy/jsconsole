@@ -5,12 +5,13 @@ input, textarea { margin: 0; padding: 0; position: relative; font-size: 18px; pa
 #output { font-family: monospace; list-style: none; }
 #output li { margin: 5px 0; padding: 10px; border-top: 1px solid #EEEFEE; white-space: pre-wrap; }
 #output li:last-child { border-bottom: 0;}
-form { position: absolute; top: 0; width: 100%;}
+/*form { position: absolute; top: 0; width: 100%;}*/
 #console { position: absolute; left: 0; right: 0; width: 100%; bottom: 0; overflow: auto; border-bottom: 1px solid #5B5C5B; }
 #console span.gutter { float: left; display: block; width: 5px; }
 
 /* log types */
 #console .echo span.gutter:before { content: '> '; color: #3583FC; font-size: 18px; font-weight: bold; }
+#console .info span.gutter:before { content: 'i '; color: #27A700; font-size: 18px; font-weight: bold; }
 #console .error span.gutter:before { content: '\0000D7 '; color: #E81D20; font-size: 28px; font-weight: bold; margin-right: -10px; line-height: 24px; }
 #console .response span.gutter:before { content: '« '; color: #BDC3CD; font-size: 18px; font-weight: normal; margin-right: -10px; line-height: 18px; }
 
@@ -23,12 +24,12 @@ form { position: absolute; top: 0; width: 100%;}
 #output li.response + li.echo { border-width: 2px; border-color: #DFDFDF; }
 #output li.error + li.echo { border-width: 2px; border-color: #DFDFDF; }
 #output li.log + li.echo { border-width: 2px; border-color: #DFDFDF; }
+#output li.info + li.echo { border-width: 2px; border-color: #DFDFDF; }
 
 #output li.echo:first-child { border-width: 0;}
 
-#exec { font-family: monospace; width: 100%; border: 0; padding: 5px; outline: 0; background: #eee; -webkit-box-shadow: 0px 2px 10px rgba(0,0,0,.3); }
 iframe { display: none; }
-#exec { background: #E6E8F2; color: #000; border-bottom: 1px solid #AAABB8; height: 24px; line-height: 24px; }
+#exec { resize: none; font-family: monospace; position: absolute; left: 0; right: 0; border: 0; padding: 5px; outline: 0; background: #eee; -webkit-box-shadow: 0px 2px 10px rgba(0,0,0,.3); background: #E6E8F2; color: #000; border-bottom: 1px solid #AAABB8; height: 24px; line-height: 24px; }
 
 #footer { position: absolute; bottom: 0; left: 0; right: 0; height: 24px; background: #000; background-color: rgba(158, 158, 158, 0.8); color: #9E9F9E; color: rgba(158, 158, 158, 0.5); width: 100%; padding: 5px; color: #fff;  text-shadow: 1px 1px 0 #000; line-height: 24px; border-top: 1px solid #CED1CE; -webkit-transition: background-color ease-out 100ms; -moz-transition: background-color ease-out 100ms; -o-transition: background-color ease-out 100ms; transition: background-color ease-out 100ms; }
 #footer:hover { background: #9E9F9E; }

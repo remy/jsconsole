@@ -46,9 +46,13 @@ function cleanse(s) {
 }
 
 function run(cmd) {
-  var rawoutput = null, className = 'response';
+  var rawoutput = null, 
+      className = 'response',
+      internalCmd = internalCommand(cmd);
 
-  if (!commands[cmd]) {
+  if (internalCmd) {
+    return ['info', internalCmd];
+  } else {
     try {
       rawoutput = sandboxframe.contentWindow.eval(cmd);
     } catch (e) {
@@ -56,11 +60,7 @@ function run(cmd) {
       className = 'error';
     }
     return [className, cleanse(stringify(rawoutput))];
-  } else {
-    return [className, commands[cmd]()];
-  }
-
-  // return [className, cleanse(stringify(rawoutput))];
+  } 
 }
 
 function post(cmd) {
@@ -79,7 +79,7 @@ function post(cmd) {
   el.className = 'response';
   span.innerHTML = response[1];
 
-  if (!commands[cmd]) prettyPrint([span]);
+  if (response[0] != 'info') prettyPrint([span]);
   el.appendChild(span);
 
   li.className = response[0];
@@ -116,6 +116,16 @@ function echo(cmd) {
   appendLog(li, true);
 }
 
+window.info = function(cmd) {
+  var li = document.createElement('li');
+
+  li.className = 'info';
+  li.innerHTML = '<span class="gutter"></span><div>' + cleanse(cmd) + '</div>';
+
+  logAfter = output.querySelectorAll('li.echo')[0] || null;
+  appendLog(li, true);
+}
+
 function appendLog(el, echo) {
   if (echo) {
     if (!output.firstChild) {
@@ -141,8 +151,39 @@ function changeView(event){
   }
 }
 
+function internalCommand(cmd) {
+  var parts = [];
+  if (cmd.substr(0, 1) == ':') {
+    parts = cmd.substr(1).split(' ');
+    return (commands[parts.shift()] || noop).apply(this, parts);
+  }
+}
+
+function noop() {}
+
 function showhelp() {
-  return 'up/down - cycle history<br />\nshift+up - single line command<br />\nshift+down - multiline command<br />\nshift+enter - to run command in multiline mode';
+  return [
+    'up/down - cycle history',
+    'shift+up - single line command',
+    'shift+down - multiline command', 
+    'shift+enter - to run command in multiline mode',
+    ':load <script_url> - to inject external script'
+  ].join('<br />\n');
+}
+
+function loadScript() {
+  var doc = sandboxframe.contentDocument || sandboxframe.contentWindow.document;
+  for (var i = 0; i < arguments.length; i++) {
+    (function (url) {
+      var script = document.createElement('script');
+      script.src = url
+      script.onload = function () {
+        window.top.info('Loaded ' + url, 'http://' + window.location.hostname);
+      };
+      doc.body.appendChild(script);
+    })(arguments[i]);
+  }
+  return "Loading scripts...";
 }
 
 function checkTab(evt) {
@@ -246,7 +287,7 @@ var exec = document.getElementById('exec'),
     wide = true,
     body = document.getElementsByTagName('body')[0],
     logAfter = null,
-    commands = { ':help' : showhelp, ':load' : function () {} };
+    commands = { help: showhelp, load: loadScript };
 
 body.appendChild(sandboxframe);
 sandboxframe.setAttribute('id', 'sandbox');
