@@ -89,7 +89,12 @@ function post(cmd) {
   appendLog(li);
     
   output.parentNode.scrollTop = 0;
-  if (!body.className) exec.value = '';
+  if (!body.className) {
+    exec.value = '';
+    if (cursor.nextSibling) exec.removeChild(cursor.nextSibling);
+    document.execCommand('selectAll', false, null);
+    document.execCommand('delete', false, null);
+  }
   pos = history.length;
 }
 
@@ -253,6 +258,103 @@ function trim(s) {
   return (s||"").replace(/^\s+|\s+$/g,"");
 }
 
+var ccCache = {};
+var ccPosition = false;
+
+function getProps(cmd, filter) {
+  var surpress = {}, props = [];
+  
+  if (!ccCache[cmd]) {
+    console.log('caching', cmd);
+    try {
+      // surpress alert boxes because they'll actually do something when we're looking
+      // up properties inside of the command we're running
+      surpress.alert = sandboxframe.contentWindow.alert;
+      sandboxframe.contentWindow.alert = function () {};
+      
+      // loop through all of the properties available on the command (that's evaled)
+      ccCache[cmd] = sandboxframe.contentWindow.eval('console.props(' + cmd + ')').sort();
+      
+      // return alert back to it's former self
+      sandboxframe.contentWindow.alert = surpress.alert;
+    } catch (e) {
+      ccCache[cmd] = [];
+    }
+    
+    // if the return value is undefined, then it means there's no props, so we'll 
+    // empty the code completion
+    if (ccCache[cmd][0] == 'undefined') ccOptions[cmd] = [];    
+    ccPosition = 0;
+    props = ccCache[cmd];
+  } else if (filter) {
+    // console.log('>>' + filter, cmd);
+    for (var i = 0, p; i < ccCache[cmd].length, p = ccCache[cmd][i]; i++) {
+      if (p.indexOf(filter) === 0) {
+        // console.log('pushing ' + ccCache[cmd][i]);
+        props.push(p.substr(filter.length, p.length));
+      }
+    }
+    console.log(cmd, props);
+  }
+  
+  return props; 
+}
+
+function codeComplete(event) {
+  var cmd = cursor.textContent.split(/[;\s]+/g).pop(),
+      parts = cmd.split('.'),
+      which = whichKey(event),
+      cc,
+      props = [];
+
+  if (cmd) {
+    if (cmd.substr(-1) == '.') {
+      // get the command without the '.' so we can eval it and lookup the properties
+      cmd = cmd.substr(0, cmd.length - 1);
+      
+      props = getProps(cmd);
+    } else {
+      props = getProps(parts[parts.length - 2] || 'window', parts[parts.length - 1]);
+    }
+    
+    if (props.length) {
+      if (which == 9) { // tabbing cycles through the code completion
+        if (event.shiftKey) {
+          // backwards
+          ccPosition = ccPosition == 0 ? props.length - 1 : ccPosition-1;
+        } else {
+          ccPosition = ccPosition == props.length - 1 ? 0 : ccPosition+1;
+        }
+      
+      } else {
+        ccPosition = 0;
+      }
+    
+      // position the code completion next to the cursor
+      if (!cursor.nextSibling) {
+        cc = document.createElement('span');
+        cc.className = 'suggest';
+        exec.appendChild(cc);
+      } 
+
+      cursor.nextSibling.innerHTML = props[ccPosition];
+      exec.value = exec.textContent;
+
+      if (which == 9) return false;
+    } else {
+      ccPosition = false;
+    }
+  } else {
+    ccPosition = false;
+  }
+  
+  if (ccPosition === false && cursor.nextSibling) {
+    exec.removeChild(cursor.nextSibling);
+  }
+  
+  exec.value = exec.textContent;
+}
+
 window._console = {
   log: function () {
     var l = arguments.length, i = 0;
@@ -265,6 +367,13 @@ window._console = {
     for (; i < l; i++) {
       log(stringify(arguments[i]));
     }
+  },
+  props: function (obj) {
+    var props = [], realObj;
+    try {
+      for (var p in obj) props.push(p);
+    } catch (e) {}
+    return props;
   }
 };
 
@@ -277,8 +386,9 @@ document.addEventListener ?
   });
 
 var exec = document.getElementById('exec'),
-    form = exec.form,
+    form = exec.form || {},
     output = document.getElementById('output'),
+    cursor = document.getElementById('cursor'),
     sandboxframe = document.createElement('iframe'),
     sandbox = null,
     fakeConsole = 'window.top._console',
@@ -287,6 +397,7 @@ var exec = document.getElementById('exec'),
     wide = true,
     body = document.getElementsByTagName('body')[0],
     logAfter = null,
+    ccTimer = null,
     commands = { help: showhelp, load: loadScript };
 
 body.appendChild(sandboxframe);
@@ -298,14 +409,28 @@ sandbox.write('<script>(function () { var fakeConsole = ' + fakeConsole + '; if 
 sandbox.close();
 
 // tweaks to interface to allow focus
-if (!('autofocus' in document.createElement('input'))) exec.focus();
+// if (!('autofocus' in document.createElement('input'))) exec.focus();
+cursor.focus();
 output.parentNode.tabIndex = 0;
+
+function whichKey(event) {
+  var keys = {38:1, 40:1, Up:38, Down:40, Enter:10, 'U+0009':9, 'U+0008':8, 'U+0190':190, 'Right':39};
+  return keys[event.keyIdentifier] || event.which || event.keyCode;
+}
+
+exec.onkeyup = function (event) {
+  clearTimeout(ccTimer);
+  setTimeout(function () {
+    codeComplete(event);
+  }, 200);
+}
 
 exec.onkeydown = function (event) {
   event = event || window.event;
-  var keys = {38:1, 40:1, Up:38, Down:40, Enter:10, 'U+0009':9, 'U+0008':8}, 
+  var keys = {38:1, 40:1}, 
       wide = body.className == 'large', 
-      which = keys[event.keyIdentifier] || event.which || event.keyCode;
+      which = whichKey(event);
+      
   if (typeof which == 'string') which = which.replace(/\/U\+/, '\\u');
   if (keys[which]) {
     if (event.shiftKey) {
@@ -320,7 +445,8 @@ exec.onkeydown = function (event) {
       } 
       if (history[pos] != undefined) {
         exec.value = history[pos];
-        // event.preventDefault && event.preventDefault();
+        cursor.innerHTML = history[pos];
+        cursor.focus();
         return false;
       }
     }
@@ -333,6 +459,22 @@ exec.onkeydown = function (event) {
     checkTab(event);
   } else if (event.shiftKey && event.metaKey && which == 8) {
     output.innerHTML = '';
+  } else if (which == 39 && ccPosition !== false) { // complete code
+    cursor.innerHTML = exec.textContent;
+    ccPosition = false;
+    window.focus();
+    cursor.focus();
+    console.log('ok??');
+  } else { // try code completion
+    // clearTimeout(codeCompleteTimer);
+    // codeCompleteTimer = setTimeout(function () {
+      // return codeComplete(which);
+    // }, 200);
+    if (ccPosition !== false && which == 9) {
+      return false;
+    } else if (ccPosition !== false && cursor.nextSibling) {
+      exec.removeChild(cursor.nextSibling);
+    }
   }
 };
 
@@ -364,5 +506,8 @@ if (window.location.search) {
 setTimeout(function () {
   window.scrollTo(0, 1);
 }, 13);
+
+getProps('window'); // cache 
+
 
 })(this);

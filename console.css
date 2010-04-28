@@ -78,3 +78,6 @@ body.large #exec { width: 390px; border-bottom: 0; top: 0; bottom: 0; height: 10
   .atv { color: #060; }
 }
 
+#cursor { display: inline-block; height: 24px; min-width: 1px; outline: 0;}
+#exec { cursor: text; }
+#exec .suggest { color: #999; }
