@@ -265,7 +265,6 @@ function getProps(cmd, filter) {
   var surpress = {}, props = [];
   
   if (!ccCache[cmd]) {
-    console.log('caching', cmd);
     try {
       // surpress alert boxes because they'll actually do something when we're looking
       // up properties inside of the command we're running
@@ -294,7 +293,6 @@ function getProps(cmd, filter) {
         props.push(p.substr(filter.length, p.length));
       }
     }
-    console.log(cmd, props);
   }
   
   return props; 
@@ -460,11 +458,16 @@ exec.onkeydown = function (event) {
   } else if (event.shiftKey && event.metaKey && which == 8) {
     output.innerHTML = '';
   } else if (which == 39 && ccPosition !== false) { // complete code
-    cursor.innerHTML = exec.textContent;
+    var tmp = exec.textContent;
+    if (cursor.nextSibling) exec.removeChild(cursor.nextSibling);
+    
+    cursor.innerHTML = tmp;
     ccPosition = false;
-    window.focus();
+    
+    // daft hack to move the focus elsewhere, then back on to the cursor to
+    // move the cursor to the end of the text.
+    document.getElementsByTagName('a')[0].focus();
     cursor.focus();
-    console.log('ok??');
   } else { // try code completion
     // clearTimeout(codeCompleteTimer);
     // codeCompleteTimer = setTimeout(function () {
