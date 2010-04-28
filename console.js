@@ -91,9 +91,14 @@ function post(cmd) {
   output.parentNode.scrollTop = 0;
   if (!body.className) {
     exec.value = '';
-    if (cursor.nextSibling) exec.removeChild(cursor.nextSibling);
-    document.execCommand('selectAll', false, null);
-    document.execCommand('delete', false, null);
+    // if (cursor.nextSibling) exec.removeChild(cursor.nextSibling);
+    try {
+      document.querySelector('a').focus();
+      cursor.focus();
+      document.execCommand('selectAll', false, null);
+      document.execCommand('delete', false, null);
+    } catch (e) {
+    }
   }
   pos = history.length;
 }
@@ -147,11 +152,11 @@ function changeView(event){
   var which = event.which || event.keyCode;
   if (which == 38 && event.shiftKey == true) {
     body.className = '';
-    exec.focus();
+    cursor.focus();
     return false;
   } else if (which == 40 && event.shiftKey == true) {
     body.className = 'large';
-    exec.focus();
+    cursor.focus();
     return false;
   }
 }
@@ -289,8 +294,9 @@ function getProps(cmd, filter) {
     // console.log('>>' + filter, cmd);
     for (var i = 0, p; i < ccCache[cmd].length, p = ccCache[cmd][i]; i++) {
       if (p.indexOf(filter) === 0) {
-        // console.log('pushing ' + ccCache[cmd][i]);
-        props.push(p.substr(filter.length, p.length));
+        if (p != filter) {
+          props.push(p.substr(filter.length, p.length));
+        }
       }
     }
   } else {
@@ -314,7 +320,7 @@ function codeComplete(event) {
       
       props = getProps(cmd);
     } else {
-      props = getProps(parts[parts.length - 2] || 'window', parts[parts.length - 1]);
+      props = getProps(parts.slice(0, parts.length - 1).join('.') || 'window', parts[parts.length - 1]);
     }
     
     if (props.length) {
@@ -421,7 +427,7 @@ function whichKey(event) {
 exec.onkeyup = function (event) {
   var which = whichKey(event);
   clearTimeout(ccTimer);
-  if (which != 9) setTimeout(function () {
+  if (which != 9 && which != 16) setTimeout(function () {
     codeComplete(event);
   }, 200);
 }
@@ -446,6 +452,7 @@ exec.onkeydown = function (event) {
       } 
       if (history[pos] != undefined) {
         exec.value = history[pos];
+        cursor.focus();
         document.execCommand('selectAll', false, null);
         document.execCommand('delete', false, null);
         document.execCommand('insertHTML', false, history[pos]);
@@ -453,10 +460,12 @@ exec.onkeydown = function (event) {
       }
     }
   } else if (which == 13 || which == 10) { // enter (what about the other one)
+    if (cursor.nextSibling) exec.removeChild(cursor.nextSibling);
     if (event.shiftKey == true || event.metaKey || event.ctrlKey || !wide) {
       post(exec.textContent || exec.value);
       return false;
     }
+    if (cursor.nextSibling) exec.removeChild(cursor.nextSibling);
   } else if (which == 9 && wide) {
     checkTab(event);
   } else if (event.shiftKey && event.metaKey && which == 8) {
@@ -485,6 +494,7 @@ exec.onkeydown = function (event) {
 form.onsubmit = function (event) {
   event = event || window.event;
   event.preventDefault && event.preventDefault();
+  if (cursor.nextSibling) exec.removeChild(cursor.nextSibling);
   post(exec.textContent || exec.value);
   return false;
 };
@@ -495,8 +505,8 @@ document.onkeydown = function (event) {
   
   if (event.shiftKey && event.metaKey && which == 8) {
     output.innerHTML = '';
-    exec.focus();
-  } else if (event.target != exec && which == 32) { // space
+    cursor.focus();
+  } else if (event.target == output.parentNode && which == 32) { // space
     output.parentNode.scrollTop += 5 + output.parentNode.offsetHeight * (event.shiftKey ? -1 : 1);
   }
   
