@@ -275,7 +275,7 @@ function getProps(cmd, filter) {
       ccCache[cmd] = sandboxframe.contentWindow.eval('console.props(' + cmd + ')').sort();
       
       // return alert back to it's former self
-      sandboxframe.contentWindow.alert = surpress.alert;
+      delete sandboxframe.contentWindow.alert;
     } catch (e) {
       ccCache[cmd] = [];
     }
@@ -293,6 +293,8 @@ function getProps(cmd, filter) {
         props.push(p.substr(filter.length, p.length));
       }
     }
+  } else {
+    props = ccCache[cmd];
   }
   
   return props; 
@@ -417,8 +419,9 @@ function whichKey(event) {
 }
 
 exec.onkeyup = function (event) {
+  var which = whichKey(event);
   clearTimeout(ccTimer);
-  setTimeout(function () {
+  if (which != 9) setTimeout(function () {
     codeComplete(event);
   }, 200);
 }
@@ -443,14 +446,15 @@ exec.onkeydown = function (event) {
       } 
       if (history[pos] != undefined) {
         exec.value = history[pos];
-        cursor.innerHTML = history[pos];
-        cursor.focus();
+        document.execCommand('selectAll', false, null);
+        document.execCommand('delete', false, null);
+        document.execCommand('insertHTML', false, history[pos]);
         return false;
       }
     }
   } else if (which == 13 || which == 10) { // enter (what about the other one)
     if (event.shiftKey == true || event.metaKey || event.ctrlKey || !wide) {
-      post(exec.value);
+      post(exec.textContent || exec.value);
       return false;
     }
   } else if (which == 9 && wide) {
@@ -469,11 +473,8 @@ exec.onkeydown = function (event) {
     document.getElementsByTagName('a')[0].focus();
     cursor.focus();
   } else { // try code completion
-    // clearTimeout(codeCompleteTimer);
-    // codeCompleteTimer = setTimeout(function () {
-      // return codeComplete(which);
-    // }, 200);
     if (ccPosition !== false && which == 9) {
+      codeComplete(event); // cycles available completions
       return false;
     } else if (ccPosition !== false && cursor.nextSibling) {
       exec.removeChild(cursor.nextSibling);
@@ -484,7 +485,7 @@ exec.onkeydown = function (event) {
 form.onsubmit = function (event) {
   event = event || window.event;
   event.preventDefault && event.preventDefault();
-  post(exec.value);
+  post(exec.textContent || exec.value);
   return false;
 };
 
@@ -501,6 +502,10 @@ document.onkeydown = function (event) {
   
   return changeView(event);
 };
+
+exec.onclick = function () {
+  cursor.focus();
+}
 
 if (window.location.search) {
   post(decodeURIComponent(window.location.search.substr(1)));
