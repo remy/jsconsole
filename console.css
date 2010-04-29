@@ -41,7 +41,7 @@ iframe { display: none; }
 
 body.large #console { top: 0; right: 400px; width: auto; }
 body.large form { right: 0; width: 400px; bottom: 0; }
-body.large #exec { width: 390px; border-bottom: 0; top: 0; bottom: 0; height: 100%; z-index: 10; background: #E6E8F2; color: #000; -webkit-box-shadow: none; border-left: 1px solid #AAABB8; }
+body.large #exec { width: 390px; border-bottom: 0; top: 0; bottom: 0; height: 100%; z-index: 10; background: #E6E8F2; color: #000; -webkit-box-shadow: none; border-left: 1px solid #AAABB8; left: auto; }
 
 /* allow the debug to be printed */
 @media print {

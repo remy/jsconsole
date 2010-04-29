@@ -9,14 +9,14 @@ function stringify(o, simple) {
   } else if (type == '[object Array]') {
     json = '[';
     for (i = 0; i < o.length; i++) {
-      parts.push(stringify(o[i]));
+      parts.push(stringify(o[i], simple));
     }
     json += parts.join(', ') + ']';
     json;
   } else if (type == '[object Object]') {
     json = '{';
     for (i in o) {
-      parts.push(stringify(i) + ': ' + stringify(o[i]));
+      parts.push(stringify(i) + ': ' + stringify(o[i], simple));
     }
     json += parts.join(', ') + '}';
   } else if (type == '[object Number]') {
@@ -91,13 +91,13 @@ function post(cmd) {
   output.parentNode.scrollTop = 0;
   if (!body.className) {
     exec.value = '';
-    // if (cursor.nextSibling) exec.removeChild(cursor.nextSibling);
-    try {
-      document.querySelector('a').focus();
-      cursor.focus();
-      document.execCommand('selectAll', false, null);
-      document.execCommand('delete', false, null);
-    } catch (e) {
+    if (enableCC) {
+      try {
+        document.querySelector('a').focus();
+        cursor.focus();
+        document.execCommand('selectAll', false, null);
+        document.execCommand('delete', false, null);
+      } catch (e) {}
     }
   }
   pos = history.length;
@@ -149,6 +149,8 @@ function appendLog(el, echo) {
 }
 
 function changeView(event){
+  if (enableCC) return;
+  
   var which = event.which || event.keyCode;
   if (which == 38 && event.shiftKey == true) {
     body.className = '';
@@ -355,10 +357,14 @@ function codeComplete(event) {
   }
   
   if (ccPosition === false && cursor.nextSibling) {
-    exec.removeChild(cursor.nextSibling);
+    removeSuggestion();
   }
   
   exec.value = exec.textContent;
+}
+
+function removeSuggestion() {
+  if (enableCC && cursor.nextSibling) cursor.parentNode.removeChild(cursor.nextSibling);
 }
 
 window._console = {
@@ -394,7 +400,7 @@ document.addEventListener ?
 var exec = document.getElementById('exec'),
     form = exec.form || {},
     output = document.getElementById('output'),
-    cursor = document.getElementById('cursor'),
+    cursor = document.getElementById('exec'),
     sandboxframe = document.createElement('iframe'),
     sandbox = null,
     fakeConsole = 'window.top._console',
@@ -404,7 +410,15 @@ var exec = document.getElementById('exec'),
     body = document.getElementsByTagName('body')[0],
     logAfter = null,
     ccTimer = null,
-    commands = { help: showhelp, load: loadScript };
+    commands = { help: showhelp, load: loadScript },
+    // I hate that I'm browser sniffing, but there's issues with Firefox and execCommand so code completion won't work
+    enableCC = navigator.userAgent.indexOf('AppleWebKit') !== -1 && navigator.userAgent.indexOf('Mobile') === -1;
+
+if (enableCC) {
+  exec.parentNode.innerHTML = '<div autofocus id="exec" spellcheck="false"><span id="cursor" contenteditable></span></div>';
+  exec = document.getElementById('exec');
+  cursor = document.getElementById('cursor');
+}
 
 body.appendChild(sandboxframe);
 sandboxframe.setAttribute('id', 'sandbox');
@@ -427,7 +441,7 @@ function whichKey(event) {
 exec.onkeyup = function (event) {
   var which = whichKey(event);
   clearTimeout(ccTimer);
-  if (which != 9 && which != 16) setTimeout(function () {
+  if (enableCC && which != 9 && which != 16) setTimeout(function () {
     codeComplete(event);
   }, 200);
 }
@@ -451,29 +465,30 @@ exec.onkeydown = function (event) {
         if (pos >= history.length) pos = 0;
       } 
       if (history[pos] != undefined) {
-        if (cursor.nextSibling) exec.removeChild(cursor.nextSibling);
+        removeSuggestion();
         exec.value = history[pos];
         cursor.focus();
-        document.execCommand('selectAll', false, null);
-        document.execCommand('delete', false, null);
-        document.execCommand('insertHTML', false, history[pos]);
+        if (enableCC) {
+          document.execCommand('selectAll', false, null);
+          document.execCommand('delete', false, null);
+          document.execCommand('insertHTML', false, history[pos]);          
+        }
         return false;
       }
     }
   } else if (which == 13 || which == 10) { // enter (what about the other one)
-    if (cursor.nextSibling) exec.removeChild(cursor.nextSibling);
+    removeSuggestion();
     if (event.shiftKey == true || event.metaKey || event.ctrlKey || !wide) {
       post(exec.textContent || exec.value);
       return false;
     }
-    if (cursor.nextSibling) exec.removeChild(cursor.nextSibling);
   } else if (which == 9 && wide) {
     checkTab(event);
   } else if (event.shiftKey && event.metaKey && which == 8) {
     output.innerHTML = '';
   } else if (which == 39 && ccPosition !== false) { // complete code
     var tmp = exec.textContent;
-    if (cursor.nextSibling) exec.removeChild(cursor.nextSibling);
+    removeSuggestion();
     
     cursor.innerHTML = tmp;
     ccPosition = false;
@@ -482,12 +497,12 @@ exec.onkeydown = function (event) {
     // move the cursor to the end of the text.
     document.getElementsByTagName('a')[0].focus();
     cursor.focus();
-  } else { // try code completion
+  } else if (enableCC) { // try code completion
     if (ccPosition !== false && which == 9) {
       codeComplete(event); // cycles available completions
       return false;
     } else if (ccPosition !== false && cursor.nextSibling) {
-      exec.removeChild(cursor.nextSibling);
+      removeSuggestion();
     }
   }
 };
@@ -495,7 +510,7 @@ exec.onkeydown = function (event) {
 form.onsubmit = function (event) {
   event = event || window.event;
   event.preventDefault && event.preventDefault();
-  if (cursor.nextSibling) exec.removeChild(cursor.nextSibling);
+  removeSuggestion();
   post(exec.textContent || exec.value);
   return false;
 };
