@@ -451,6 +451,7 @@ exec.onkeydown = function (event) {
         if (pos >= history.length) pos = 0;
       } 
       if (history[pos] != undefined) {
+        if (cursor.nextSibling) exec.removeChild(cursor.nextSibling);
         exec.value = history[pos];
         cursor.focus();
         document.execCommand('selectAll', false, null);
