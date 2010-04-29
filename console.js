@@ -486,7 +486,7 @@ exec.onkeydown = function (event) {
     checkTab(event);
   } else if (event.shiftKey && event.metaKey && which == 8) {
     output.innerHTML = '';
-  } else if (which == 39 && ccPosition !== false) { // complete code
+  } else if ((which == 39 || which == 35) && ccPosition !== false) { // complete code
     var tmp = exec.textContent;
     removeSuggestion();
     
