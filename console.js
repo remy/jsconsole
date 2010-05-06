@@ -49,11 +49,13 @@ function run(cmd) {
   var rawoutput = null, 
       className = 'response',
       internalCmd = internalCommand(cmd);
-
+  
+  console.log(internalCmd);
   if (internalCmd) {
     return ['info', internalCmd];
   } else {
     try {
+      console.log(cmd);
       rawoutput = sandboxframe.contentWindow.eval(cmd);
     } catch (e) {
       rawoutput = e.message;
@@ -164,10 +166,11 @@ function changeView(event){
 }
 
 function internalCommand(cmd) {
-  var parts = [];
+  var parts = [], c;
   if (cmd.substr(0, 1) == ':') {
     parts = cmd.substr(1).split(' ');
-    return (commands[parts.shift()] || noop).apply(this, parts);
+    c = parts.shift();
+    return (commands[c] || noop).apply(this, parts);
   }
 }
 
@@ -179,7 +182,7 @@ function showhelp() {
     'shift+up - single line command',
     'shift+down - multiline command', 
     'shift+enter - to run command in multiline mode',
-    ':load <script_url> - to inject external script'
+    ':load &gt;script_url&lt; - to inject external script'
   ].join('<br />\n');
 }
 
