@@ -50,12 +50,10 @@ function run(cmd) {
       className = 'response',
       internalCmd = internalCommand(cmd);
   
-  console.log(internalCmd);
   if (internalCmd) {
     return ['info', internalCmd];
   } else {
     try {
-      console.log(cmd);
       rawoutput = sandboxframe.contentWindow.eval(cmd);
     } catch (e) {
       rawoutput = e.message;
@@ -146,7 +144,13 @@ function appendLog(el, echo) {
       output.insertBefore(el, output.firstChild);
     }      
   } else {
-    output.insertBefore(el, logAfter ? logAfter : output.lastChild.nextSibling);
+    // if (!output.lastChild) {
+    //   output.appendChild(el);
+    //   // console.log('ok');
+    // } else {
+      // console.log(output.lastChild.nextSibling);
+      output.insertBefore(el, logAfter ? logAfter : output.lastChild.nextSibling); //  ? output.lastChild.nextSibling : output.firstChild
+    // }
   }
 }
 
@@ -178,11 +182,12 @@ function noop() {}
 
 function showhelp() {
   return [
+  ':load &lt;script_url&gt; - to inject external script',
+  ':clear - to clear the history',
     'up/down - cycle history',
     'shift+up - single line command',
     'shift+down - multiline command', 
-    'shift+enter - to run command in multiline mode',
-    ':load &gt;script_url&lt; - to inject external script'
+    'shift+enter - to run command in multiline mode'
   ].join('<br />\n');
 }
 
@@ -317,12 +322,14 @@ function codeComplete(event) {
       which = whichKey(event),
       cc,
       props = [];
-
+  
   if (cmd) {
+    // get the command without the dot to allow us to introspect
     if (cmd.substr(-1) == '.') {
       // get the command without the '.' so we can eval it and lookup the properties
       cmd = cmd.substr(0, cmd.length - 1);
       
+      // returns an array of all the properties from the command
       props = getProps(cmd);
     } else {
       props = getProps(parts.slice(0, parts.length - 1).join('.') || 'window', parts[parts.length - 1]);
@@ -330,26 +337,35 @@ function codeComplete(event) {
     
     if (props.length) {
       if (which == 9) { // tabbing cycles through the code completion
-        if (event.shiftKey) {
-          // backwards
-          ccPosition = ccPosition == 0 ? props.length - 1 : ccPosition-1;
+        
+        // however if there's only one selection, it'll auto complete
+        if (props.length === 1) {
+          ccPosition = false;
         } else {
-          ccPosition = ccPosition == props.length - 1 ? 0 : ccPosition+1;
-        }
-      
+          if (event.shiftKey) {
+            // backwards
+            ccPosition = ccPosition == 0 ? props.length - 1 : ccPosition-1;
+          } else {
+            ccPosition = ccPosition == props.length - 1 ? 0 : ccPosition+1;
+          }
+        }      
       } else {
         ccPosition = 0;
       }
     
-      // position the code completion next to the cursor
-      if (!cursor.nextSibling) {
-        cc = document.createElement('span');
-        cc.className = 'suggest';
-        exec.appendChild(cc);
-      } 
+      if (ccPosition === false) {
+        completeCode();
+      } else {
+        // position the code completion next to the cursor
+        if (!cursor.nextSibling) {
+          cc = document.createElement('span');
+          cc.className = 'suggest';
+          exec.appendChild(cc);
+        } 
 
-      cursor.nextSibling.innerHTML = props[ccPosition];
-      exec.value = exec.textContent;
+        cursor.nextSibling.innerHTML = props[ccPosition];
+        exec.value = exec.textContent;
+      }
 
       if (which == 9) return false;
     } else {
@@ -413,7 +429,10 @@ var exec = document.getElementById('exec'),
     body = document.getElementsByTagName('body')[0],
     logAfter = null,
     ccTimer = null,
-    commands = { help: showhelp, load: loadScript },
+    commands = { help: showhelp, load: loadScript, clear: function () {
+      setTimeout(function () { output.innerHTML = ''; }, 10);
+      return 'clearing...';
+    } },
     // I hate that I'm browser sniffing, but there's issues with Firefox and execCommand so code completion won't work
     enableCC = navigator.userAgent.indexOf('AppleWebKit') !== -1 && navigator.userAgent.indexOf('Mobile') === -1;
 
@@ -437,9 +456,15 @@ cursor.focus();
 output.parentNode.tabIndex = 0;
 
 function whichKey(event) {
-  var keys = {38:1, 40:1, Up:38, Down:40, Enter:10, 'U+0009':9, 'U+0008':8, 'U+0190':190, 'Right':39};
+  var keys = {38:1, 40:1, Up:38, Down:40, Enter:10, 'U+0009':9, 'U+0008':8, 'U+0190':190, 'Right':39, 
+      // these two are ignored
+      'U+0028': 57, 'U+0026': 55 }; 
   return keys[event.keyIdentifier] || event.which || event.keyCode;
 }
+
+exec.ontouchstart = function () {
+  window.scrollTo(0,0);
+};
 
 exec.onkeyup = function (event) {
   var which = whichKey(event);
@@ -454,7 +479,7 @@ exec.onkeydown = function (event) {
   var keys = {38:1, 40:1}, 
       wide = body.className == 'large', 
       which = whichKey(event);
-      
+
   if (typeof which == 'string') which = which.replace(/\/U\+/, '\\u');
   if (keys[which]) {
     if (event.shiftKey) {
@@ -490,16 +515,7 @@ exec.onkeydown = function (event) {
   } else if (event.shiftKey && event.metaKey && which == 8) {
     output.innerHTML = '';
   } else if ((which == 39 || which == 35) && ccPosition !== false) { // complete code
-    var tmp = exec.textContent;
-    removeSuggestion();
-    
-    cursor.innerHTML = tmp;
-    ccPosition = false;
-    
-    // daft hack to move the focus elsewhere, then back on to the cursor to
-    // move the cursor to the end of the text.
-    document.getElementsByTagName('a')[0].focus();
-    cursor.focus();
+    completeCode();
   } else if (enableCC) { // try code completion
     if (ccPosition !== false && which == 9) {
       codeComplete(event); // cycles available completions
@@ -509,6 +525,19 @@ exec.onkeydown = function (event) {
     }
   }
 };
+
+function completeCode(focus) {
+  var tmp = exec.textContent, l = tmp.length;
+  removeSuggestion();
+  
+  cursor.innerHTML = tmp;
+  ccPosition = false;
+  
+  // daft hack to move the focus elsewhere, then back on to the cursor to
+  // move the cursor to the end of the text.
+  document.getElementsByTagName('a')[0].focus();
+  cursor.focus();
+}
 
 form.onsubmit = function (event) {
   event = event || window.event;
