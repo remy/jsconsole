@@ -420,7 +420,7 @@ var exec = document.getElementById('exec'),
     form = exec.form || {},
     output = document.getElementById('output'),
     cursor = document.getElementById('exec'),
-    sandboxframe = typeof JSCONSOLE == 'undefined' ? document.createElement('iframe') : window['JSCONSOLE'],
+    sandboxframe = typeof window.top['JSCONSOLE'] == 'undefined' ? document.createElement('iframe') : window.top['JSCONSOLE'],
     sandbox = null,
     fakeConsole = 'window.top._console',
     history = [''],
@@ -444,7 +444,7 @@ if (enableCC) {
 
 sandbox = sandboxframe.contentDocument || sandboxframe.contentWindow.document;
 
-if (typeof JSCONSOLE == 'undefined') {
+if (typeof window.top['JSCONSOLE'] == 'undefined') {
   body.appendChild(sandboxframe);
   sandboxframe.setAttribute('id', 'sandbox');  
   sandbox.open();
@@ -452,7 +452,7 @@ if (typeof JSCONSOLE == 'undefined') {
   sandbox.write('<script>(function () { var fakeConsole = ' + fakeConsole + '; if (console != undefined) { for (var k in fakeConsole) { console[k] = fakeConsole[k]; } } else { console = fakeConsole; } })();</script>');
   sandbox.close();
 } else {
-  sandbox.contentWindow.eval('(function () { var fakeConsole = ' + fakeConsole + '; if (console != undefined) { for (var k in fakeConsole) { console[k] = fakeConsole[k]; } } else { console = fakeConsole; } })();');
+  sandboxframe.contentWindow.eval('(function () { var fakeConsole = ' + fakeConsole + '; if (console != undefined) { for (var k in fakeConsole) { console[k] = fakeConsole[k]; } } else { console = fakeConsole; } })();');
 }
 
 // tweaks to interface to allow focus
