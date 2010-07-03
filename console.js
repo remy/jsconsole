@@ -442,16 +442,18 @@ if (enableCC) {
   cursor = document.getElementById('cursor');
 }
 
+sandbox = sandboxframe.contentDocument || sandboxframe.contentWindow.document;
+
 if (typeof JSCONSOLE == 'undefined') {
   body.appendChild(sandboxframe);
   sandboxframe.setAttribute('id', 'sandbox');  
+  sandbox.open();
+  // stupid jumping through hoops if Firebug is open, since overwriting console throws error
+  sandbox.write('<script>(function () { var fakeConsole = ' + fakeConsole + '; if (console != undefined) { for (var k in fakeConsole) { console[k] = fakeConsole[k]; } } else { console = fakeConsole; } })();</script>');
+  sandbox.close();
+} else {
+  sandbox.contentWindow.eval('(function () { var fakeConsole = ' + fakeConsole + '; if (console != undefined) { for (var k in fakeConsole) { console[k] = fakeConsole[k]; } } else { console = fakeConsole; } })();');
 }
-
-sandbox = sandboxframe.contentDocument || sandboxframe.contentWindow.document;
-sandbox.open();
-// stupid jumping through hoops if Firebug is open, since overwriting console throws error
-sandbox.write('<script>(function () { var fakeConsole = ' + fakeConsole + '; if (console != undefined) { for (var k in fakeConsole) { console[k] = fakeConsole[k]; } } else { console = fakeConsole; } })();</script>');
-sandbox.close();
 
 // tweaks to interface to allow focus
 // if (!('autofocus' in document.createElement('input'))) exec.focus();
