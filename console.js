@@ -420,7 +420,7 @@ var exec = document.getElementById('exec'),
     form = exec.form || {},
     output = document.getElementById('output'),
     cursor = document.getElementById('exec'),
-    sandboxframe = document.createElement('iframe'),
+    sandboxframe = typeof JSCONSOLE == 'undefined' ? document.createElement('iframe') : window['JSCONSOLE'],
     sandbox = null,
     fakeConsole = 'window.top._console',
     history = [''],
@@ -442,8 +442,11 @@ if (enableCC) {
   cursor = document.getElementById('cursor');
 }
 
-body.appendChild(sandboxframe);
-sandboxframe.setAttribute('id', 'sandbox');
+if (typeof JSCONSOLE == 'undefined') {
+  body.appendChild(sandboxframe);
+  sandboxframe.setAttribute('id', 'sandbox');  
+}
+
 sandbox = sandboxframe.contentDocument || sandboxframe.contentWindow.document;
 sandbox.open();
 // stupid jumping through hoops if Firebug is open, since overwriting console throws error

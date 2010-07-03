@@ -1,5 +1,5 @@
 (function () {
-  window.jsconsole = {
+  window.JSCONSOLE = {
     contentWindow: window,
     contentDocument: document
   };
@@ -15,7 +15,7 @@
   container.style.left = '0px';
   container.style.width = '100%';
 
-  var styles = document.createElement('link');
+  var link = document.createElement('link');
   link.type = 'text/css';
   link.rel = 'stylesheet';
   link.href = 'http://jsconsole.com/console.css';
