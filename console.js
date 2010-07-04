@@ -181,14 +181,22 @@ function internalCommand(cmd) {
 function noop() {}
 
 function showhelp() {
-  return [
-  ':load &lt;script_url&gt; - to inject external script',
-  ':clear - to clear the history',
+  var commands = [
+    ':load &lt;script_url&gt; - to inject external script',
+    ':clear - to clear the history'];
+    
+  if (injected) {
+    commands.push(':close - to hide the JS Console');
+  }
+  
+  commands = commands.concat([
     'up/down - cycle history',
     'shift+up - single line command',
     'shift+down - multiline command', 
     'shift+enter - to run command in multiline mode'
-  ].join('<br />\n');
+  ]);
+  
+  return commands.join('<br />\n');
 }
 
 function loadScript() {
@@ -420,7 +428,8 @@ var exec = document.getElementById('exec'),
     form = exec.form || {},
     output = document.getElementById('output'),
     cursor = document.getElementById('exec'),
-    sandboxframe = typeof window.top['JSCONSOLE'] == 'undefined' ? document.createElement('iframe') : window.top['JSCONSOLE'],
+    injected = typeof window.top['JSCONSOLE'] !== 'undefined',
+    sandboxframe = injected ? window.top['JSCONSOLE'] : document.createElement('iframe'),
     sandbox = null,
     fakeConsole = 'window.top._console',
     history = [''],
@@ -429,10 +438,22 @@ var exec = document.getElementById('exec'),
     body = document.getElementsByTagName('body')[0],
     logAfter = null,
     ccTimer = null,
-    commands = { help: showhelp, load: loadScript, clear: function () {
-      setTimeout(function () { output.innerHTML = ''; }, 10);
-      return 'clearing...';
-    } },
+    commands = { 
+      help: showhelp, 
+      load: loadScript, 
+      clear: function () {
+        setTimeout(function () { output.innerHTML = ''; }, 10);
+        return 'clearing...';
+      },
+      close: function () {
+        if (injected) {
+          JSCONSOLE.console.style.display = 'none';
+          return 'hidden';
+        } else {
+          return 'noop';
+        }
+      }
+    },
     // I hate that I'm browser sniffing, but there's issues with Firefox and execCommand so code completion won't work
     enableCC = navigator.userAgent.indexOf('AppleWebKit') !== -1 && navigator.userAgent.indexOf('Mobile') === -1;
 
@@ -442,11 +463,14 @@ if (enableCC) {
   cursor = document.getElementById('cursor');
 }
 
-sandbox = sandboxframe.contentDocument || sandboxframe.contentWindow.document;
-
-if (typeof window.top['JSCONSOLE'] == 'undefined') {
+if (!injected) {
   body.appendChild(sandboxframe);
   sandboxframe.setAttribute('id', 'sandbox');  
+}
+
+sandbox = sandboxframe.contentDocument || sandboxframe.contentWindow.document;
+
+if (!injected) {
   sandbox.open();
   // stupid jumping through hoops if Firebug is open, since overwriting console throws error
   sandbox.write('<script>(function () { var fakeConsole = ' + fakeConsole + '; if (console != undefined) { for (var k in fakeConsole) { console[k] = fakeConsole[k]; } } else { console = fakeConsole; } })();</script>');
