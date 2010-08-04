@@ -121,7 +121,6 @@ function echo(cmd) {
 
   li.className = 'echo';
   li.innerHTML = '<span class="gutter"></span><div>' + cleanse(cmd) + '<a href="/?' + encodeURIComponent(cleanse(cmd)) + '" class="permalink" title="permalink">link</a></div>';
-  console.log('echo');
 
   logAfter = output.querySelectorAll('li.echo')[0] || null;
   appendLog(li, true);

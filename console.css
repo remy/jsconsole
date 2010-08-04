@@ -1,7 +1,7 @@
 * { margin: 0; padding: 0; }
 html  { height: 100%; background: #fff; }
 body { height: 100%; overflow: hidden; border: 0; margin: 0; padding: 0; font-family: "helvetica neue", arial, helvetica;  }
-input, textarea { margin: 0; padding: 0; position: relative; font-size: 18px; padding: 2px; }
+input, textarea { margin: 0; padding: 0; position: relative; font-size: 18px; padding: 2px; width: 100%; }
 
 #console { position: absolute; left: 0; right: 0; width: 100%; bottom: 0; overflow: auto; border-bottom: 1px solid #5B5C5B; }
 #console span.gutter { float: left; display: block; width: 5px; }
