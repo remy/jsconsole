@@ -209,7 +209,7 @@ function loadScript() {
         window.top.info('Loaded ' + url, 'http://' + window.location.hostname);
       };
       doc.body.appendChild(script);
-    })(arguments[i]);
+    })(libraries[arguments[i]] || arguments[i]);
   }
   return "Loading scripts...";
 }
@@ -435,6 +435,7 @@ var exec = document.getElementById('exec'),
     history = [''],
     pos = 0,
     wide = true,
+    libraries = { jquery: 'http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js', prototype: 'http://ajax.googleapis.com/ajax/libs/prototype/1/prototype.js' },
     body = document.getElementsByTagName('body')[0],
     logAfter = null,
     ccTimer = null,
