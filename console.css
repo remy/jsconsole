@@ -11,6 +11,11 @@ input, textarea { margin: 0; padding: 0; position: relative; font-size: 18px; pa
 #output li:last-child { border-bottom: 0;}
 #output > li > div { margin-left: 20px; line-height: 20px; }
 
+#output .echo div { position: relative; }
+#output .echo .permalink { position: absolute; right: 0; overflow: hidden; display: block; background: url(link.png) no-repeat center; height: 20px; width: 30px; text-indent: -200px; top: 0; opacity: 0.5; }
+
+#output .echo .permalink:hover { opacity: 1; }
+
 /* log types */
 #output .echo span.gutter:before { content: '> '; color: #3583FC; font-size: 18px; font-weight: bold; }
 #output .info span.gutter:before { content: 'i '; color: #27A700; font-size: 18px; font-weight: bold; }
@@ -31,7 +36,7 @@ input, textarea { margin: 0; padding: 0; position: relative; font-size: 18px; pa
 iframe { display: none; }
 
 /* input style */
-#exec { resize: none; font-family: monospace; position: absolute; left: 0; right: 0; border: 0; padding: 5px; outline: 0; background: #eee; -webkit-box-shadow: 0px 2px 10px rgba(0,0,0,.3); background: #E6E8F2; color: #000; border-bottom: 1px solid #AAABB8; height: 24px; line-height: 24px; overflow: hidden; }
+#exec { resize: none; font-family: monospace; position: absolute; left: 0; right: 0; border: 0; padding: 5px; outline: 0; background: #eee; -webkit-box-shadow: 0px 2px 10px rgba(0,0,0,.3); -moz-box-shadow: 0px 2px 10px rgba(0,0,0,.3); -o-box-shadow: 0px 2px 10px rgba(0,0,0,.3); box-shadow: 0px 2px 10px rgba(0,0,0,.3); background: #E6E8F2; color: #000; border-bottom: 1px solid #AAABB8; height: 24px; line-height: 24px; overflow: hidden; }
 
 /* footer, credit, etc */
 #footer { position: absolute; bottom: 0; left: 0; right: 0; height: 24px; background: #000; background-color: rgba(158, 158, 158, 0.8); color: #9E9F9E; color: rgba(158, 158, 158, 0.5); width: 100%; padding: 5px; color: #fff;  text-shadow: 1px 1px 0 #000; line-height: 24px; border-top: 1px solid #CED1CE; -webkit-transition: background-color ease-out 100ms; -moz-transition: background-color ease-out 100ms; -o-transition: background-color ease-out 100ms; transition: background-color ease-out 100ms; }
