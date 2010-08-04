@@ -66,6 +66,7 @@ function run(cmd) {
 function post(cmd) {
   cmd = trim(cmd);
   history.push(cmd);
+  setHistory(history);
   
   echo(cmd);
   
@@ -416,6 +417,29 @@ window._console = {
   }
 };
 
+function getHistory() {
+  var history = [''];
+  
+  if (typeof JSON == 'undefined') return history;
+  
+  try {
+    // because FF with cookies disabled goes nuts, and because sometimes WebKit goes nuts too...
+    history = JSON.parse(sessionStorage.getItem('history') || '[""]');
+  } catch (e) {}
+  return history;
+}
+
+// I should do this onunload...but I'm being lazy and hacky right now
+function setHistory(history) {
+  if (typeof JSON == 'undefined') return;
+  
+  try {
+    // because FF with cookies disabled goes nuts, and because sometimes WebKit goes nuts too...
+    sessionStorage.setItem('history', JSON.stringify(history));
+  } catch (e) {}
+}
+
+
 document.addEventListener ? 
   window.addEventListener('message', function (event) {
     post(event.data);
@@ -432,7 +456,7 @@ var exec = document.getElementById('exec'),
     sandboxframe = injected ? window.top['JSCONSOLE'] : document.createElement('iframe'),
     sandbox = null,
     fakeConsole = 'window.top._console',
-    history = [''],
+    history = getHistory(),
     pos = 0,
     wide = true,
     libraries = { jquery: 'http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js', prototype: 'http://ajax.googleapis.com/ajax/libs/prototype/1/prototype.js' },

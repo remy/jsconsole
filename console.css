@@ -1,15 +1,20 @@
 * { margin: 0; padding: 0; }
 html  { height: 100%; background: #fff; }
 body { height: 100%; overflow: hidden; border: 0; margin: 0; padding: 0; font-family: "helvetica neue", arial, helvetica;  }
-input, textarea { margin: 0; padding: 0; position: relative; font-size: 18px; padding: 2px; width: 100%; }
+input, textarea { margin: 0; padding: 0; position: relative; font-size: 18px; width: 100%; }
+input { padding: 2px; }
 
-#console { position: absolute; left: 0; right: 0; width: 100%; bottom: 0; overflow: auto; border-bottom: 1px solid #5B5C5B; }
-#console span.gutter { float: left; display: block; width: 5px; }
+/*#console { position: absolute; left: 0; right: 0; width: 100%; bottom: 0; overflow: auto; border-bottom: 1px solid #5B5C5B; }*/
+
+/* HACK attempt to allow multiline */
+body { overflow: auto; }
+#console { bottom: 35px; left: 0; right: 0; width: 100%; margin-bottom: 35px; overflow: auto; /*border-bottom: 1px solid #5B5C5B;*/ }
 
 #output { font-family: monospace; list-style: none; }
-#output li { margin: 5px 0; padding: 10px; border-top: 1px solid #EEEFEE; white-space: pre-wrap; }
+#output li { margin: 5px 0; padding: 5px; border-top: 1px solid #EEEFEE; white-space: pre-wrap; }
 #output li:last-child { border-bottom: 0;}
 #output > li > div { margin-left: 20px; line-height: 20px; }
+#console span.gutter { float: left; display: block; width: 5px; }
 
 #output .echo div { position: relative; }
 #output .echo .permalink { position: absolute; right: 0; overflow: hidden; display: block; background: url(link.png) no-repeat center; height: 20px; width: 30px; text-indent: -200px; top: 0; opacity: 0.5; }
@@ -35,27 +40,37 @@ input, textarea { margin: 0; padding: 0; position: relative; font-size: 18px; pa
 
 iframe { display: none; }
 
-/* input style */
-#exec { resize: none; font-family: monospace; position: absolute; left: 0; right: 0; border: 0; padding: 5px; outline: 0; background: #eee; -webkit-box-shadow: 0px 2px 10px rgba(0,0,0,.3); -moz-box-shadow: 0px 2px 10px rgba(0,0,0,.3); -o-box-shadow: 0px 2px 10px rgba(0,0,0,.3); box-shadow: 0px 2px 10px rgba(0,0,0,.3); background: #E6E8F2; color: #000; border-bottom: 1px solid #AAABB8; height: 24px; line-height: 24px; overflow: hidden; }
+/* input style - note: moz-shadow purposely omitted because it affects layout */
+form { padding: 5px; border-bottom: 1px solid #AAABB8; background: #E6E8F2; -webkit-box-shadow: 0px 2px 10px rgba(0,0,0,.3); -o-box-shadow: 0px 2px 10px rgba(0,0,0,.3); box-shadow: 0px 2px 10px rgba(0,0,0,.3); }
+#exec { resize: none; font-family: monospace; position: absolute; left: 0; right: 0; border: 0; /*padding: 5px; */outline: 0; background: #E6E8F2; color: #000; height: 24px; line-height: 24px; overflow: hidden; }
+
+/* HACK */
+form { position: fixed; top: 0; width: 100%; z-index: 2; }
+#console { margin-top: 35px; }
+#exec { position: relative; height: auto; }
 
 /* footer, credit, etc */
-#footer { position: absolute; bottom: 0; left: 0; right: 0; height: 24px; background: #000; background-color: rgba(158, 158, 158, 0.8); color: #9E9F9E; color: rgba(158, 158, 158, 0.5); width: 100%; padding: 5px; color: #fff;  text-shadow: 1px 1px 0 #000; line-height: 24px; border-top: 1px solid #CED1CE; -webkit-transition: background-color ease-out 100ms; -moz-transition: background-color ease-out 100ms; -o-transition: background-color ease-out 100ms; transition: background-color ease-out 100ms; }
-#footer:hover { background: #9E9F9E; }
-#footer a { text-transform: lowercase; margin: 0 5px; color: #fff; text-decoration: none; text-shadow: 1px 1px 0 #000; }
+#footer { position: fixed; bottom: 0; left: 0; right: 0; height: 34px; background-color: #9E9E9E; color: #9E9F9E; color: rgba(158, 158, 158, 0.5); width: 100%; color: #fff;  text-shadow: 1px 1px 0 #000; line-height: 24px; border-top: 1px solid #CED1CE; -webkit-transition: background-color ease-out 100ms; -moz-transition: background-color ease-out 100ms; -o-transition: background-color ease-out 100ms; transition: background-color ease-out 100ms; }
+#footer:hover { background: #727372; }
+#footer a { line-height: 34px; text-transform: lowercase; margin: 0 5px; color: #fff; text-decoration: none; text-shadow: 1px 1px 0 #000; }
 
 /* font size control */
-#console { top: 35px; bottom: 35px; }
-#output li, #exec { min-height: 24px; font-size: 18px; padding: 5px; }
+/*#console { top: 35px; bottom: 35px; }*/
+#output li, #exec { min-height: 24px; font-size: 18px; }
 
 /* code complete visual tweaks */
 #cursor { display: inline-block; height: 24px; min-width: 1px; outline: 0; top: 0; left: 0; z-index: 999;}
+
+/* HACK */
+#cursor { height: auto; white-space: pre-wrap; }
+
 #exec { cursor: text; }
 #exec .suggest { color: #999; }
 
 /* large command input */
-body.large #console { top: 0; right: 400px; width: auto; }
-body.large form { right: 0; width: 400px; bottom: 0; }
-body.large #exec { width: 390px; border-bottom: 0; top: 0; bottom: 0; height: 100%; z-index: 10; background: #E6E8F2; color: #000; -webkit-box-shadow: none; border-left: 1px solid #AAABB8; left: auto; }
+body.large #console { top: 0; bottom: 35px; margin-bottom: 0; right: 400px; width: auto; position: absolute; }
+body.large form { right: 0; width: 400px; bottom: 0; background: none; border: 0; }
+body.large #exec { position: absolute; width: 390px; border-bottom: 0; top: 0; bottom: 0; height: 100%; z-index: 10; background: #E6E8F2; color: #000; -webkit-box-shadow: none; border-left: 1px solid #AAABB8; left: auto; padding: 5px; }
 
 /* syntax highlighting */
 /** Pretty printing styles. Used with prettify.js. */
@@ -80,7 +95,7 @@ body.large #exec { width: 390px; border-bottom: 0; top: 0; bottom: 0; height: 10
 /*@media screen and (max-width: 480px) {  */
   html, body { height: auto; overflow: visible; }
   #console { overflow: visible; bottom: 0; border-bottom: 0;  }
-  input, textarea { -webkit-border-radius: 0; } /* webkit-mobile adds rounded corners :( */
+  input, textarea { -webkit-border-radius: 0; -webkit-appearance: none; } /* webkit-mobile adds rounded corners :( */
   #footer { display: none; }
 
   #exec { font-weight: bold; padding-right: 10px; }
