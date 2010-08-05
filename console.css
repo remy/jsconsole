@@ -1,6 +1,6 @@
 * { margin: 0; padding: 0; }
 html  { height: 100%; background: #fff; }
-body { height: 100%; overflow: hidden; border: 0; margin: 0; padding: 0; font-family: "helvetica neue", arial, helvetica;  }
+body { height: 100%; overflow: hidden; border: 0; margin: 0; padding: 0; font-family: "helvetica neue", arial, helvetica; width: 100%; overflow-x: hidden; }
 input, textarea { margin: 0; padding: 0; position: relative; font-size: 18px; width: 100%; }
 input { padding: 2px; }
 
@@ -92,16 +92,16 @@ body.large #exec { position: absolute; width: 390px; border-bottom: 0; top: 0; b
 
 /* iPhone type display */
 @media screen and (max-device-width: 480px) {
-/*@media screen and (max-width: 480px) {  */
-  html, body { height: auto; overflow: visible; }
-  #console { overflow: visible; bottom: 0; border-bottom: 0;  }
+  html, body { height: auto; overflow-y: auto; overflow-x: hidden; }
+  #console { overflow: visible; bottom: 0; border-bottom: 0; margin-bottom: 0; }
+  #output .echo .permalink { width: 16px; height: 16px; }
   input, textarea { -webkit-border-radius: 0; -webkit-appearance: none; } /* webkit-mobile adds rounded corners :( */
   #footer { display: none; }
 
   #exec { font-weight: bold; padding-right: 10px; }
   
   #output li { min-height: 20px; font-size: 14px; padding: 0 5px; }
-  #output > li > div { margin-left: 10px; line-height: 18px; }
+  #output > li > div { margin-left: 12px; line-height: 18px; }
   
   #output > li:last-child { padding-bottom: 0; margin-bottom: 0; }
   
