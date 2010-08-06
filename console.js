@@ -650,6 +650,8 @@ exec.onclick = function () {
 
 if (window.location.search) {
   post(decodeURIComponent(window.location.search.substr(1)));
+} else {
+  post(':help', true);
 }
 
 setTimeout(function () {
@@ -657,6 +659,5 @@ setTimeout(function () {
 }, 500);
 
 getProps('window'); // cache 
-post(':help', true);
 
 })(this);
