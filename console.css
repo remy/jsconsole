@@ -46,7 +46,7 @@ form { padding: 5px; border-bottom: 1px solid #AAABB8; background: #E6E8F2; -web
 
 /* HACK */
 form { position: fixed; top: 0; width: 100%; z-index: 2; }
-#console { margin-top: 35px; }
+#console { padding-top: 35px; }
 #exec { position: relative; height: auto; }
 
 /* footer, credit, etc */
@@ -93,8 +93,8 @@ body.large #exec { position: absolute; width: 390px; border-bottom: 0; top: 0; b
 /* iPhone type display */
 @media screen and (max-device-width: 480px) {
   html, body { height: auto; overflow-y: auto; overflow-x: hidden; }
-  #console { overflow: visible; bottom: 0; border-bottom: 0; margin-bottom: 0; }
-  #output .echo .permalink { width: 16px; height: 16px; }
+  #console { overflow: auto; bottom: 0; border-bottom: 0; margin-bottom: 0; padding-top: 5px; }
+  #output .echo .permalink { width: 18px; height: 20px; }
   input, textarea { -webkit-border-radius: 0; -webkit-appearance: none; } /* webkit-mobile adds rounded corners :( */
   #footer { display: none; }
 

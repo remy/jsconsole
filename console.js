@@ -63,13 +63,16 @@ function run(cmd) {
   } 
 }
 
-function post(cmd) {
+function post(cmd, blind) {
   cmd = trim(cmd);
-  history.push(cmd);
-  setHistory(history);
   
-  echo(cmd);
+  if (blind === undefined) {
+    history.push(cmd);
+    setHistory(history);  
+  }
   
+  echo(cmd);    
+
   // order so it appears at the top  
   var el = document.createElement('div'),
       li = document.createElement('li'),
@@ -183,7 +186,8 @@ function noop() {}
 
 function showhelp() {
   var commands = [
-    ':load &lt;script_url&gt; - to inject external script (:load jquery also works)',
+    ':load &lt;url&gt; - to inject new DOM',
+    ':loadjs &lt;script_url&gt; - to inject external library (:load jquery also works)',
     ':clear - to clear the history'];
     
   if (injected) {
@@ -213,6 +217,30 @@ function loadScript() {
     })(libraries[arguments[i]] || arguments[i]);
   }
   return "Loading scripts...";
+}
+
+function loadDOM(url) {
+  var doc = sandboxframe.contentWindow.document,
+      script = document.createElement('script'),
+      cb = 'loadDOM' + +new Date;
+      
+  script.src = 'http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22' + encodeURIComponent(url) + '%22&format=xml&callback=' + cb;
+  
+  window[cb] = function (yql) {
+    var html = yql.results[0].replace(/type="text\/javascript"/ig,'type="x"').replace(/<body.*?>/, '').replace(/<\/body>/, '');
+    
+    doc.body.innerHTML = html;
+    
+    window.top.info('DOM load complete');
+    try {
+      window[cb] = null;
+      delete window[cb];
+    } catch (e) {}
+  };
+  
+  document.body.appendChild(script);
+  
+  return "Loading url into DOM...";
 }
 
 function checkTab(evt) {
@@ -465,7 +493,8 @@ var exec = document.getElementById('exec'),
     ccTimer = null,
     commands = { 
       help: showhelp, 
-      load: loadScript, 
+      loadjs: loadScript, 
+      load: loadDOM,
       clear: function () {
         setTimeout(function () { output.innerHTML = ''; }, 10);
         return 'clearing...';
@@ -625,9 +654,9 @@ if (window.location.search) {
 
 setTimeout(function () {
   window.scrollTo(0, 1);
-}, 13);
+}, 500);
 
 getProps('window'); // cache 
-
+post(':help', true);
 
 })(this);
