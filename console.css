@@ -68,8 +68,7 @@ form { position: fixed; top: 0; width: 100%; z-index: 2; }
 #output li, #exec { min-height: 24px; font-size: 18px; }
 
 /* code complete visual tweaks */
-#cursor { height: 24px; min-width: 1px; outline: 0; top: 0; left: 0; z-index: 999;}
-/*display: inline-block; */
+#cursor { display: inline-block; height: 24px; min-width: 1px; outline: 0; top: 0; left: 0; z-index: 999;}
 
 /* HACK */
 #cursor { height: auto; white-space: pre-wrap; }
