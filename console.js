@@ -79,7 +79,7 @@ function post(cmd, blind) {
       span = document.createElement('span'),
       parent = output.parentNode, 
       response = run(cmd);
-    
+
   el.className = 'response';
   span.innerHTML = response[1];
 
@@ -107,13 +107,13 @@ function post(cmd, blind) {
   pos = history.length;
 }
 
-function log(msg) {
+function log(msg, className) {
   var li = document.createElement('li'),
       div = document.createElement('div');
 
   div.innerHTML = msg;
   prettyPrint([div]);
-  li.className = 'log';
+  li.className = className || 'log';
   li.innerHTML = '<span class="gutter"></span>';
   li.appendChild(div);
 
@@ -136,8 +136,9 @@ window.info = function(cmd) {
   li.className = 'info';
   li.innerHTML = '<span class="gutter"></span><div>' + cleanse(cmd) + '</div>';
 
-  logAfter = output.querySelectorAll('li.echo')[0] || null;
-  appendLog(li, true);
+  // logAfter = output.querySelectorAll('li.echo')[0] || null;
+  // appendLog(li, true);
+  appendLog(li);
 }
 
 function appendLog(el, echo) {
@@ -187,21 +188,33 @@ function noop() {}
 function showhelp() {
   var commands = [
     ':load &lt;url&gt; - to inject new DOM',
-    ':loadjs &lt;script_url&gt; - to inject external library (:load jquery also works)',
+    ':load &lt;script_url&gt; - to inject external library (eg :load jquery)',
     ':clear - to clear the history'];
     
   if (injected) {
     commands.push(':close - to hide the JS Console');
   }
   
-  commands = commands.concat([
-    'up/down - cycle history',
-    'shift+up - single line command',
-    'shift+down - multiline command', 
-    'shift+enter - to run command in multiline mode'
-  ]);
+  // commands = commands.concat([
+  //   'up/down - cycle history',
+  //   'shift+up - single line command',
+  //   'shift+down - multiline command', 
+  //   'shift+enter - to run command in multiline mode'
+  // ]);
   
   return commands.join('<br />\n');
+}
+
+function load(url) {
+  if (navigator.onLine) {
+    if (arguments.length > 1 || libraries[url] || url.indexOf('.js') !== -1) {
+      return loadScript.apply(this, arguments);
+    } else {
+      return loadDOM(url);
+    }    
+  } else {
+    return "You need to be online to use :load";
+  }
 }
 
 function loadScript() {
@@ -213,10 +226,13 @@ function loadScript() {
       script.onload = function () {
         window.top.info('Loaded ' + url, 'http://' + window.location.hostname);
       };
+      script.onerror = function () {
+        log('Failed to load ' + url, 'error');
+      }
       doc.body.appendChild(script);
     })(libraries[arguments[i]] || arguments[i]);
   }
-  return "Loading scripts...";
+  return "Loading script...";
 }
 
 function loadDOM(url) {
@@ -227,15 +243,20 @@ function loadDOM(url) {
   script.src = 'http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22' + encodeURIComponent(url) + '%22&format=xml&callback=' + cb;
   
   window[cb] = function (yql) {
-    var html = yql.results[0].replace(/type="text\/javascript"/ig,'type="x"').replace(/<body.*?>/, '').replace(/<\/body>/, '');
-    
-    doc.body.innerHTML = html;
-    
-    window.top.info('DOM load complete');
+    if (yql.results.length) {
+      var html = yql.results[0].replace(/type="text\/javascript"/ig,'type="x"').replace(/<body.*?>/, '').replace(/<\/body>/, '');
+
+      doc.body.innerHTML = html;
+      window.top.info('DOM load complete');
+      alert('fail');
+    } else {
+      log('Failed to load DOM', 'error');
+    }
     try {
       window[cb] = null;
       delete window[cb];
-    } catch (e) {}
+    } catch (e) {}      
+    
   };
   
   document.body.appendChild(script);
@@ -493,8 +514,8 @@ var exec = document.getElementById('exec'),
     ccTimer = null,
     commands = { 
       help: showhelp, 
-      loadjs: loadScript, 
-      load: loadDOM,
+      // loadjs: loadScript, 
+      load: load,
       clear: function () {
         setTimeout(function () { output.innerHTML = ''; }, 10);
         return 'clearing...';
@@ -545,6 +566,15 @@ function whichKey(event) {
   return keys[event.keyIdentifier] || event.which || event.keyCode;
 }
 
+output.onclick = function (event) {
+  event = event || window.event;
+  if (event.target.nodeName == 'A' && event.target.className == 'permalink') {
+    exec.value = (decodeURIComponent(event.target.search.substr(1)));
+    window.scrollTo(0,0);
+    return false;
+  }
+};
+
 exec.ontouchstart = function () {
   window.scrollTo(0,0);
 };
@@ -582,7 +612,7 @@ exec.onkeydown = function (event) {
         if (enableCC) {
           document.execCommand('selectAll', false, null);
           document.execCommand('delete', false, null);
-          document.execCommand('insertHTML', false, history[pos]);          
+          document.execCommand('insertHTML', false, history[pos]);
         }
         return false;
       }
@@ -650,8 +680,6 @@ exec.onclick = function () {
 
 if (window.location.search) {
   post(decodeURIComponent(window.location.search.substr(1)));
-} else {
-  post(':help', true);
 }
 
 setTimeout(function () {
@@ -659,5 +687,6 @@ setTimeout(function () {
 }, 500);
 
 getProps('window'); // cache 
+post(':help', true);
 
 })(this);

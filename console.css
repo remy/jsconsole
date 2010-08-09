@@ -1,7 +1,15 @@
-* { margin: 0; padding: 0; }
+* {
+  -webkit-touch-callout: none; /* prevent callout to copy image, etc when tap to hold */
+  -webkit-text-size-adjust: none; /* prevent webkit from resizing text to fit */
+/* make transparent link selection, adjust last value opacity 0 to 1.0 */
+  -webkit-tap-highlight-color: rgba(0,0,0,1.0); 
+  margin: 0; 
+  padding: 0;
+}
+
 html  { height: 100%; background: #fff; }
 body { height: 100%; overflow: hidden; border: 0; margin: 0; padding: 0; font-family: "helvetica neue", arial, helvetica; width: 100%; overflow-x: hidden; }
-input, textarea { margin: 0; padding: 0; position: relative; font-size: 18px; width: 100%; }
+input, textarea { margin: 0; padding: 0; position: relative; font-size: 18px; width: 100%; -webkit-border-radius: 0; -webkit-appearance: none; } /* webkit-mobile adds rounded corners :( */
 input { padding: 2px; }
 
 /*#console { position: absolute; left: 0; right: 0; width: 100%; bottom: 0; overflow: auto; border-bottom: 1px solid #5B5C5B; }*/
@@ -16,7 +24,7 @@ body { overflow: auto; }
 #output > li > div { margin-left: 20px; line-height: 20px; }
 #console span.gutter { float: left; display: block; width: 5px; }
 
-#output .echo div { position: relative; }
+#output li div { position: relative; }
 #output .echo .permalink { position: absolute; right: 0; overflow: hidden; display: block; background: url(link.png) no-repeat center; height: 20px; width: 30px; text-indent: -200px; top: 0; opacity: 0.5; }
 
 #output .echo .permalink:hover { opacity: 1; }
@@ -37,6 +45,7 @@ body { overflow: auto; }
 #output li.info + li.echo { border-width: 2px; border-color: #DFDFDF; }
 
 #output li.echo:first-child { border-width: 0;}
+#output li:first-child { border-width: 0;}
 
 iframe { display: none; }
 
@@ -59,7 +68,8 @@ form { position: fixed; top: 0; width: 100%; z-index: 2; }
 #output li, #exec { min-height: 24px; font-size: 18px; }
 
 /* code complete visual tweaks */
-#cursor { display: inline-block; height: 24px; min-width: 1px; outline: 0; top: 0; left: 0; z-index: 999;}
+#cursor { height: 24px; min-width: 1px; outline: 0; top: 0; left: 0; z-index: 999;}
+/*display: inline-block; */
 
 /* HACK */
 #cursor { height: auto; white-space: pre-wrap; }
@@ -86,7 +96,7 @@ body.large #exec { position: absolute; width: 390px; border-bottom: 0; top: 0; b
 .atn { color: #606; }
 .atv { color: #080; }
 .dec { color: #606; }
-.error .str { color: #E81D20;}
+.error span { color: #E81D20;}
 
 /* difference display types */
 
@@ -94,8 +104,8 @@ body.large #exec { position: absolute; width: 390px; border-bottom: 0; top: 0; b
 @media screen and (max-device-width: 480px) {
   html, body { height: auto; overflow-y: auto; overflow-x: hidden; }
   #console { overflow: auto; bottom: 0; border-bottom: 0; margin-bottom: 0; padding-top: 5px; }
+  #console { margin-top: 35px; }
   #output .echo .permalink { width: 18px; height: 20px; }
-  input, textarea { -webkit-border-radius: 0; -webkit-appearance: none; } /* webkit-mobile adds rounded corners :( */
   #footer { display: none; }
 
   #exec { font-weight: bold; padding-right: 10px; }
