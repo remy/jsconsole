@@ -73,7 +73,7 @@ form { position: fixed; top: 0; width: 100%; z-index: 2; }
 
 /* font size control */
 /*#console { top: 35px; bottom: 35px; }*/
-#output li, #exec { min-height: 24px; font-size: 18px; }
+#output li, #exec { min-height: 20px; font-size: 18px; }
 
 /* code complete visual tweaks */
 #cursor { display: inline-block; height: 24px; min-width: 1px; outline: 0; top: 0; left: 0; z-index: 999;}
