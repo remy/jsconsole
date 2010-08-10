@@ -189,7 +189,9 @@ function showhelp() {
   var commands = [
     ':load &lt;url&gt; - to inject new DOM',
     ':load &lt;script_url&gt; - to inject external library (eg :load jquery)',
-    ':clear - to clear the history'];
+    ':clear - to clear the history',
+    ':about'
+  ];
     
   if (injected) {
     commands.push(':close - to hide the JS Console');
@@ -248,7 +250,6 @@ function loadDOM(url) {
 
       doc.body.innerHTML = html;
       window.top.info('DOM load complete');
-      alert('fail');
     } else {
       log('Failed to load DOM', 'error');
     }
@@ -488,6 +489,10 @@ function setHistory(history) {
   } catch (e) {}
 }
 
+function about() {
+  return 'Built by <a target="_new" href="http://twitter.com/rem">@rem</a>';
+}
+
 
 document.addEventListener ? 
   window.addEventListener('message', function (event) {
@@ -514,6 +519,7 @@ var exec = document.getElementById('exec'),
     ccTimer = null,
     commands = { 
       help: showhelp, 
+      about: about,
       // loadjs: loadScript, 
       load: load,
       clear: function () {
@@ -570,6 +576,12 @@ output.onclick = function (event) {
   event = event || window.event;
   if (event.target.nodeName == 'A' && event.target.className == 'permalink') {
     exec.value = (decodeURIComponent(event.target.search.substr(1)));
+    if (enableCC) {
+      document.execCommand('selectAll', false, null);
+      document.execCommand('delete', false, null);
+      document.execCommand('insertHTML', false, (decodeURIComponent(event.target.search.substr(1))));
+    }
+    cursor.focus();
     window.scrollTo(0,0);
     return false;
   }
@@ -680,6 +692,8 @@ exec.onclick = function () {
 
 if (window.location.search) {
   post(decodeURIComponent(window.location.search.substr(1)));
+} else {
+  post(':help', true);
 }
 
 setTimeout(function () {
@@ -687,6 +701,10 @@ setTimeout(function () {
 }, 500);
 
 getProps('window'); // cache 
-post(':help', true);
+
+document.addEventListener('deviceready', function () {
+  cursor.focus();
+}, false);
+
 
 })(this);
