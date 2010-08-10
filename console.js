@@ -204,7 +204,7 @@ function showhelp() {
   //   'shift+enter - to run command in multiline mode'
   // ]);
   
-  return commands.join('<br />\n');
+  return commands.join('\n');
 }
 
 function load(url) {
@@ -511,6 +511,7 @@ var exec = document.getElementById('exec'),
     sandbox = null,
     fakeConsole = 'window.top._console',
     history = getHistory(),
+    liveHistory = (window.history.pushState !== undefined),
     pos = 0,
     wide = true,
     libraries = { jquery: 'http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js', prototype: 'http://ajax.googleapis.com/ajax/libs/prototype/1/prototype.js' },
@@ -572,17 +573,27 @@ function whichKey(event) {
   return keys[event.keyIdentifier] || event.which || event.keyCode;
 }
 
-output.onclick = function (event) {
+function setCursorTo(str) {
+  exec.value = str;
+  if (enableCC) {
+    document.execCommand('selectAll', false, null);
+    document.execCommand('delete', false, null);
+    document.execCommand('insertHTML', false, str);
+  }
+  cursor.focus();
+  window.scrollTo(0,0);
+}
+
+output.ontouchstart = output.onclick = function (event) {
   event = event || window.event;
   if (event.target.nodeName == 'A' && event.target.className == 'permalink') {
-    exec.value = (decodeURIComponent(event.target.search.substr(1)));
-    if (enableCC) {
-      document.execCommand('selectAll', false, null);
-      document.execCommand('delete', false, null);
-      document.execCommand('insertHTML', false, (decodeURIComponent(event.target.search.substr(1))));
+    var command = decodeURIComponent(event.target.search.substr(1));
+    setCursorTo(command);
+    
+    if (liveHistory) {
+      window.history.pushState(command, command, event.target.href);
     }
-    cursor.focus();
-    window.scrollTo(0,0);
+    
     return false;
   }
 };
@@ -695,6 +706,10 @@ if (window.location.search) {
 } else {
   post(':help', true);
 }
+
+window.onpopstate = function (event) {
+  setCursorTo(event.state);
+};
 
 setTimeout(function () {
   window.scrollTo(0, 1);

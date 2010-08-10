@@ -2,7 +2,7 @@
   -webkit-touch-callout: none; /* prevent callout to copy image, etc when tap to hold */
   -webkit-text-size-adjust: none; /* prevent webkit from resizing text to fit */
 /* make transparent link selection, adjust last value opacity 0 to 1.0 */
-  -webkit-tap-highlight-color: rgba(0,0,0,1.0); 
+  -webkit-tap-highlight-color: rgba(0,0,0,0); 
   margin: 0; 
   padding: 0;
 }
@@ -27,6 +27,14 @@ body { overflow: auto; }
 #output li div { position: relative; }
 #output .echo .permalink { position: absolute; right: 0; overflow: hidden; display: block; background: url(link.png) no-repeat center; height: 20px; width: 30px; text-indent: -200px; top: 0; opacity: 0.5; }
 
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+  #output .echo .permalink {
+    background: url(link@2x.png) no-repeat center; 
+    background-size: 16px 16px; 
+  }
+}
+
+
 #output .echo .permalink:hover { opacity: 1; }
 
 /* log types */
@@ -45,7 +53,7 @@ body { overflow: auto; }
 #output li.info + li.echo { border-width: 2px; border-color: #DFDFDF; }
 
 #output li.echo:first-child { border-width: 0;}
-#output li:first-child { border-width: 0;}
+#output li:first-child { border-width: 0; padding-top: 0; }
 
 iframe { display: none; }
 
@@ -100,7 +108,7 @@ body.large #exec { position: absolute; width: 390px; border-bottom: 0; top: 0; b
 /* difference display types */
 
 /* iPhone type display */
-@media screen and (max-device-width: 480px) {
+/*@media screen and (max-device-width: 480px) {*/
   html, body { height: auto; overflow-y: auto; overflow-x: hidden; }
   #console { overflow: auto; bottom: 0; border-bottom: 0; margin-bottom: 0; padding-top: 5px; }
   #console { margin-top: 35px; }
@@ -109,17 +117,20 @@ body.large #exec { position: absolute; width: 390px; border-bottom: 0; top: 0; b
 
   #exec { font-weight: bold; padding-right: 10px; }
   
-  #output li { min-height: 20px; font-size: 14px; padding: 0 5px; }
-  #output > li > div { margin-left: 12px; line-height: 18px; }
+  #output li { min-height: 20px; font-size: 14px; padding: 2px 5px 0 5px; }
+  #output > li > div { margin-left: 12px; line-height: 20px; }
   
   #output > li:last-child { padding-bottom: 0; margin-bottom: 0; }
   
+  #output .gutter { line-height: 20px; }
   #output .echo { padding-top: 5px; }
   #output .echo span.gutter:before,
   #output .info span.gutter:before,
   #output .response span.gutter:before { font-size: 14px; line-height: 18px; height: 14px; }
   #output .error span.gutter:before { font-size: 18px; line-height: 18px; }
-}
+  
+/*  .info span { line-height: 30px; }*/
+/*}*/
 
 /* allow the debug to be printed */
 @media print {
