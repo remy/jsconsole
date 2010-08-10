@@ -51,6 +51,7 @@ body { overflow: auto; }
 #output li.error + li.echo { border-width: 2px; border-color: #DFDFDF; }
 #output li.log + li.echo { border-width: 2px; border-color: #DFDFDF; }
 #output li.info + li.echo { border-width: 2px; border-color: #DFDFDF; }
+/*#output li.info .response span { line-height: 30px; }*/
 
 #output li.echo:first-child { border-width: 0;}
 #output li:first-child { border-width: 0; padding-top: 0; }
