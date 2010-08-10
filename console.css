@@ -108,7 +108,7 @@ body.large #exec { position: absolute; width: 390px; border-bottom: 0; top: 0; b
 /* difference display types */
 
 /* iPhone type display */
-/*@media screen and (max-device-width: 480px) {*/
+@media screen and (max-device-width: 480px) {
   html, body { height: auto; overflow-y: auto; overflow-x: hidden; }
   #console { overflow: auto; bottom: 0; border-bottom: 0; margin-bottom: 0; padding-top: 5px; }
   #console { margin-top: 35px; }
@@ -130,7 +130,7 @@ body.large #exec { position: absolute; width: 390px; border-bottom: 0; top: 0; b
   #output .error span.gutter:before { font-size: 18px; line-height: 18px; }
   
 /*  .info span { line-height: 30px; }*/
-/*}*/
+}
 
 /* allow the debug to be printed */
 @media print {
