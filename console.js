@@ -124,7 +124,7 @@ function echo(cmd) {
   var li = document.createElement('li');
 
   li.className = 'echo';
-  li.innerHTML = '<span class="gutter"></span><div>' + cleanse(cmd) + '<a href="/?' + encodeURIComponent(cleanse(cmd)) + '" class="permalink" title="permalink">link</a></div>';
+  li.innerHTML = '<span class="gutter"></span><div>' + cleanse(cmd) + '<a href="/?' + encodeURIComponent(cmd) + '" class="permalink" title="permalink">link</a></div>';
 
   logAfter = output.querySelectorAll('li.echo')[0] || null;
   appendLog(li, true);
@@ -467,6 +467,12 @@ window._console = {
   }
 };
 
+function showHistory() {
+  var h = getHistory();
+  h.shift();
+  return h.join("\n");
+}
+
 function getHistory() {
   var history = [''];
   
@@ -523,6 +529,7 @@ var exec = document.getElementById('exec'),
       about: about,
       // loadjs: loadScript, 
       load: load,
+      history: showHistory,
       clear: function () {
         setTimeout(function () { output.innerHTML = ''; }, 10);
         return 'clearing...';
@@ -574,6 +581,7 @@ function whichKey(event) {
 }
 
 function setCursorTo(str) {
+  str = cleanse(str);
   exec.value = str;
   if (enableCC) {
     document.execCommand('selectAll', false, null);
@@ -630,13 +638,7 @@ exec.onkeydown = function (event) {
       } 
       if (history[pos] != undefined) {
         removeSuggestion();
-        exec.value = history[pos];
-        cursor.focus();
-        if (enableCC) {
-          document.execCommand('selectAll', false, null);
-          document.execCommand('delete', false, null);
-          document.execCommand('insertHTML', false, history[pos]);
-        }
+        setCursorTo(history[pos])
         return false;
       }
     }
