@@ -2,7 +2,7 @@
 
 // custom because I want to be able to introspect native browser objects *and* functions
 function stringify(o, simple) {
-  var json = '', i, type = ({}).toString.call(o), parts = [];
+  var json = '', i, type = ({}).toString.call(o), parts = [], names = [];
   
   if (type == '[object String]') {
     json = '"' + o.replace(/"/g, '\\"') + '"';
@@ -16,7 +16,11 @@ function stringify(o, simple) {
   } else if (type == '[object Object]') {
     json = '{';
     for (i in o) {
-      parts.push(stringify(i) + ': ' + stringify(o[i], simple));
+      names.push(i);
+    }
+    names.sort();
+    for (i = 0; i < names.length; i++) {
+      parts.push(stringify(names[i]) + ': ' + stringify(o[names[i] ], simple));
     }
     json += parts.join(', ') + '}';
   } else if (type == '[object Number]') {
@@ -32,7 +36,11 @@ function stringify(o, simple) {
   } else if (simple == undefined) {
     json = type + '{\n';
     for (i in o) {
-      parts.push(i + ': ' + stringify(o[i], true)); // safety from max stack
+      names.push(i);
+    }
+    names.sort();
+    for (i = 0; i < names.length; i++) {
+      parts.push(names[i] + ': ' + stringify(o[names[i]], true)); // safety from max stack
     }
     json += parts.join(',\n') + '\n}';
   } else {
