@@ -1,5 +1,9 @@
 (function (window) {
 
+function sortci(a, b) {
+  return a.toLowerCase() < b.toLowerCase() ? -1 : 1;
+}
+
 // custom because I want to be able to introspect native browser objects *and* functions
 function stringify(o, simple) {
   var json = '', i, type = ({}).toString.call(o), parts = [], names = [];
@@ -18,7 +22,7 @@ function stringify(o, simple) {
     for (i in o) {
       names.push(i);
     }
-    names.sort();
+    names.sort(sortci);
     for (i = 0; i < names.length; i++) {
       parts.push(stringify(names[i]) + ': ' + stringify(o[names[i] ], simple));
     }
@@ -38,7 +42,7 @@ function stringify(o, simple) {
     for (i in o) {
       names.push(i);
     }
-    names.sort();
+    names.sort(sortci);
     for (i = 0; i < names.length; i++) {
       parts.push(names[i] + ': ' + stringify(o[names[i]], true)); // safety from max stack
     }
