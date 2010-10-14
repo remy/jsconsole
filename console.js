@@ -200,8 +200,9 @@ function noop() {}
 function showhelp() {
   var commands = [
     ':load &lt;url&gt; - to inject new DOM',
-    ':load &lt;script_url&gt; - to inject external library (eg :load jquery)',
-    ':clear - to clear the history',
+    ':load &lt;script_url&gt; - to inject external library',
+    '      load also supports following shortcuts: <br />      jquery, underscore, prototype, mootools, dojo. eg. :load jquery',
+    ':clear - to clear the history (accessed using cursor keys)',
     ':about'
   ];
     
