@@ -537,7 +537,7 @@ var exec = document.getElementById('exec'),
         jquery: 'http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js',
         prototype: 'http://ajax.googleapis.com/ajax/libs/prototype/1/prototype.js',
         dojo: 'http://ajax.googleapis.com/ajax/libs/dojo/1/dojo/dojo.xd.js',
-        mootools: 'http://ajax.googleapis.com/ajax/libs/mootools/1.2/mootools-yui-compressed.js',
+        mootools: 'http://ajax.googleapis.com/ajax/libs/mootools/1.3/mootools-yui-compressed.js',
         underscore: 'http://documentcloud.github.com/underscore/underscore-min.js'
     },
     body = document.getElementsByTagName('body')[0],
