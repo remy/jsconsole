@@ -729,7 +729,7 @@ if (window.location.search) {
 }
 
 window.onpopstate = function (event) {
-  setCursorTo(event.state);
+  setCursorTo(event.state || '');
 };
 
 setTimeout(function () {
