@@ -609,7 +609,6 @@ function whichKey(event) {
 }
 
 function setCursorTo(str) {
-  str = cleanse(str);
   exec.value = str;
   if (enableCC) {
     document.execCommand('selectAll', false, null);
