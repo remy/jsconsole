@@ -472,6 +472,20 @@ window._console = {
     }
   },
   props: function (obj) {
+	//ES5 new functions, allow us to enumerate all object properties whether enumerable or not, and this function will traverse through prototype too.
+	if (Object.getOwnPropertyNames && Object.__proto__){
+		var resultSet = [];
+		       for (var o = obj; o; o = o.__proto__) {
+		           try {
+		               var names = Object.getOwnPropertyNames(o);
+		               for (var i = 0; i < names.length; ++i)
+		                   resultSet.push(names[i]);
+		           } catch (e) {
+		           }
+		       }
+		return resultSet;
+	}
+		//old browsers
     var props = [], realObj;
     try {
       for (var p in obj) props.push(p);
