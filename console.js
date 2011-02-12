@@ -48,7 +48,9 @@ function stringify(o, simple) {
     }
     json += parts.join(',\n') + '\n}';
   } else {
-    json = o+''; // should look like an object
+    try {
+      json = o+''; // should look like an object      
+    } catch (e) {}
   }
   return json;
 }
@@ -563,6 +565,7 @@ var exec = document.getElementById('exec'),
       }
     },
     // I hate that I'm browser sniffing, but there's issues with Firefox and execCommand so code completion won't work
+    iOSMobile = navigator.userAgent.indexOf('AppleWebKit') !== -1 && navigator.userAgent.indexOf('Mobile') !== -1,
     enableCC = navigator.userAgent.indexOf('AppleWebKit') !== -1 && navigator.userAgent.indexOf('Mobile') === -1;
 
 if (enableCC) {
@@ -757,5 +760,9 @@ document.addEventListener('deviceready', function () {
   cursor.focus();
 }, false);
 
+// if (iOSMobile) {
+//   document.getElementById('footer').style.display = 'none';
+//   alert('hidden');
+// }
 
 })(this);

@@ -133,6 +133,10 @@ body.large #exec { position: absolute; width: 390px; border-bottom: 0; top: 0; b
 /*  .info span { line-height: 30px; }*/
 }
 
+@media screen and (max-device-width: 768px) {
+  #footer { display: none; }
+}
+
 /* allow the debug to be printed */
 @media print {
   body { overflow: auto; }
