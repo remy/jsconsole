@@ -68,6 +68,7 @@ function run(cmd) {
     return ['info', internalCmd];
   } else {
     try {
+      if ('CoffeeScript' in sandboxframe.contentWindow) cmd = sandboxframe.contentWindow.CoffeeScript.compile(cmd, {bare:true});
       rawoutput = sandboxframe.contentWindow.eval(cmd);
     } catch (e) {
       rawoutput = e.message;
@@ -203,7 +204,7 @@ function showhelp() {
   var commands = [
     ':load &lt;url&gt; - to inject new DOM',
     ':load &lt;script_url&gt; - to inject external library',
-    '      load also supports following shortcuts: <br />      jquery, underscore, prototype, mootools, dojo, rightjs. eg. :load jquery',
+    '      load also supports following shortcuts: <br />      jquery, underscore, prototype, mootools, dojo, rightjs, coffeescript. eg. :load jquery',
     ':clear - to clear the history (accessed using cursor keys)',
     ':about'
   ];
@@ -541,7 +542,8 @@ var exec = document.getElementById('exec'),
         dojo: 'http://ajax.googleapis.com/ajax/libs/dojo/1/dojo/dojo.xd.js',
         mootools: 'http://ajax.googleapis.com/ajax/libs/mootools/1.2/mootools-yui-compressed.js',
         underscore: 'http://documentcloud.github.com/underscore/underscore-min.js',
-        rightjs: 'http://rightjs.org/hotlink/right.js'
+        rightjs: 'http://rightjs.org/hotlink/right.js',
+        coffeescript: 'http://jashkenas.github.com/coffee-script/extras/coffee-script.js'
     },
     body = document.getElementsByTagName('body')[0],
     logAfter = null,
