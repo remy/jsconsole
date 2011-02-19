@@ -203,7 +203,7 @@ function showhelp() {
   var commands = [
     ':load &lt;url&gt; - to inject new DOM',
     ':load &lt;script_url&gt; - to inject external library',
-    '      load also supports following shortcuts: <br />      jquery, underscore, prototype, mootools, dojo. eg. :load jquery',
+    '      load also supports following shortcuts: <br />      jquery, underscore, prototype, mootools, dojo, rightjs. eg. :load jquery',
     ':clear - to clear the history (accessed using cursor keys)',
     ':about'
   ];
@@ -540,7 +540,8 @@ var exec = document.getElementById('exec'),
         prototype: 'http://ajax.googleapis.com/ajax/libs/prototype/1/prototype.js',
         dojo: 'http://ajax.googleapis.com/ajax/libs/dojo/1/dojo/dojo.xd.js',
         mootools: 'http://ajax.googleapis.com/ajax/libs/mootools/1.2/mootools-yui-compressed.js',
-        underscore: 'http://documentcloud.github.com/underscore/underscore-min.js'
+        underscore: 'http://documentcloud.github.com/underscore/underscore-min.js',
+        rightjs: 'http://rightjs.org/hotlink/right.js'
     },
     body = document.getElementsByTagName('body')[0],
     logAfter = null,
