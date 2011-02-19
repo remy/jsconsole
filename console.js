@@ -243,7 +243,7 @@ function loadScript() {
       script.src = url
       script.onload = function () {
         window.top.info('Loaded ' + url, 'http://' + window.location.hostname);
-        if (url == libraries.coffeescript) window.top.info('Now you can type <a href="http://coffeescript.com">CoffeeScript</a> instead of plain old JS');
+        if (url == libraries.coffeescript) window.top.info('Now you can type CoffeeScript instead of plain old JS!');
       };
       script.onerror = function () {
         log('Failed to load ' + url, 'error');
