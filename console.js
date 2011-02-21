@@ -545,7 +545,6 @@ var exec = document.getElementById('exec'),
         underscore: 'http://documentcloud.github.com/underscore/underscore-min.js',
         rightjs: 'http://rightjs.org/hotlink/right.js',
         coffeescript: 'http://jashkenas.github.com/coffee-script/extras/coffee-script.js'
-        underscore: 'http://documentcloud.github.com/underscore/underscore-min.js'
     },
     body = document.getElementsByTagName('body')[0],
     logAfter = null,
