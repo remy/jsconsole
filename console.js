@@ -204,9 +204,10 @@ function showhelp() {
   var commands = [
     ':load &lt;url&gt; - to inject new DOM',
     ':load &lt;script_url&gt; - to inject external library',
-    '      load also supports following shortcuts: <br />      jquery, underscore, prototype, mootools, dojo, rightjs, coffeescript. eg. :load jquery',
+    '      load also supports following shortcuts: <br />      jquery, underscore, prototype, mootools, dojo, rightjs, coffeescript, yui. eg. :load jquery',
     ':clear - to clear the history (accessed using cursor keys)',
-    ':about'
+    ':about',
+    'Directions to <a href="/inject.html">inject</a> JS Console in to any page (useful for mobile debugging)'
   ];
     
   if (injected) {
@@ -544,7 +545,8 @@ var exec = document.getElementById('exec'),
         mootools: 'http://ajax.googleapis.com/ajax/libs/mootools/1/mootools-yui-compressed.js',
         underscore: 'http://documentcloud.github.com/underscore/underscore-min.js',
         rightjs: 'http://rightjs.org/hotlink/right.js',
-        coffeescript: 'http://jashkenas.github.com/coffee-script/extras/coffee-script.js'
+        coffeescript: 'http://jashkenas.github.com/coffee-script/extras/coffee-script.js',
+        yui: 'http://yui.yahooapis.com/3.2.0/build/yui/yui-min.js'
     },
     body = document.getElementsByTagName('body')[0],
     logAfter = null,
