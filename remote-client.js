@@ -74,7 +74,7 @@ remoteFrame.style.display = 'none';
 remoteFrame.src = origin + '/remote.html?' + id;
 document.body.appendChild(remoteFrame);
 
-var remoteWindow = remoteFrame.contentWindow;
+var remoteWindow = null;
 
 window.addEventListener('message', function (event) {
   if (event.origin != origin) return;
@@ -86,12 +86,13 @@ window.addEventListener('message', function (event) {
 var remote = {
   log: function () {
     var argsObj = stringify(arguments.length == 1 ? arguments[0] : [].slice.call(arguments, 0));
-    remoteWindow.postMessage(JSON.stringify(argsObj), 'http://' + remoteFrame.src.substr(7).replace(/\/.*$/, ''));
+    remoteWindow && remoteWindow.postMessage(JSON.stringify(argsObj), 'http://' + remoteFrame.src.substr(7).replace(/\/.*$/, ''));
   }
 };
 
-remoteWindow.onload = function () {
-  remoteWindow.postMessage('__init__');
+remoteFrame.onload = function () {
+  remoteWindow = remoteFrame.contentWindow;
+  remoteWindow.postMessage('__init__', origin);
 };
 
 window.remote = remote;

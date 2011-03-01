@@ -26,7 +26,7 @@ window.addEventListener('message', function (event) {
 
 var sse = new EventSource('/remote/' + id + '/run');
 sse.onmessage = function (event) {
-  window.top.postMessage(event.data, window.parent.location.protocol + '//' + window.parent.location.host);
+  window.top.postMessage(event.data, origin);
 };
 </script>
 </body>
