@@ -66,6 +66,15 @@ function run(cmd) {
   
   if (internalCmd) {
     return ['info', internalCmd];
+  } else if (remoteId !== null) {
+    // send the remote event
+    var xhr = new XMLHttpRequest(),
+        params = 'data=' + encodeURIComponent(cmd);
+
+    xhr.open('POST', '/remote/' + remoteId + '/run', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send(params);
+    return ['info', 'sent remote command'];
   } else {
     try {
       if ('CoffeeScript' in sandboxframe.contentWindow) cmd = sandboxframe.contentWindow.CoffeeScript.compile(cmd, {bare:true});
@@ -78,45 +87,52 @@ function run(cmd) {
   } 
 }
 
-function post(cmd, blind) {
+function post(cmd, blind, response /* passed in when echoing from remote console */) {
   cmd = trim(cmd);
-  
+
   if (blind === undefined) {
     history.push(cmd);
-    setHistory(history);  
-  }
-  
-  echo(cmd);    
+    setHistory(history);
 
-  // order so it appears at the top  
+    if (historySupported) {
+      window.history.pushState(cmd, cmd, '?' + encodeURIComponent(cmd));
+    }
+  } 
+
+  echo(cmd);
+
+  // order so it appears at the top
   var el = document.createElement('div'),
       li = document.createElement('li'),
       span = document.createElement('span'),
-      parent = output.parentNode, 
-      response = run(cmd);
+      parent = output.parentNode;
 
-  el.className = 'response';
-  span.innerHTML = response[1];
+  response = response || run(cmd);
 
-  if (response[0] != 'info') prettyPrint([span]);
-  el.appendChild(span);
+  if (response !== undefined) {
+    el.className = 'response';
+    span.innerHTML = response[1];
 
-  li.className = response[0];
-  li.innerHTML = '<span class="gutter"></span>';
-  li.appendChild(el);
+    if (response[0] != 'info') prettyPrint([span]);
+    el.appendChild(span);
 
-  appendLog(li);
-    
-  output.parentNode.scrollTop = 0;
-  if (!body.className) {
-    exec.value = '';
-    if (enableCC) {
-      try {
-        document.querySelector('a').focus();
-        cursor.focus();
-        document.execCommand('selectAll', false, null);
-        document.execCommand('delete', false, null);
-      } catch (e) {}
+    li.className = response[0];
+    li.innerHTML = '<span class="gutter"></span>';
+    li.appendChild(el);
+
+    appendLog(li);
+
+    output.parentNode.scrollTop = 0;
+    if (!body.className) {
+      exec.value = '';
+      if (enableCC) {
+        try {
+          document.querySelector('a').focus();
+          cursor.focus();
+          document.execCommand('selectAll', false, null);
+          document.execCommand('delete', false, null);
+        } catch (e) {}
+      }
     }
   }
   pos = history.length;
@@ -550,7 +566,10 @@ var exec = document.getElementById('exec'),
     },
     body = document.getElementsByTagName('body')[0],
     logAfter = null,
+    historySupported = !!(window.history && window.history.pushState),
     ccTimer = null,
+    sse = null,
+    remoteId = null,
     commands = { 
       help: showhelp, 
       about: about,
@@ -568,6 +587,38 @@ var exec = document.getElementById('exec'),
         } else {
           return 'noop';
         }
+      },
+      listen: function (id) {
+        // place script request for new listen ID and start SSE
+        var script = document.createElement('script'),
+            callback = '_cb' + +new Date;
+        script.src = '/remote/' + (id||'') + '?callback=' + callback;
+
+        window[callback] = function (id) {
+          remoteId = id;
+          if (sse !== null) sse.close();
+          sse = new EventSource('/remote/' + id + '/log');
+          sse.onopen = function () {
+            remoteId = id;
+            window.top.info('Now listening on "' + id + '"');
+          };
+
+          sse.onmessage = function (event) {
+            post('remote log', true, ['response', JSON.parse(event.data)]);
+          };
+
+          sse.onclose = function () {
+            window.top.error('Remote connection closed');
+            remoteId = null;
+          };
+
+          try {
+            body.removeChild(script);
+            delete window[callback];
+          } catch (e) {}
+        };
+        body.appendChild(script);
+        return 'Creating connection...';
       }
     },
     // I hate that I'm browser sniffing, but there's issues with Firefox and execCommand so code completion won't work
