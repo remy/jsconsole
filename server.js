@@ -47,10 +47,10 @@ function remoteServer(app) {
 }
 
 var server = connect.createServer(
-    connect.bodyDecoder(),
-    connect.logger(),
-    connect.staticProvider(__dirname),
-    connect.router(remoteServer)
+  connect.bodyDecoder(),
+  connect.logger(),
+  connect.staticProvider(__dirname),
+  connect.router(remoteServer)
 );
 
 server.listen(80);
