@@ -90,6 +90,10 @@ var remote = {
   }
 };
 
+remoteWindow.onload = function () {
+  remoteWindow.postMessage('__init__');
+};
+
 window.remote = remote;
 
 try {

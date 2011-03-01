@@ -9,13 +9,19 @@
 var id = window.location.search.replace(/.*\?/, ''),
     origin = null;
 window.addEventListener('message', function (event) {
+  origin = event.origin;
+
+  if (event.data == '__init__') {
+    return;
+  }
+
   var xhr = new XMLHttpRequest(),
       params = 'data=' + encodeURIComponent(event.data);
-
-  origin = event.origin;
+  
   xhr.open('POST', '/remote/' + id + '/log', true);
   xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-  xhr.send(params);
+  xhr.send(params);    
+
 }, false);
 
 var sse = new EventSource('/remote/' + id + '/run');
