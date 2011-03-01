@@ -67,7 +67,7 @@ function getLastChild(el) {
 
 var id = getLastChild(document.lastChild).getAttribute('src').replace(/.*\?/, '');
 
-var origin = 'http://offline.jsconsole.com:8000';
+var origin = 'http://jsconsole.com';
 
 var remoteFrame = document.createElement('iframe');
 remoteFrame.style.display = 'none';
