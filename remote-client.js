@@ -65,28 +65,51 @@ function getLastChild(el) {
   return (el.lastChild && el.lastChild.nodeName != '#text') ? getLastChild(el.lastChild) : el;
 }
 
-var id = getLastChild(document.lastChild).getAttribute('src').replace(/.*\?/, '');
-
-var origin = 'http://jsconsole.com';
+var last = getLastChild(document.lastChild).getAttribute('src'),
+    id = last.replace(/.*\?/, ''),
+    origin = 'http://' + last.substr(7).replace(/\/.*$/, ''),
+    remoteWindow = null;
 
 var remoteFrame = document.createElement('iframe');
 remoteFrame.style.display = 'none';
 remoteFrame.src = origin + '/remote.html?' + id;
 document.body.appendChild(remoteFrame);
 
-var remoteWindow = null;
 
 window.addEventListener('message', function (event) {
   if (event.origin != origin) return;
 
   // eval the event.data command
-  remote.log(eval(event.data));
+  try {
+    if (event.data.indexOf('console.log') == 0) {
+      eval('remote.echo(' + event.data.match(/\((.*?)\)/)[1] + ', "' + event.data + '")');
+    } else {
+      remote.echo(eval(event.data), event.data);
+    }
+  } catch (e) {
+    remote.error(e, event.data);
+  }
 });
 
 var remote = {
   log: function () {
     var argsObj = stringify(arguments.length == 1 ? arguments[0] : [].slice.call(arguments, 0));
-    remoteWindow && remoteWindow.postMessage(JSON.stringify(argsObj), 'http://' + remoteFrame.src.substr(7).replace(/\/.*$/, ''));
+    var response = [];
+    [].forEach.call(arguments, function (args) {
+      response.push(stringify(args, true));
+    });
+    remoteWindow && remoteWindow.postMessage(JSON.stringify({ response: response, cmd: 'remote console.log' }), origin);
+  },
+  echo: function (response, cmd) {
+    var args = [].slice.call(arguments, 0),
+        cmd = args.pop(),
+        response = args;
+
+    var argsObj = stringify(response, true);
+    remoteWindow && remoteWindow.postMessage(JSON.stringify({ response: argsObj, cmd: cmd }), origin);
+  },
+  error: function (error, cmd) {
+    remoteWindow && remoteWindow.postMessage(JSON.stringify({ response: error.message, cmd: cmd, type: 'error' }), origin);
   }
 };
 

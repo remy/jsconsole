@@ -74,7 +74,7 @@ function run(cmd) {
     xhr.open('POST', '/remote/' + remoteId + '/run', true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.send(params);
-    return ['info', 'sent remote command'];
+    // return ['info', 'sent remote command'];
   } else {
     try {
       if ('CoffeeScript' in sandboxframe.contentWindow) cmd = sandboxframe.contentWindow.CoffeeScript.compile(cmd, {bare:true});
@@ -99,7 +99,7 @@ function post(cmd, blind, response /* passed in when echoing from remote console
     }
   } 
 
-  echo(cmd);
+  if (!remoteId || response) echo(cmd);
 
   // order so it appears at the top
   var el = document.createElement('div'),
@@ -569,6 +569,7 @@ var exec = document.getElementById('exec'),
     historySupported = !!(window.history && window.history.pushState),
     ccTimer = null,
     sse = null,
+    lastCmd = null,
     remoteId = null,
     commands = { 
       help: showhelp, 
@@ -600,15 +601,23 @@ var exec = document.getElementById('exec'),
           sse = new EventSource('/remote/' + id + '/log');
           sse.onopen = function () {
             remoteId = id;
-            window.top.info('Now listening on "' + id + '"');
+            window.top.info('Connected to "' + id + '"');
           };
 
           sse.onmessage = function (event) {
-            post('remote log', true, ['response', JSON.parse(event.data)]);
+            var data = JSON.parse(event.data);
+            if (data.type && data.type == 'error') {
+              post(data.cmd, true, ['error', data.response]);
+            } else {
+              data.response = data.response.substr(1, data.response.length - 2); // fiddle to remove the [] around the repsonse
+              echo(data.cmd);
+              setCursorTo('');
+              log(data.response, 'response');
+            }
           };
 
           sse.onclose = function () {
-            window.top.error('Remote connection closed');
+            window.top.info('Remote connection closed');
             remoteId = null;
           };
 
