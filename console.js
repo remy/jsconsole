@@ -609,7 +609,7 @@ var exec = document.getElementById('exec'),
             if (data.type && data.type == 'error') {
               post(data.cmd, true, ['error', data.response]);
             } else {
-              data.response = data.response.substr(1, data.response.length - 2); // fiddle to remove the [] around the repsonse
+              if (data.cmd != 'remote console.log') data.response = data.response.substr(1, data.response.length - 2); // fiddle to remove the [] around the repsonse
               echo(data.cmd);
               setCursorTo('');
               log(data.response, 'response');

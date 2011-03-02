@@ -88,9 +88,9 @@ window.addEventListener('message', function (event) {
   // eval the event.data command
   try {
     if (event.data.indexOf('console.log') == 0) {
-      eval('remote.echo(' + event.data.match(/\((.*?)\)/)[1] + ', "' + event.data + '")');
+      eval('remote.echo(' + event.data.match(/console.log\((.*)\);?/)[1] + ', "' + event.data + '", true)');
     } else {
-      remote.echo(eval(event.data), event.data);
+      remote.echo(eval(event.data), event.data, undefined);
     }
   } catch (e) {
     remote.error(e, event.data);
@@ -106,12 +106,13 @@ var remote = {
     });
     remoteWindow && remoteWindow.postMessage(JSON.stringify({ response: response, cmd: 'remote console.log' }), origin);
   },
-  echo: function (response, cmd) {
+  echo: function (response, cmd, plain) {
     var args = [].slice.call(arguments, 0),
+        plain = args.pop();
         cmd = args.pop(),
         response = args;
 
-    var argsObj = stringify(response, true);
+    var argsObj = stringify(response, plain);
     remoteWindow && remoteWindow.postMessage(JSON.stringify({ response: argsObj, cmd: cmd }), origin);
   },
   error: function (error, cmd) {
