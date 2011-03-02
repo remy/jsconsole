@@ -65,9 +65,15 @@ function getLastChild(el) {
   return (el.lastChild && el.lastChild.nodeName != '#text') ? getLastChild(el.lastChild) : el;
 }
 
-var last = getLastChild(document.lastChild).getAttribute('src'),
-    id = last.replace(/.*\?/, ''),
-    origin = 'http://' + last.substr(7).replace(/\/.*$/, ''),
+var last = getLastChild(document.lastChild);
+
+if (last.getAttribute('id') == '_firebugConsole') { // if Firebug is open, this all goes to crap
+  last = last.previousElementSibling;
+} 
+
+var lastSrc = last.getAttribute('src'),
+    id = lastSrc.replace(/.*\?/, ''),
+    origin = 'http://' + lastSrc.substr(7).replace(/\/.*$/, ''),
     remoteWindow = null;
 
 var remoteFrame = document.createElement('iframe');
@@ -89,7 +95,7 @@ window.addEventListener('message', function (event) {
   } catch (e) {
     remote.error(e, event.data);
   }
-});
+}, false);
 
 var remote = {
   log: function () {

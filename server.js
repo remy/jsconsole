@@ -18,28 +18,32 @@ function remoteServer(app) {
   });
 
   app.get('/remote/:id/log', function (req, res) {
+    var id = req.params.id;
     res.writeHead(200, {'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache'});
     res.write('eventId:0\n\n');
-    sessions.log[req.id] = res;
+    console.log('saving log: ' + id);
+    sessions.log[id] = res;
   });
 
   app.post('/remote/:id/log', function (req, res) {
     // post made to send log to jsconsole
-    var id = req.id;
+    var id = req.params.id;
     // passed over to Server Sent Events on jsconsole.com
+    console.log('sending to connected sse on ' + id + ' -- ' + sessions.log[id]);
     sessions.log[id] && sessions.log[id].write('data: ' + req.body.data + '\neventId:' + (++eventid) + '\n\n');
     res.writeHead(200, { 'Content-Type' : 'text/plain' });
     res.end();
   });
 
   app.get('/remote/:id/run', function (req, res) {
+    var id = req.params.id;
     res.writeHead(200, {'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache'});
     res.write('eventId:0\n\n');
-    sessions.run[req.id] = res;
+    sessions.run[id] = res;
   });
 
   app.post('/remote/:id/run', function (req, res) {
-    var id = req.id;
+    var id = req.params.id;
     sessions.run[id] && sessions.run[id].write('data: ' + req.body.data + '\neventId:' + (++eventid) + '\n\n');
     res.writeHead(200, { 'Content-Type' : 'text/plain' });
     res.end();
@@ -53,4 +57,4 @@ var server = connect.createServer(
   connect.router(remoteServer)
 );
 
-server.listen(80);
+server.listen(8000);
