@@ -608,6 +608,8 @@ var exec = document.getElementById('exec'),
             var data = JSON.parse(event.data);
             if (data.type && data.type == 'error') {
               post(data.cmd, true, ['error', data.response]);
+            } else if (data.type && data.type == 'info') {
+              window.top.info(data.response);
             } else {
               if (data.cmd != 'remote console.log') data.response = data.response.substr(1, data.response.length - 2); // fiddle to remove the [] around the repsonse
               echo(data.cmd);

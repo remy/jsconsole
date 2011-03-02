@@ -90,7 +90,7 @@ window.addEventListener('message', function (event) {
     if (event.data.indexOf('console.log') == 0) {
       eval('remote.echo(' + event.data.match(/console.log\((.*)\);?/)[1] + ', "' + event.data + '", true)');
     } else {
-      remote.echo(eval(event.data), event.data, undefined);
+      remote.echo(eval(event.data), event.data, undefined); // must be undefined to work
     }
   } catch (e) {
     remote.error(e, event.data);
@@ -106,9 +106,9 @@ var remote = {
     });
     remoteWindow && remoteWindow.postMessage(JSON.stringify({ response: response, cmd: 'remote console.log' }), origin);
   },
-  echo: function (response, cmd, plain) {
+  echo: function () {
     var args = [].slice.call(arguments, 0),
-        plain = args.pop();
+        plain = args.pop(),
         cmd = args.pop(),
         response = args;
 
@@ -123,6 +123,8 @@ var remote = {
 remoteFrame.onload = function () {
   remoteWindow = remoteFrame.contentWindow;
   remoteWindow.postMessage('__init__', origin);
+  
+  remoteWindow.postMessage(JSON.stringify({ response: 'Connection established with ' + navigator.userAgent, type: 'info' }), origin);
 };
 
 window.remote = remote;
