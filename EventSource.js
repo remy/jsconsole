@@ -34,12 +34,16 @@ var EventSource = function (url) {
       xhr.setRequestHeader('Accept', 'text/event-stream');
       xhr.setRequestHeader('Cache-Control', 'no-cache');
     
+      // we must make use of this on the server side if we're working with Android - because they don't trigger 
+      // readychange until the server connection is closed
+      xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
       if (lastEventId != null) xhr.setRequestHeader('Last-Event-ID', lastEventId);
       cache = '';
     
       xhr.timeout = 50000;
       xhr.onreadystatechange = function () {
-        if (this.readyState == 3 && this.status == 200) {
+        if ((this.readyState == 3 || this.readyState == 4) && this.status == 200) {
           // on success
           if (eventsource.readyState == eventsource.CONNECTING) {
             eventsource.readyState = eventsource.OPEN;
@@ -71,6 +75,8 @@ var EventSource = function (url) {
               }
             }
           }
+
+          if (this.readyState == 4) pollAgain();
           // don't need to poll again, because we're long-loading
         } else if (eventsource.readyState !== eventsource.CLOSED) {
           if (this.readyState == 4) { // and some other status
@@ -87,7 +93,7 @@ var EventSource = function (url) {
       xhr.send();
     
       setTimeout(function () {
-        if (xhr.readyState == 3) xhr.abort();
+        if (true || xhr.readyState == 3) xhr.abort();
       }, xhr.timeout);
       
       eventsource._xhr = xhr;
