@@ -57,4 +57,4 @@ var server = connect.createServer(
   connect.router(remoteServer)
 );
 
-server.listen(8000);
+server.listen(80);
