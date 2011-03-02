@@ -220,9 +220,11 @@ function showhelp() {
   var commands = [
     ':load &lt;url&gt; - to inject new DOM',
     ':load &lt;script_url&gt; - to inject external library',
-    '      load also supports following shortcuts: <br />      jquery, underscore, prototype, mootools, dojo, rightjs, coffeescript, yui. eg. :load jquery',
+    '      load also supports following shortcuts: <br />      jquery, underscore, prototype, mootools, dojo, rightjs, coffeescript, yui.<br />      eg. :load jquery',
+    ':listen [id] - to start <a href="/remote-debugging.html">remote debugging</a> session',
     ':clear - to clear the history (accessed using cursor keys)',
     ':about',
+    '',
     'Directions to <a href="/inject.html">inject</a> JS Console in to any page (useful for mobile debugging)'
   ];
     
