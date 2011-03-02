@@ -21,16 +21,23 @@ function remoteServer(app) {
     var id = req.params.id;
     res.writeHead(200, {'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache'});
     res.write('eventId:0\n\n');
-    console.log('saving log: ' + id);
+
     sessions.log[id] = res;
+    sessions.log[id].xhr = req.headers['x-requested-with'] == 'XMLHttpRequest';
   });
 
   app.post('/remote/:id/log', function (req, res) {
     // post made to send log to jsconsole
     var id = req.params.id;
     // passed over to Server Sent Events on jsconsole.com
-    console.log('sending to connected sse on ' + id + ' -- ' + sessions.log[id]);
-    sessions.log[id] && sessions.log[id].write('data: ' + req.body.data + '\neventId:' + (++eventid) + '\n\n');
+    if (sessions.log[id]) {
+      sessions.log[id].write('data: ' + req.body.data + '\neventId:' + (++eventid) + '\n\n');
+
+      if (sessions.log[id].xhr) {
+        sessions.log[id].end(); // lets older browsers finish their xhr request
+      }
+    }
+
     res.writeHead(200, { 'Content-Type' : 'text/plain' });
     res.end();
   });
@@ -40,11 +47,19 @@ function remoteServer(app) {
     res.writeHead(200, {'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache'});
     res.write('eventId:0\n\n');
     sessions.run[id] = res;
+    sessions.run[id].xhr = req.headers['x-requested-with'] == 'XMLHttpRequest';
   });
 
   app.post('/remote/:id/run', function (req, res) {
     var id = req.params.id;
-    sessions.run[id] && sessions.run[id].write('data: ' + req.body.data + '\neventId:' + (++eventid) + '\n\n');
+
+    if (sessions.run[id]) {
+      sessions.run[id].write('data: ' + req.body.data + '\neventId:' + (++eventid) + '\n\n');
+
+      if (sessions.run[id].xhr) {
+        sessions.run[id].end(); // lets older browsers finish their xhr request
+      }
+    }
     res.writeHead(200, { 'Content-Type' : 'text/plain' });
     res.end();
   });
