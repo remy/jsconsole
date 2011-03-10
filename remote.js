@@ -108,10 +108,13 @@ var remote = {
     [].forEach.call(arguments, function (args) {
       response.push(stringify(args, true));
     });
+
+	var msg = JSON.stringify({ response: response, cmd: 'remote console.log', type: msgType });
+
     if (remoteWindow) {
-      remoteWindow.postMessage(stringify({ response: response, cmd: 'remote console.log', type: msgType }), origin);
+      remoteWindow.postMessage(msg, origin);
     } else {
-      queue.push(stringify({ response: response, cmd: 'remote console.log' }));
+      queue.push(msg);
     }
     
     msgType = '';
@@ -127,7 +130,7 @@ var remote = {
         response = args;
 
     var argsObj = stringify(response, plain),
-        msg = stringify({ response: argsObj, cmd: cmd });
+        msg = JSON.stringify({ response: argsObj, cmd: cmd });
     if (remoteWindow) {
       remoteWindow.postMessage(msg, origin);
     } else {
@@ -135,7 +138,7 @@ var remote = {
     }
   },
   error: function (error, cmd) {
-    var msg = stringify({ response: error.message, cmd: cmd, type: 'error' });
+    var msg = JSON.stringify({ response: error.message, cmd: cmd, type: 'error' });
     if (remoteWindow) {
       remoteWindow.postMessage(msg, origin);
     } else {
