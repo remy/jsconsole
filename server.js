@@ -72,4 +72,5 @@ var server = connect.createServer(
   connect.router(remoteServer)
 );
 
-server.listen(80);
+console.log('Listening on ' + (process.ARGV[2] || 80));
+server.listen(parseInt(process.ARGV[2]) || 80);
