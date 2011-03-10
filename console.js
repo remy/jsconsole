@@ -74,7 +74,8 @@ function run(cmd) {
     xhr.open('POST', '/remote/' + remoteId + '/run', true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.send(params);
-    // return ['info', 'sent remote command'];
+	setCursorTo('');
+    return ['info', 'sent remote command'];
   } else {
     try {
       if ('CoffeeScript' in sandboxframe.contentWindow) cmd = sandboxframe.contentWindow.CoffeeScript.compile(cmd, {bare:true});
@@ -615,7 +616,6 @@ var exec = document.getElementById('exec'),
             } else {
               if (data.cmd != 'remote console.log') data.response = data.response.substr(1, data.response.length - 2); // fiddle to remove the [] around the repsonse
               echo(data.cmd);
-              setCursorTo('');
               log(data.response, 'response');
             }
           };
