@@ -128,7 +128,7 @@ function post(cmd, blind, response /* passed in when echoing from remote console
       exec.value = '';
       if (enableCC) {
         try {
-          document.querySelector('a').focus();
+          document.getElementsByTagName('a')[0].focus();
           cursor.focus();
           document.execCommand('selectAll', false, null);
           document.execCommand('delete', false, null);
@@ -158,7 +158,22 @@ function echo(cmd) {
   li.className = 'echo';
   li.innerHTML = '<span class="gutter"></span><div>' + cleanse(cmd) + '<a href="/?' + encodeURIComponent(cmd) + '" class="permalink" title="permalink">link</a></div>';
 
-  logAfter = output.querySelectorAll('li.echo')[0] || null;
+  logAfter = null;
+
+  if (document.querySelectorAll) {
+    logAfter = output.querySelectorAll('li.echo')[0] || null;
+  } else {
+    var lis = document.getElementsByTagName('li'),
+        len = lis.length;
+    for (var i = 0; i < len; i++) {
+      if (lis[i].className.indexOf('echo') !== -1) {
+        logAfter = lis[i];
+        break;
+      }
+    }
+  }
+  
+  // logAfter = output.querySelectorAll('li.echo')[0] || null;
   appendLog(li, true);
 }
 
@@ -809,7 +824,6 @@ document.onkeydown = function (event) {
 exec.onclick = function () {
   cursor.focus();
 }
-
 if (window.location.search) {
   post(decodeURIComponent(window.location.search.substr(1)));
 } else {
