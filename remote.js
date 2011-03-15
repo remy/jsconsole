@@ -61,15 +61,29 @@ function stringify(o, simple) {
 }
 
 
-function getLastChild(el) {
-  return (el.lastChild && el.lastChild.nodeName != '#text') ? getLastChild(el.lastChild) : el;
+// Plugins that inject are screwing this up :(
+// function getLastChild(el) {
+//   return (el.lastChild && el.lastChild.nodeName != '#text') ? getLastChild(el.lastChild) : el;
+// }
+
+function getRemoteScript() {
+	var scripts = document.getElementsByTagName('script'),
+		remoteScript = null;
+	for (var i = 0; i < scripts.length; i++) {
+		if (scripts[i].src.indexOf('jsconsole.com/remote.js') !== -1) {
+			remoteScript = scripts[i];
+			break;
+		}
+	}
+	
+	return remoteScript;
 }
 
-var last = getLastChild(document.lastChild);
+var last = getRemoteScript();
 
-if (last.getAttribute('id') == '_firebugConsole') { // if Firebug is open, this all goes to crap
-  last = last.previousElementSibling;
-} 
+// if (last.getAttribute('id') == '_firebugConsole') { // if Firebug is open, this all goes to crap
+//   last = last.previousElementSibling;
+// } 
 
 var lastSrc = last.getAttribute('src'),
     id = lastSrc.replace(/.*\?/, ''),
