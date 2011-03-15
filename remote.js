@@ -67,16 +67,16 @@ function stringify(o, simple) {
 // }
 
 function getRemoteScript() {
-	var scripts = document.getElementsByTagName('script'),
-		remoteScript = null;
-	for (var i = 0; i < scripts.length; i++) {
-		if (scripts[i].src.indexOf('jsconsole.com/remote.js') !== -1) {
-			remoteScript = scripts[i];
-			break;
-		}
-	}
-	
-	return remoteScript;
+  var scripts = document.getElementsByTagName('script'),
+      remoteScript = null;
+  for (var i = 0; i < scripts.length; i++) {
+    if (scripts[i].src.indexOf('jsconsole.com/remote.js') !== -1) {
+      remoteScript = scripts[i];
+      break;
+    }
+  }
+  
+  return remoteScript;
 }
 
 var last = getRemoteScript();
