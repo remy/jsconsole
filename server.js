@@ -66,9 +66,9 @@ function remoteServer(app) {
 }
 
 var server = connect.createServer(
-  connect.bodyDecoder(),
+  connect.bodyParser(),
   connect.logger(),
-  connect.staticProvider(__dirname),
+  connect.static(__dirname),
   connect.router(remoteServer)
 );
 
