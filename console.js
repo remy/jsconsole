@@ -616,6 +616,7 @@ var exec = document.getElementById('exec'),
         window[callback] = function (id) {
           remoteId = id;
           if (sse !== null) sse.close();
+
           sse = new EventSource('/remote/' + id + '/log');
           sse.onopen = function () {
             remoteId = id;

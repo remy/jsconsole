@@ -14,7 +14,7 @@ function stringify(o, simple) {
   var json = '', i, type = ({}).toString.call(o), parts = [], names = [];
   
   if (type == '[object String]') {
-    json = '"' + o.replace(/"/g, '\\"') + '"';
+    json = '"' + o.replace(/\n/g, '\\n').replace(/"/g, '\\"') + '"';
   } else if (type == '[object Array]') {
     json = '[';
     for (i = 0; i < o.length; i++) {
@@ -70,7 +70,7 @@ function getRemoteScript() {
   var scripts = document.getElementsByTagName('script'),
       remoteScript = null;
   for (var i = 0; i < scripts.length; i++) {
-    if (scripts[i].src.indexOf('jsconsole.com/remote.js') !== -1) {
+    if (/jsconsole.com(:\d+)?\/remote.js/.test(scripts[i].src)) {
       remoteScript = scripts[i];
       break;
     }
@@ -169,7 +169,7 @@ remoteFrame.onload = function () {
   remoteWindow = remoteFrame.contentWindow;
   remoteWindow.postMessage('__init__', origin);
   
-  remoteWindow.postMessage(stringify({ response: 'Connection established with ' + navigator.userAgent, type: 'info' }), origin);
+  remoteWindow.postMessage(stringify({ response: 'Connection established with ' + window.location.toString() + '\n' + navigator.userAgent, type: 'info' }), origin);
   
   for (var i = 0; i < queue.length; i++) {
     remoteWindow.postMessage(queue[i], origin);

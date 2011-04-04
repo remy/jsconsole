@@ -25,10 +25,12 @@ window.addEventListener('message', function (event) {
 
 }, false);
 
-var sse = new EventSource('/remote/' + id + '/run');
-sse.onmessage = function (event) {
-  window.top.postMessage(event.data, origin);
-};
+setTimeout(function () {
+  var sse = new EventSource('/remote/' + id + '/run');
+  sse.onmessage = function (event) {
+    window.top.postMessage(event.data, origin);
+  };
+}, 13);
 </script>
 </body>
 </html>
