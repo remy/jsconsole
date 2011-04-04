@@ -18,7 +18,7 @@ input { padding: 2px; }
 body { overflow: auto; }
 #console { bottom: 35px; left: 0; right: 0; width: 100%; margin-bottom: 35px; overflow: auto; /*border-bottom: 1px solid #5B5C5B;*/ }
 
-#output { font-family: monospace; list-style: none; }
+#output { list-style: none; }
 #output li { margin: 5px 0; padding: 5px; border-top: 1px solid #EEEFEE; white-space: pre-wrap; }
 #output li:last-child { border-bottom: 0;}
 #output > li > div { margin-left: 20px; line-height: 20px; }
@@ -60,7 +60,7 @@ iframe { display: none; }
 
 /* input style - note: moz-shadow purposely omitted because it affects layout */
 form { padding: 5px; border-bottom: 1px solid #AAABB8; background: #E6E8F2; -webkit-box-shadow: 0px 2px 10px rgba(0,0,0,.3); -o-box-shadow: 0px 2px 10px rgba(0,0,0,.3); box-shadow: 0px 2px 10px rgba(0,0,0,.3); }
-#exec { resize: none; font-family: monospace; position: absolute; left: 0; right: 0; border: 0; /*padding: 5px; */outline: 0; background: #E6E8F2; color: #000; height: 24px; line-height: 24px; overflow: hidden; }
+#exec { resize: none; position: absolute; left: 0; right: 0; border: 0; /*padding: 5px; */outline: 0; background: #E6E8F2; color: #000; height: 24px; line-height: 24px; overflow: hidden; }
 
 /* HACK */
 form { position: fixed; top: 0; width: 100%; z-index: 2; }
@@ -74,7 +74,7 @@ form { position: fixed; top: 0; width: 100%; z-index: 2; }
 
 /* font size control */
 /*#console { top: 35px; bottom: 35px; }*/
-#output li, #exec { min-height: 20px; font-size: 18px; }
+#output li, #exec { min-height: 20px; font-size: 15px; font-family: "Menlo", consolas, monospace; }
 
 /* code complete visual tweaks */
 #cursor { display: inline-block; height: 24px; min-width: 1px; outline: 0; top: 0; left: 0; z-index: 999;}
