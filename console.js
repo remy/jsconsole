@@ -841,7 +841,7 @@ setTimeout(function () {
 
 getProps('window'); // cache 
 
-document.addEventListener('deviceready', function () {
+if (document.addEventListener) document.addEventListener('deviceready', function () {
   cursor.focus();
 }, false);
 
