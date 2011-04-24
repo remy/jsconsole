@@ -739,14 +739,18 @@ exec.onkeydown = function (event) {
     } else if (!wide) {
       if (which == 38) { // cycle up
         pos--;
-        if (pos < 0) pos = history.length - 1;
+        if (pos < 0) pos = 0; //history.length - 1;
       } else if (which == 40) { // down
         pos++;
-        if (pos >= history.length) pos = 0;
+        if (pos >= history.length) pos = history.length; //0;
       } 
-      if (history[pos] != undefined) {
+      if (history[pos] != undefined && history[pos] !== '') {
         removeSuggestion();
         setCursorTo(history[pos])
+        return false;
+      } else if (pos == history.length) {
+        removeSuggestion();
+        setCursorTo('');
         return false;
       }
     }
