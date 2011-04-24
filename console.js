@@ -750,7 +750,7 @@ exec.onkeydown = function (event) {
         return false;
       }
     }
-  } else if (which == 13 || which == 10) { // enter (what about the other one)
+  } else if ((which == 13 || which == 10) && event.shiftKey == false) { // enter (what about the other one)
     removeSuggestion();
     if (event.shiftKey == true || event.metaKey || event.ctrlKey || !wide) {
       post(exec.textContent || exec.value);
