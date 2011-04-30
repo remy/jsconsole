@@ -6,7 +6,13 @@ function sortci(a, b) {
 
 // custom because I want to be able to introspect native browser objects *and* functions
 function stringify(o, simple) {
-  var json = '', i, type = ({}).toString.call(o), parts = [], names = [];
+  var json = '', i, type = '', parts = [], names = [];
+  
+  try {
+    type = ({}).toString.call(o);
+  } catch (e) { // only happens when typeof is protected (...randomly)
+    type = '[object Object]';
+  }
   
   if (type == '[object String]') {
     json = '"' + o.replace(/"/g, '\\"') + '"';
@@ -44,7 +50,14 @@ function stringify(o, simple) {
     }
     names.sort(sortci);
     for (i = 0; i < names.length; i++) {
-      parts.push(names[i] + ': ' + stringify(o[names[i]], true)); // safety from max stack
+      try {
+        parts.push(names[i] + ': ' + stringify(o[names[i]], true)); // safety from max stack        
+      } catch (e) {
+        if (e.name == 'NS_ERROR_NOT_IMPLEMENTED') {
+          // do nothing - not sure it's useful to show this error when the variable is protected
+          // parts.push(names[i] + ': NS_ERROR_NOT_IMPLEMENTED');
+        }
+      }
     }
     json += parts.join(',\n') + '\n}';
   } else {
@@ -494,6 +507,7 @@ function codeComplete(event) {
 }
 
 function removeSuggestion() {
+  if (!enableCC) exec.setAttribute('rows', 1);
   if (enableCC && cursor.nextSibling) cursor.parentNode.removeChild(cursor.nextSibling);
 }
 
@@ -652,6 +666,7 @@ var exec = document.getElementById('exec'),
     },
     // I hate that I'm browser sniffing, but there's issues with Firefox and execCommand so code completion won't work
     iOSMobile = navigator.userAgent.indexOf('AppleWebKit') !== -1 && navigator.userAgent.indexOf('Mobile') !== -1,
+    // TODO try and detect this - currently Firefox doesn't allow me to clear the contents :(
     enableCC = navigator.userAgent.indexOf('AppleWebKit') !== -1 && navigator.userAgent.indexOf('Mobile') === -1;
 
 if (enableCC) {
@@ -689,12 +704,15 @@ function whichKey(event) {
 }
 
 function setCursorTo(str) {
-  str = cleanse(str);
+  str = enableCC ? cleanse(str) : str;
   exec.value = str;
   if (enableCC) {
     document.execCommand('selectAll', false, null);
     document.execCommand('delete', false, null);
     document.execCommand('insertHTML', false, str);
+  } else {
+    var rows = str.match(/\n/g);
+    exec.setAttribute('rows', rows !== null ? rows.length + 1 : 1);
   }
   cursor.focus();
   window.scrollTo(0,0);
@@ -760,6 +778,11 @@ exec.onkeydown = function (event) {
       post(exec.textContent || exec.value);
       return false;
     }
+  } else if ((which == 13 || which == 10) && !enableCC && event.shiftKey == true) {
+    // manually expand the textarea when we don't have code completion turned on
+    var rows = exec.value.match(/\n/g);
+    rows = rows != null ? rows.length + 2 : 2;
+    exec.setAttribute('rows', rows);
   } else if (which == 9 && wide) {
     checkTab(event);
   } else if (event.shiftKey && event.metaKey && which == 8) {
