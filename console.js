@@ -775,7 +775,8 @@ exec.onkeydown = function (event) {
   } else if ((which == 13 || which == 10) && event.shiftKey == false) { // enter (what about the other one)
     removeSuggestion();
     if (event.shiftKey == true || event.metaKey || event.ctrlKey || !wide) {
-      post(exec.textContent || exec.value);
+      var command = exec.textContent || exec.value;
+      if (command.length) post(command);
       return false;
     }
   } else if ((which == 13 || which == 10) && !enableCC && event.shiftKey == true) {
@@ -789,6 +790,8 @@ exec.onkeydown = function (event) {
     output.innerHTML = '';
   } else if ((which == 39 || which == 35) && ccPosition !== false) { // complete code
     completeCode();
+  } else if (event.ctrlKey && which == 76) {
+    output.innerHTML = '';
   } else if (enableCC) { // try code completion
     if (ccPosition !== false && which == 9) {
       codeComplete(event); // cycles available completions

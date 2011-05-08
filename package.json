@@ -1,0 +1,11 @@
+{
+  "name": "jsconsole",
+  "version": "1.1",
+  "author": "Remy Sharp <remy@leftlogic.com>",
+  "dependencies": {
+    "connect": ">= 1.4.0",
+    "node-uuid": ">= 1.1.0"
+  },
+  "main": "jsconsole",
+  "private": true
+}

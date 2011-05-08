@@ -1,0 +1,19 @@
+CACHE MANIFEST
+
+CACHE:
+inject.html
+remote-debugging.html
+console.js
+prettify.packed.js
+EventSource.js
+inject.js
+console.css
+link.png
+favicon.png
+
+NETWORK:
+/
+/remote/*
+*
+
+# 2011-05-08
