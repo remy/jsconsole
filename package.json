@@ -1,6 +1,6 @@
 {
   "name": "jsconsole",
-  "version": "1.1",
+  "version": "1.1.1",
   "author": "Remy Sharp <remy@leftlogic.com>",
   "dependencies": {
     "connect": ">= 1.4.0",
