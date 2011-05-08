@@ -6,6 +6,6 @@
     "connect": ">= 1.4.0",
     "node-uuid": ">= 1.1.0"
   },
-  "main": "jsconsole",
+  "main": "server.js",
   "private": true
 }
