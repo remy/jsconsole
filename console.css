@@ -1,6 +1,5 @@
 * {
   -webkit-touch-callout: none; /* prevent callout to copy image, etc when tap to hold */
-  -webkit-text-size-adjust: none; /* prevent webkit from resizing text to fit */
 /* make transparent link selection, adjust last value opacity 0 to 1.0 */
   -webkit-tap-highlight-color: rgba(0,0,0,0); 
   margin: 0; 
@@ -28,6 +27,8 @@ body { overflow: auto; }
 #output .echo .permalink { position: absolute; right: 0; overflow: hidden; display: block; background: url(link.png) no-repeat center; height: 20px; width: 30px; text-indent: -200px; top: 0; opacity: 0.5; }
 
 @media only screen and (-webkit-min-device-pixel-ratio: 2) {
+  -webkit-text-size-adjust: none; /* prevent webkit from resizing text to fit */
+  
   #output .echo .permalink {
     background: url(link@2x.png) no-repeat center; 
     background-size: 16px 16px; 
@@ -110,6 +111,8 @@ body.large #exec { position: absolute; width: 390px; border-bottom: 0; top: 0; b
 
 /* iPhone type display */
 @media screen and (max-device-width: 480px) {
+  -webkit-text-size-adjust: none; /* prevent webkit from resizing text to fit */
+  
   html, body { height: auto; overflow-y: auto; overflow-x: hidden; }
   #console { overflow: auto; bottom: 0; border-bottom: 0; margin-bottom: 0; padding-top: 5px; }
   #console { margin-top: 35px; }
