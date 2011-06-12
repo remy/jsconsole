@@ -252,6 +252,7 @@ function showhelp() {
     '      load also supports following shortcuts: <br />      jquery, underscore, prototype, mootools, dojo, rightjs, coffeescript, yui.<br />      eg. :load jquery',
     ':listen [id] - to start <a href="/remote-debugging.html">remote debugging</a> session',
     ':clear - to clear the history (accessed using cursor keys)',
+    ':history - list current session history',
     ':about',
     '',
     'Directions to <a href="/inject.html">inject</a> JS Console in to any page (useful for mobile debugging)'
@@ -599,10 +600,11 @@ var exec = document.getElementById('exec'),
     body = document.getElementsByTagName('body')[0],
     logAfter = null,
     historySupported = !!(window.history && window.history.pushState),
-    ccTimer = null,
     sse = null,
     lastCmd = null,
     remoteId = null,
+    codeCompleteTimer = null,
+    keypressTimer = null,
     commands = { 
       help: showhelp, 
       about: about,
@@ -738,10 +740,22 @@ exec.ontouchstart = function () {
 
 exec.onkeyup = function (event) {
   var which = whichKey(event);
-  clearTimeout(ccTimer);
-  if (enableCC && which != 9 && which != 16) setTimeout(function () {
-    codeComplete(event);
-  }, 200);
+
+  if (enableCC && which != 9 && which != 16) {
+    clearTimeout(codeCompleteTimer);
+    codeCompleteTimer = setTimeout(function () {
+      codeComplete(event);
+    }, 200);
+  }
+};
+
+function findNode(list, node) {
+  for (var i = 0; i < list.length; i++) {
+    if (list[i] == node) {
+      return i;
+    }
+  }
+  return -1;
 }
 
 exec.onkeydown = function (event) {
@@ -754,7 +768,24 @@ exec.onkeydown = function (event) {
   if (keys[which]) {
     if (event.shiftKey) {
       changeView(event);
-    } else if (!wide) {
+    } else if (!wide) { // history cycle
+      if (enableCC && window.getSelection) {
+        var selObj = window.getSelection();
+        var selRange = selObj.getRangeAt(0);
+        cursorPos =  findNode(selObj.anchorNode.parentNode.childNodes, selObj.anchorNode) + selObj.anchorOffset;
+        var value = exec.value,
+            firstnl = value.indexOf('\n'),
+            lastnl = value.lastIndexOf('\n');
+
+        if (firstnl !== -1) {
+          if (which == 38 && cursorPos > firstnl) {
+            return;
+          } else if (which == 40 && cursorPos <= lastnl) {
+            return;
+          }
+        }        
+      }
+      
       if (which == 38) { // cycle up
         pos--;
         if (pos < 0) pos = 0; //history.length - 1;
