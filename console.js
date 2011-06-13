@@ -750,10 +750,12 @@ exec.onkeyup = function (event) {
 };
 
 function findNode(list, node) {
+  var pos = 0;
   for (var i = 0; i < list.length; i++) {
     if (list[i] == node) {
-      return i;
+      return pos;
     }
+    pos += list[i].nodeValue.length;
   }
   return -1;
 }
@@ -770,8 +772,9 @@ exec.onkeydown = function (event) {
       changeView(event);
     } else if (!wide) { // history cycle
       if (enableCC && window.getSelection) {
-        var selObj = window.getSelection();
+        window.selObj = window.getSelection();
         var selRange = selObj.getRangeAt(0);
+        
         cursorPos =  findNode(selObj.anchorNode.parentNode.childNodes, selObj.anchorNode) + selObj.anchorOffset;
         var value = exec.value,
             firstnl = value.indexOf('\n'),
@@ -780,10 +783,10 @@ exec.onkeydown = function (event) {
         if (firstnl !== -1) {
           if (which == 38 && cursorPos > firstnl) {
             return;
-          } else if (which == 40 && cursorPos <= lastnl) {
+          } else if (which == 40 && cursorPos < lastnl) {
             return;
           }
-        }        
+        }
       }
       
       if (which == 38) { // cycle up
