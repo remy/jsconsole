@@ -12,8 +12,7 @@ link.png
 favicon.png
 
 NETWORK:
-/
-/remote/*
-*
+http://*
+https://*
 
-# 2011-05-08
+# 2011-06-07 c
