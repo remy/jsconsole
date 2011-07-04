@@ -69,7 +69,7 @@ function stringify(o, simple) {
 }
 
 function cleanse(s) {
-  return (s||'').replace(/[<>&]/g, function (m) { return {'&':'&amp;','>':'&gt;','<':'&lt;'}[m];});
+  return (s||'').replace(/[<>&]/g, function (m) { return {'&':'&amp;','<':'&lt;'}[m];});
 }
 
 function run(cmd) {
@@ -173,7 +173,7 @@ function echo(cmd) {
 
   logAfter = null;
 
-  if (document.querySelector) {
+  if (output.querySelector) {
     logAfter = output.querySelector('li.echo') || null;
   } else {
     var lis = document.getElementsByTagName('li'),
