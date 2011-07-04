@@ -173,12 +173,13 @@ function echo(cmd) {
 
   logAfter = null;
 
-  if (document.querySelectorAll) {
-    logAfter = output.querySelectorAll('li.echo')[0] || null;
+  if (document.querySelector) {
+    logAfter = output.querySelector('li.echo') || null;
   } else {
     var lis = document.getElementsByTagName('li'),
-        len = lis.length;
-    for (var i = 0; i < len; i++) {
+        len = lis.length,
+        i;
+    for (i = 0; i < len; i++) {
       if (lis[i].className.indexOf('echo') !== -1) {
         logAfter = lis[i];
         break;
@@ -186,7 +187,7 @@ function echo(cmd) {
     }
   }
   
-  // logAfter = output.querySelectorAll('li.echo')[0] || null;
+  // logAfter = output.querySelector('li.echo') || null;
   appendLog(li, true);
 }
 
@@ -196,7 +197,7 @@ window.info = function(cmd) {
   li.className = 'info';
   li.innerHTML = '<span class="gutter"></span><div>' + cleanse(cmd) + '</div>';
 
-  // logAfter = output.querySelectorAll('li.echo')[0] || null;
+  // logAfter = output.querySelector('li.echo') || null;
   // appendLog(li, true);
   appendLog(li);
 }
