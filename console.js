@@ -69,7 +69,7 @@ function stringify(o, simple) {
 }
 
 function cleanse(s) {
-  return (s||'').replace(/[<>&]/g, function (m) { return {'&':'&amp;','<':'&lt;'}[m];});
+  return (s||'').replace(/[<&]/g, function (m) { return {'&':'&amp;','<':'&lt;'}[m];});
 }
 
 function run(cmd) {
