@@ -87,9 +87,14 @@ form { position: fixed; top: 0; width: 100%; z-index: 2; }
 #exec .suggest { color: #999; }
 
 /* large command input */
-body.large #console { top: 0; bottom: 35px; margin-bottom: 0; right: 400px; width: auto; position: absolute; }
+body.large #console { top: 0; padding-top: 0; bottom: 0; margin-bottom: 0; right: 400px; width: auto; position: absolute; }
 body.large form { right: 0; width: 391px; bottom: 0; background: none; border: 0; }
 body.large #exec { position: absolute; width: 390px; border-bottom: 0; top: 0; bottom: 0; height: 100%; z-index: 10; background: #E6E8F2; color: #000; -webkit-box-shadow: none; border-left: 1px solid #AAABB8; left: auto; padding: 5px; }
+
+/* with footer - which I've removed temporarily */
+/* body.large #console {
+  bottom: 35px; 
+} */
 
 /* syntax highlighting */
 /** Pretty printing styles. Used with prettify.js. */
@@ -107,6 +112,46 @@ body.large #exec { position: absolute; width: 390px; border-bottom: 0; top: 0; b
 .dec { color: #606; }
 .error span { color: #E81D20;}
 
+/* hide the footer after a short amount of time */
+#footer {
+  transition: opacity 200ms ease-out;
+  -webkit-transition: opacity 200ms ease-out;
+  -moz-transition: opacity 200ms ease-out;
+  -o-transition: opacity 200ms ease-out;
+  -ms-transition: opacity 200ms ease-out;
+  opacity: 1;
+}
+
+#footer.hidden {
+  opacity: 0;
+}
+
+#footer:hover {
+  opacity: 1;
+}
+/*#footer {
+  -webkit-animation-name: hidefooter;
+  -webkit-animation-duration: 200ms;
+  -webkit-animation-delay: 1s;
+  -webkit-animation-iteration-count: 1;
+  -webkit-animation-fill-mode: none;
+  -webkit-transition: opacity 200ms ease-out;
+  opacity: 1;
+}
+
+#footer:hover {
+  opacity: 1 !important;
+}
+
+@-webkit-keyframes hidefooter {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+*/
 /* difference display types */
 
 /* iPhone type display */

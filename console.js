@@ -220,7 +220,7 @@ function appendLog(el, echo) {
 }
 
 function changeView(event){
-  if (enableCC) return;
+  if (false && enableCC) return;
   
   var which = event.which || event.keyCode;
   if (which == 38 && event.shiftKey == true) {
@@ -902,6 +902,10 @@ window.onpopstate = function (event) {
 setTimeout(function () {
   window.scrollTo(0, 1);
 }, 500);
+
+setTimeout(function () {
+  document.getElementById('footer').className = 'hidden';
+}, 5000);
 
 getProps('window'); // cache 
 
