@@ -178,6 +178,10 @@ remoteFrame.onload = function () {
 
 window.remote = remote;
 
+window.addEventListner('error', function (event) {
+  remote.error(event.message, event.filename + ':' + event.lineno);
+}, false);
+
 try {
   window.console = remote;
 } catch (e) {
