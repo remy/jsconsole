@@ -18,7 +18,9 @@ function stringify(o, simple, visited) {
   // check for circular references
   var isCircular = false;
   for (var vi = 0; vi < visited.length; vi++) {
-    isCircular = isCircular || o === visited[vi];
+    if (o === visited[vi]) {
+      isCircular = true; break;
+    }
   }
 
   if (isCircular) {
