@@ -227,9 +227,15 @@ function changeView(event){
   if (which == 38 && event.shiftKey == true) {
     body.className = '';
     cursor.focus();
+    try {
+      localStorage.large = 0;
+    } catch (e) {}
     return false;
   } else if (which == 40 && event.shiftKey == true) {
     body.className = 'large';
+    try {
+      localStorage.large = 1;
+    } catch (e) {}
     cursor.focus();
     return false;
   }
@@ -587,7 +593,6 @@ var exec = document.getElementById('exec'),
     history = getHistory(),
     liveHistory = (window.history.pushState !== undefined),
     pos = 0,
-    wide = true,
     libraries = {
         jquery: 'http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js',
         prototype: 'http://ajax.googleapis.com/ajax/libs/prototype/1/prototype.js',
@@ -909,6 +914,13 @@ setTimeout(function () {
 }, 5000);
 
 getProps('window'); // cache 
+
+try {
+  if (!!(localStorage.large*1)) {
+    document.body.className = 'large';
+  }
+} catch (e) {}
+
 
 if (document.addEventListener) document.addEventListener('deviceready', function () {
   cursor.focus();
