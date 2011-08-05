@@ -87,10 +87,10 @@ form { position: fixed; top: 0; width: 100%; z-index: 2; }
 #exec .suggest { color: #999; }
 
 /* large command input */
-body.large #console { top: 0; padding-top: 0; bottom: 0; margin-bottom: 0; right: 400px; width: auto; position: absolute; }
-body.large form { right: 0; width: 391px; bottom: 0; background: none; border: 0; }
-body.large #exec { position: absolute; width: 390px; border-bottom: 0; top: 0; bottom: 0; height: 100%; z-index: 10; background: #E6E8F2; color: #000; -webkit-box-shadow: none; border-left: 1px solid #AAABB8; left: auto; padding: 5px; }
-
+body.large #console { top: 0; padding-top: 0; bottom: 0; margin-bottom: 0; right: 40%; width: auto; position: absolute; }
+body.large form { right: 0; width: 40%; bottom: 0; background: none; border: 0; padding: 0; }
+body.large #exec { position: absolute; width: 100%; padding: 0; border-bottom: 0; top: 0; bottom: 0; height: 100%; z-index: 10; background: #E6E8F2; color: #000; -webkit-box-shadow: none; border-left: 1px solid #AAABB8; left: auto; }
+body.large #cursor { padding: 5px; }
 /* with footer - which I've removed temporarily */
 /* body.large #console {
   bottom: 35px; 
