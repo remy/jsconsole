@@ -6,7 +6,7 @@ function sortci(a, b) {
 
 // custom because I want to be able to introspect native browser objects *and* functions
 function stringify(o, simple, visited) {
-  var json = '', i, type = '', parts = [], names = [];
+  var json = '', i, vi, type = '', parts = [], names = [], circular = false;
   visited = visited || [];
   
   try {
@@ -16,17 +16,16 @@ function stringify(o, simple, visited) {
   }
 
   // check for circular references
-  var isCircular = false;
-  for (var vi = 0; vi < visited.length; vi++) {
+  for (vi = 0; vi < visited.length; vi++) {
     if (o === visited[vi]) {
-      isCircular = true; break;
+      circular = true; 
+      break;
     }
   }
 
-  if (isCircular) {
-    json = ':Circular:';
-  }
-  else if (type == '[object String]') {
+  if (circular) {
+    json = '[circular]';
+  } else if (type == '[object String]') {
     json = '"' + o.replace(/"/g, '\\"') + '"';
   } else if (type == '[object Array]') {
     visited.push(o);
@@ -46,8 +45,7 @@ function stringify(o, simple, visited) {
     }
     names.sort(sortci);
     for (i = 0; i < names.length; i++) {
-      parts.push( stringify(names[i], undefined, visited) + ': ' +
-                  stringify(o[ names[i] ], simple, visited) );
+      parts.push( stringify(names[i], undefined, visited) + ': ' + stringify(o[ names[i] ], simple, visited) );
     }
     json += parts.join(', ') + '}';
   } else if (type == '[object Number]') {
@@ -733,6 +731,7 @@ function whichKey(event) {
 function setCursorTo(str) {
   str = enableCC ? cleanse(str) : str;
   exec.value = str;
+  
   if (enableCC) {
     document.execCommand('selectAll', false, null);
     document.execCommand('delete', false, null);
@@ -771,8 +770,19 @@ exec.onkeyup = function (event) {
     codeCompleteTimer = setTimeout(function () {
       codeComplete(event);
     }, 200);
-  }
+  } 
 };
+
+if (enableCC) {
+  cursor.onpaste = function (event) {
+    setTimeout(function () {
+      // this causes the field to lose focus - I'll leave it here for a while, see how we get on.
+      // what I need to do is rip out the contenteditable and replace it with something entirely different
+      cursor.innerHTML = cursor.innerText;
+      // setCursorTo(cursor.innerText);
+    }, 10);
+  };
+}
 
 function findNode(list, node) {
   var pos = 0;
