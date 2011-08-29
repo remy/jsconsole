@@ -910,32 +910,7 @@ if (iOSMobile) {
   var dblTapTimer = null,
       taps = 0;
 
-  // fakeInput.onclick = 
-  document.addEventListener('touchstart', function (event) {
-    console.log(event.target.innerHTML);
-    if (event.target.className == 'fakeInput') {
-      window.scrollTo(0,0);
-      console.log('ok: ' + ccPosition);
-      if (ccPosition !== false) {
-        clearTimeout(dblTapTimer);
-        taps++;
-
-        if (taps === 2) {
-          completeCode();
-          fakeInput.value = exec.textContent;
-          removeSuggestion();
-        } else {
-          dblTapTimer = setTimeout(function () {
-            taps = 0;
-            console.log('click');
-            codeComplete({ which: 9 });
-          }, 200);
-        }
-      }
-      // return false;
-    }
-  });
-  fakeInput.___ontouchstart = function (event) {
+  fakeInput.addEventListener('touchstart', function (event) {
     window.scrollTo(0,0);
     console.log('ok: ' + ccPosition);
     if (ccPosition !== false) {
@@ -955,7 +930,7 @@ if (iOSMobile) {
       }
     }
     return false;
-  }
+  });
 }
 
 function completeCode(focus) {
