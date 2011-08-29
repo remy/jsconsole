@@ -471,7 +471,9 @@ function codeComplete(event) {
       which = whichKey(event),
       cc,
       props = [];
-  
+
+  console.log(which);
+
   if (cmd) {
     // get the command without the dot to allow us to introspect
     if (cmd.substr(-1) == '.') {
@@ -483,10 +485,8 @@ function codeComplete(event) {
     } else {
       props = getProps(parts.slice(0, parts.length - 1).join('.') || 'window', parts[parts.length - 1]);
     }
-    
     if (props.length) {
       if (which == 9) { // tabbing cycles through the code completion
-        
         // however if there's only one selection, it'll auto complete
         if (props.length === 1) {
           ccPosition = false;
@@ -495,6 +495,7 @@ function codeComplete(event) {
             // backwards
             ccPosition = ccPosition == 0 ? props.length - 1 : ccPosition-1;
           } else {
+            console.log('inc prop position');
             ccPosition = ccPosition == props.length - 1 ? 0 : ccPosition+1;
           }
         }      
@@ -689,15 +690,29 @@ var exec = document.getElementById('exec'),
         return 'Creating connection...';
       }
     },
+    fakeInput = null,
     // I hate that I'm browser sniffing, but there's issues with Firefox and execCommand so code completion won't work
     iOSMobile = navigator.userAgent.indexOf('AppleWebKit') !== -1 && navigator.userAgent.indexOf('Mobile') !== -1,
     // TODO try and detect this - currently Firefox doesn't allow me to clear the contents :(
     enableCC = navigator.userAgent.indexOf('AppleWebKit') !== -1 && navigator.userAgent.indexOf('Mobile') === -1 && navigator.userAgent.indexOf('iPhone OS 5_0') !== -1;
 
+if (iOSMobile) enableCC = true;
+
+iOSMobile = true;
+
 if (enableCC) {
   exec.parentNode.innerHTML = '<div autofocus id="exec" spellcheck="false"><span id="cursor" contenteditable></span></div>';
   exec = document.getElementById('exec');
   cursor = document.getElementById('cursor');
+}
+
+if (iOSMobile) {
+  fakeInput = document.createElement('input');
+  fakeInput.className = 'fakeInput';
+  fakeInput.setAttribute('spellcheck', 'false');
+  fakeInput.setAttribute('autocorrect', 'off');
+  fakeInput.setAttribute('autocapitalize', 'off');
+  exec.parentNode.appendChild(fakeInput);
 }
 
 if (!injected) {
@@ -774,6 +789,7 @@ exec.onkeyup = function (event) {
 };
 
 if (enableCC) {
+  // disabled for now
   cursor.__onpaste = function (event) {
     setTimeout(function () {
       // this causes the field to lose focus - I'll leave it here for a while, see how we get on.
@@ -870,6 +886,81 @@ exec.onkeydown = function (event) {
     }
   }
 };
+
+if (iOSMobile) {
+  fakeInput.onkeydown = function (event) {
+    var which = whichKey(event);
+    
+    if (which == 13 || which == 10) {
+      removeSuggestion();
+      post(this.value);
+      this.value = '';
+      cursor.innerHTML = '';
+      return false;
+    }
+  };
+
+  fakeInput.onkeyup = function (event) {
+    cursor.innerHTML = cleanse(this.value);
+    var which = whichKey(event);
+    if (enableCC && which != 9 && which != 16) {
+      clearTimeout(codeCompleteTimer);
+      codeCompleteTimer = setTimeout(function () {
+        codeComplete(event);
+      }, 200);
+    } 
+  };
+
+  var dblTapTimer = null,
+      taps = 0;
+
+  // fakeInput.onclick = 
+  document.addEventListener('touchstart', function (event) {
+    console.log(event.target.innerHTML);
+    if (event.target.className == 'fakeInput') {
+      window.scrollTo(0,0);
+      console.log('ok: ' + ccPosition);
+      if (ccPosition !== false) {
+        clearTimeout(dblTapTimer);
+        taps++;
+
+        if (taps === 2) {
+          completeCode();
+          fakeInput.value = exec.textContent;
+          removeSuggestion();
+        } else {
+          dblTapTimer = setTimeout(function () {
+            taps = 0;
+            console.log('click');
+            codeComplete({ which: 9 });
+          }, 200);
+        }
+      }
+      // return false;
+    }
+  });
+  fakeInput.___ontouchstart = function (event) {
+    window.scrollTo(0,0);
+    console.log('ok: ' + ccPosition);
+    if (ccPosition !== false) {
+      clearTimeout(dblTapTimer);
+      taps++;
+
+      if (taps === 2) {
+        completeCode();
+        fakeInput.value = exec.textContent;
+        removeSuggestion();
+      } else {
+        dblTapTimer = setTimeout(function () {
+          taps = 0;
+          console.log('click');
+          codeComplete({ which: 9 });
+        }, 200);
+      }
+    }
+    return false;
+  }
+}
 
 function completeCode(focus) {
   var tmp = exec.textContent, l = tmp.length;

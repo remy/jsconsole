@@ -61,12 +61,12 @@ iframe { display: none; }
 
 /* input style - note: moz-shadow purposely omitted because it affects layout */
 form { padding: 5px; border-bottom: 1px solid #AAABB8; background: #E6E8F2; -webkit-box-shadow: 0px 2px 10px rgba(0,0,0,.3); -o-box-shadow: 0px 2px 10px rgba(0,0,0,.3); box-shadow: 0px 2px 10px rgba(0,0,0,.3); }
-#exec { resize: none; position: absolute; left: 0; right: 0; border: 0; /*padding: 5px; */outline: 0; background: #E6E8F2; color: #000; height: 24px; line-height: 24px; overflow: hidden; }
+#exec, .fakeInput { resize: none; position: absolute; left: 0; right: 0; border: 0; /*padding: 5px; */outline: 0; background: #E6E8F2; color: #000; height: 24px; line-height: 24px; overflow: hidden; }
 
 /* HACK */
 form { position: fixed; top: 0; width: 100%; z-index: 2; }
 #console { padding-top: 35px; }
-#exec { position: relative; height: auto; }
+#exec, .fakeInput { position: relative; height: auto; }
 
 /* footer, credit, etc */
 #footer { position: fixed; bottom: 0; left: 0; right: 0; height: 34px; background-color: #9E9E9E; color: #9E9F9E; color: rgba(158, 158, 158, 0.5); width: 100%; color: #fff;  text-shadow: 1px 1px 0 #000; line-height: 24px; border-top: 1px solid #CED1CE; -webkit-transition: background-color ease-out 100ms; -moz-transition: background-color ease-out 100ms; -o-transition: background-color ease-out 100ms; transition: background-color ease-out 100ms; }
@@ -75,7 +75,7 @@ form { position: fixed; top: 0; width: 100%; z-index: 2; }
 
 /* font size control */
 /*#console { top: 35px; bottom: 35px; }*/
-#output li, #exec { min-height: 20px; font-size: 15px; font-family: "Menlo", consolas, monospace; }
+#output li, #exec, .fakeInput { min-height: 20px; font-size: 15px; font-family: "Menlo", consolas, monospace; }
 
 /* code complete visual tweaks */
 #cursor { display: inline-block; height: 24px; min-width: 1px; outline: 0; top: 0; left: 0; z-index: 999;}
@@ -83,7 +83,7 @@ form { position: fixed; top: 0; width: 100%; z-index: 2; }
 /* HACK */
 #cursor { height: auto; white-space: pre-wrap; }
 
-#exec { cursor: text; }
+#exec, .fakeInput { cursor: text; }
 #exec .suggest { color: #999; }
 
 /* large command input */
@@ -129,6 +129,19 @@ body.large #cursor { padding: 5px; }
 #footer:hover {
   opacity: 1;
 }
+
+.fakeInput {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 5px;
+  border: 0;
+  color: red;
+  opacity: 0.5;
+  /* pointer-events: auto !important;*/
+}
+
 /*#footer {
   -webkit-animation-name: hidefooter;
   -webkit-animation-duration: 200ms;
@@ -164,7 +177,7 @@ body.large #cursor { padding: 5px; }
   #output .echo .permalink { width: 18px; height: 20px; }
   #footer { display: none; }
 
-  #exec { font-weight: bold; padding-right: 10px; }
+  #exec, .fakeInput { font-weight: bold; padding-right: 10px; }
   
   #output li { min-height: 20px; font-size: 14px; padding: 2px 5px 0 5px; }
   #output > li > div { margin-left: 12px; line-height: 20px; }
