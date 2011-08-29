@@ -694,11 +694,7 @@ var exec = document.getElementById('exec'),
     // I hate that I'm browser sniffing, but there's issues with Firefox and execCommand so code completion won't work
     iOSMobile = navigator.userAgent.indexOf('AppleWebKit') !== -1 && navigator.userAgent.indexOf('Mobile') !== -1,
     // TODO try and detect this - currently Firefox doesn't allow me to clear the contents :(
-    enableCC = navigator.userAgent.indexOf('AppleWebKit') !== -1 && navigator.userAgent.indexOf('Mobile') === -1 && navigator.userAgent.indexOf('iPhone OS 5_0') !== -1;
-
-if (iOSMobile) enableCC = true;
-
-iOSMobile = true;
+    enableCC = navigator.userAgent.indexOf('AppleWebKit') !== -1 && navigator.userAgent.indexOf('Mobile') === -1 || navigator.userAgent.indexOf('iPhone OS 5') !== -1;
 
 if (enableCC) {
   exec.parentNode.innerHTML = '<div autofocus id="exec" spellcheck="false"><span id="cursor" contenteditable></span></div>';
