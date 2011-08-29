@@ -472,8 +472,6 @@ function codeComplete(event) {
       cc,
       props = [];
 
-  console.log(which);
-
   if (cmd) {
     // get the command without the dot to allow us to introspect
     if (cmd.substr(-1) == '.') {
@@ -495,7 +493,6 @@ function codeComplete(event) {
             // backwards
             ccPosition = ccPosition == 0 ? props.length - 1 : ccPosition-1;
           } else {
-            console.log('inc prop position');
             ccPosition = ccPosition == props.length - 1 ? 0 : ccPosition+1;
           }
         }      
@@ -693,16 +690,16 @@ var exec = document.getElementById('exec'),
     fakeInput = null,
     // I hate that I'm browser sniffing, but there's issues with Firefox and execCommand so code completion won't work
     iOSMobile = navigator.userAgent.indexOf('AppleWebKit') !== -1 && navigator.userAgent.indexOf('Mobile') !== -1,
-    // TODO try and detect this - currently Firefox doesn't allow me to clear the contents :(
-    enableCC = navigator.userAgent.indexOf('AppleWebKit') !== -1 && navigator.userAgent.indexOf('Mobile') === -1 || navigator.userAgent.indexOf('iPhone OS 5') !== -1;
+    // FIXME Remy, seriously, don't sniff the agent like this, it'll bite you in the arse.
+    enableCC = navigator.userAgent.indexOf('AppleWebKit') !== -1 && navigator.userAgent.indexOf('Mobile') === -1 || navigator.userAgent.indexOf('iPhone OS 5_') !== -1;
 
 if (enableCC) {
-  exec.parentNode.innerHTML = '<div autofocus id="exec" spellcheck="false"><span id="cursor" contenteditable></span></div>';
+  exec.parentNode.innerHTML = '<div autofocus id="exec" autocapitalize="off" spellcheck="false"><span id="cursor" spellcheck="false" autocapitalize="off" autocorrect="off"' + (iOSMobile ? '' : ' contenteditable') + '></span></div>';
   exec = document.getElementById('exec');
   cursor = document.getElementById('cursor');
 }
 
-if (iOSMobile) {
+if (enableCC && iOSMobile) {
   fakeInput = document.createElement('input');
   fakeInput.className = 'fakeInput';
   fakeInput.setAttribute('spellcheck', 'false');
@@ -883,12 +880,12 @@ exec.onkeydown = function (event) {
   }
 };
 
-if (iOSMobile) {
+if (enableCC && iOSMobile) {
   fakeInput.onkeydown = function (event) {
+    removeSuggestion();
     var which = whichKey(event);
     
     if (which == 13 || which == 10) {
-      removeSuggestion();
       post(this.value);
       this.value = '';
       cursor.innerHTML = '';
@@ -907,28 +904,31 @@ if (iOSMobile) {
     } 
   };
 
+  var fakeInputFocused = false;
+
   var dblTapTimer = null,
       taps = 0;
 
-  fakeInput.addEventListener('touchstart', function (event) {
-    window.scrollTo(0,0);
-    console.log('ok: ' + ccPosition);
+  form.addEventListener('touchstart', function (event) {
+    // window.scrollTo(0,0);
     if (ccPosition !== false) {
+      event.preventDefault();
       clearTimeout(dblTapTimer);
       taps++;
 
       if (taps === 2) {
         completeCode();
-        fakeInput.value = exec.textContent;
+        fakeInput.value = cursor.textContent;
         removeSuggestion();
+        fakeInput.focus();
       } else {
         dblTapTimer = setTimeout(function () {
           taps = 0;
-          console.log('click');
           codeComplete({ which: 9 });
         }, 200);
       }
     }
+
     return false;
   });
 }
