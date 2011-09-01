@@ -691,7 +691,7 @@ var exec = document.getElementById('exec'),
     // I hate that I'm browser sniffing, but there's issues with Firefox and execCommand so code completion won't work
     iOSMobile = navigator.userAgent.indexOf('AppleWebKit') !== -1 && navigator.userAgent.indexOf('Mobile') !== -1,
     // FIXME Remy, seriously, don't sniff the agent like this, it'll bite you in the arse.
-    enableCC = navigator.userAgent.indexOf('AppleWebKit') !== -1 && navigator.userAgent.indexOf('Mobile') === -1 || navigator.userAgent.indexOf('iPhone OS 5_') !== -1;
+    enableCC = navigator.userAgent.indexOf('AppleWebKit') !== -1 && navigator.userAgent.indexOf('Mobile') === -1 || navigator.userAgent.indexOf('OS 5_') !== -1;
 
 if (enableCC) {
   exec.parentNode.innerHTML = '<div autofocus id="exec" autocapitalize="off" spellcheck="false"><span id="cursor" spellcheck="false" autocapitalize="off" autocorrect="off"' + (iOSMobile ? '' : ' contenteditable') + '></span></div>';
