@@ -39,6 +39,7 @@ body { overflow: auto; }
 #output .echo .permalink:hover { opacity: 1; }
 
 /* log types */
+#output span.gutter:before { position: absolute; }
 #output .echo span.gutter:before { content: '> '; color: #3583FC; font-size: 18px; font-weight: bold; }
 #output .info span.gutter:before { content: 'i '; color: #27A700; font-size: 18px; font-weight: bold; }
 #output .error span.gutter:before { content: '\0000D7 '; color: #E81D20; font-size: 28px; font-weight: bold; margin-right: -10px; line-height: 24px; }
@@ -67,6 +68,10 @@ form { padding: 5px; border-bottom: 1px solid #AAABB8; background: #E6E8F2; -web
 form { position: fixed; top: 0; width: 100%; z-index: 2; }
 #console { padding-top: 35px; }
 #exec, .fakeInput { position: relative; height: auto; }
+
+/* bottom position */
+.bottom form { bottom: 0; top: auto; }
+.bottom form { border-bottom: 0; border-top: 1px solid #AAABB8; background: #E6E8F2; -webkit-box-shadow: 0px -2px 10px rgba(0,0,0,.3); -o-box-shadow: 0px -2px 10px rgba(0,0,0,.3); box-shadow: 0px -2px 10px rgba(0,0,0,.3); }
 
 /* footer, credit, etc */
 #footer { position: fixed; bottom: 0; left: 0; right: 0; height: 34px; background-color: #9E9E9E; color: #9E9F9E; color: rgba(158, 158, 158, 0.5); width: 100%; color: #fff;  text-shadow: 1px 1px 0 #000; line-height: 24px; border-top: 1px solid #CED1CE; -webkit-transition: background-color ease-out 100ms; -moz-transition: background-color ease-out 100ms; -o-transition: background-color ease-out 100ms; transition: background-color ease-out 100ms; }
