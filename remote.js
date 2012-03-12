@@ -68,9 +68,9 @@ function stringify(o, simple) {
 
 function getRemoteScript() {
   var scripts = document.getElementsByTagName('script'),
-      remoteScript = null;
+      remoteScript = scripts[scripts.length-1];
   for (var i = 0; i < scripts.length; i++) {
-    if (/jsconsole.com(:\d+)?\/remote.js/.test(scripts[i].src)) {
+    if (/jsconsole\..*(:\d+)?\/remote.js/.test(scripts[i].src)) {
       remoteScript = scripts[i];
       break;
     }
@@ -187,5 +187,19 @@ try {
 } catch (e) {
   console.log('cannot overwrite existing console object');
 }
+
+function warnUsage() {
+  var useSS = false;
+  try {
+    sessionStorage.getItem('foo');
+    useSS = true;
+  } catch (e) {}
+  if (!(useSS ? sessionStorage.jsconsole : window.name)) {
+    if (useSS) sessionStorage.jsconsole = 1; else window.name = 1;
+    alert('You will see this warning once per session.\n\nYou are using a remote control script on this site - if you accidently push it to production, anyone will have control of your visitor\'s browser. Remember to remove this script.');
+  }
+}
+
+warnUsage();
 
 })();
