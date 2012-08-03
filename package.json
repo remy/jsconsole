@@ -3,8 +3,8 @@
   "version": "1.1.1",
   "author": "Remy Sharp <remy@leftlogic.com>",
   "dependencies": {
-    "connect": ">= 1.4.0",
-    "node-uuid": ">= 1.1.0"
+    "connect": "1.8.x",
+    "node-uuid": "1.1.0"
   },
   "main": "server.js",
   "private": true
