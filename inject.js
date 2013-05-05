@@ -8,7 +8,7 @@
   };
 
   if (iframe = document.getElementById('jsconsole')) {
-    document.getElementById('jsconsole').style.display = 'block';
+    iframe.style.display = 'block';
   } else {
     iframe = document.createElement('iframe');
 
@@ -33,6 +33,6 @@
     
     iframe.contentWindow.onload = function () {
       this.document.getElementById('exec').focus();
-    } 
+    };
   }
 })(this, document);
