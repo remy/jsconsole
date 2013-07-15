@@ -3,14 +3,14 @@
 A JavaScript (and [CoffeeScript](http://coffeescript.com)) web console, useful 
 for quick experimentation, debugging, presentations (for live coding) and workshops.
 
-Also available as a [native iOS app](http://jsconsole.com/app/) from the iTunes store
+Also available as a [native iOS app](http://jsconsole.com/app/) from the iTunes store.
 
 # Features
 
 - Remote device debugging using "listen" command ([more info](http://jsconsole.com/remote-debugging.html))
 - Resizable font (yep, biggest issue with Firebug in workshops)
 - Autocomplete in WebKit desktop browsers
-- shift + up/down for bigger console
+- Shift + up/down for bigger console
 - Save history (based on session)
 - Add support for loading in a DOM (YQL - I thank you again)
 - Permalink to individual executions
@@ -23,7 +23,7 @@ and inside the new `jsconsole` directory run:
 
     npm install
     
-This will install the dependancies (in particular 1.8.x version of connect.js).
+This will install the dependencies (in particular 1.8.x version of connect.js).
 
 Once installed, run (on port 80):
 
