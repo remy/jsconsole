@@ -1,16 +1,18 @@
+'use strict';
 // pending connect exposing static.mime (not available in npm yet)
-var mime = require('connect/node_modules/mime');               
-mime.define({ 'text/cache-manifest': ['appcache'] });                                                                             
+var mime = require('connect/node_modules/mime');
+mime.define({ 'text/cache-manifest': ['appcache'] });
 
 var connect = require('connect'),
     parse = require('url').parse,
     querystring = require('querystring').parse,
     sessions = { run: {}, log: {} },
     eventid = 0,
+    port = process.env.PORT || parseInt(process.argv[2]) || 80,
     uuid = require('node-uuid');
 
 function remoteServer(app) {
-  app.get('/remote/:id?', function (req, res, next) {
+  app.get('/remote/:id?', function (req, res) {
     var url = parse(req.url),
         query = querystring(url.query);
 
@@ -27,7 +29,7 @@ function remoteServer(app) {
     res.write('eventId:0\n\n');
 
     sessions.log[id] = res;
-    sessions.log[id].xhr = req.headers['x-requested-with'] == 'XMLHttpRequest';
+    sessions.log[id].xhr = req.headers['x-requested-with'] === 'XMLHttpRequest';
   });
 
   app.post('/remote/:id/log', function (req, res) {
@@ -51,7 +53,7 @@ function remoteServer(app) {
     res.writeHead(200, {'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache'});
     res.write('eventId:0\n\n');
     sessions.run[id] = res;
-    sessions.run[id].xhr = req.headers['x-requested-with'] == 'XMLHttpRequest';
+    sessions.run[id].xhr = req.headers['x-requested-with'] === 'XMLHttpRequest';
   });
 
   app.post('/remote/:id/run', function (req, res) {
@@ -78,5 +80,5 @@ var server = connect.createServer(
   connect.router(remoteServer)
 );
 
-console.log('Listening on ' + (process.argv[2] || 80));
-server.listen(parseInt(process.argv[2]) || 80);
+console.log('Listening on ' + port);
+server.listen(port);
