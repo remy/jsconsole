@@ -173,7 +173,7 @@ function log(msg, className) {
   var li = document.createElement('li'),
       div = document.createElement('div');
 
-  div.innerHTML = cleanse(msg);
+  div.innerHTML = typeof msg==='string' ? cleanse(msg): msg;
   prettyPrint([div]);
   li.className = className || 'log';
   li.innerHTML = '<span class="gutter"></span>';
