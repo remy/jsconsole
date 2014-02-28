@@ -173,7 +173,7 @@ function log(msg, className) {
   var li = document.createElement('li'),
       div = document.createElement('div');
 
-  div.innerHTML = msg;
+  div.innerHTML = cleanse(msg);
   prettyPrint([div]);
   li.className = className || 'log';
   li.innerHTML = '<span class="gutter"></span>';
@@ -657,7 +657,7 @@ var exec = document.getElementById('exec'),
           sse = new EventSource('/remote/' + id + '/log');
           sse.onopen = function () {
             remoteId = id;
-            window.top.info('Connected to "' + id + '"\n\n<script src="http://jsconsole.com/remote.js?' + id + '"></script>');
+            window.top.info('Connected to "' + id + '"\n\n<script src="'+ location.origin +'/remote.js?' + id + '"></script>');
           };
 
           sse.onmessage = function (event) {
