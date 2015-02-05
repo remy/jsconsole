@@ -115,6 +115,8 @@ window.addEventListener('message', function (event) {
   }
 }, false);
 
+var timers = {} // timers for console.time and console.timeEnd
+
 var remote = {
   log: function () {
     var argsObj = stringify(arguments.length == 1 ? arguments[0] : [].slice.call(arguments, 0));
@@ -153,6 +155,22 @@ var remote = {
   },
   error: function (error, cmd) {
     var msg = JSON.stringify({ response: error.message, cmd: cmd, type: 'error' });
+    if (remoteWindow) {
+      remoteWindow.postMessage(msg, origin);
+    } else {
+      queue.push(msg);
+    }
+  },
+  time: function(title){
+    if(typeof title !== 'string') return;
+    timers[title] = +new Date();
+  },
+  timeEnd: function(title){
+    if(typeof title !== 'string' || !timers[title]) return;
+    var execTime = +new Date() - timers[title];
+    delete timers[title];
+    var plain = title + ": " + execTime + "ms";
+    var msg = JSON.stringify({ response: plain, cmd:  'remote console.log', type: '' });
     if (remoteWindow) {
       remoteWindow.postMessage(msg, origin);
     } else {

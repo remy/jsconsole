@@ -86,6 +86,7 @@ function stringify(o, simple, visited) {
 }
 
 function cleanse(s) {
+  s = s instanceof Array ? s.join(', ') : s;
   return (s||'').replace(/[<&]/g, function (m) { return {'&':'&amp;','<':'&lt;'}[m];});
 }
 
