@@ -38,3 +38,12 @@ for windows or `ifconfig` for mac and linux). Then on the mobile phone, just
 visit that IP address and port you're running jsconsole on:
 
 ![jsconsole running locally](http://i.imgur.com/hyRF5.png)
+
+# Execute from Docker
+
+This requires that you install [Docker](https://docs.docker.com/installation/). Once installed, you need only run:
+
+    docker run -d -p 8080:80 --name jsconsole cachavezley/jsconsole
+
+This will run the application on your local machine in port `8080` (this is customizable). Then follow the instructions
+from before to access it from your mobile device.
