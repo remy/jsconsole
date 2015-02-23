@@ -5,8 +5,8 @@ https://registry.hub.docker.com/u/cachavezley/jsconsole/
 -->
 
 # JS Console
-This is a temporary (I hope) image while my pull request is accepted (again, I hope) by [jconsole](http://jsconsole.com/)
-'s real [author](https://github.com/remy/jsconsole).
+This is a temporary (I hope) image while my [pull request](https://github.com/remy/jsconsole/pull/55) is accepted
+(again, I hope) by [jconsole](http://jsconsole.com/)'s real [author](https://github.com/remy/jsconsole).
 
 
 # How to use this image
