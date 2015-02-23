@@ -76,7 +76,7 @@ function getRemoteScript() {
     }
   }
   
-  return remoteScript;
+  return remoteScript || document.getElementById('jsconsole');
 }
 
 var last = getRemoteScript();
