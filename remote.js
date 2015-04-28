@@ -3,7 +3,7 @@
 // 1. create iframe pointing to script on jsconsole.com domain
 // 2. create console object with: log, dir, etc?
 // 3. console.log runs postMessage with json.stringified content
-// 4. jsconsole.com/remote/?id.onMessage = send to server, and wait for response. 
+// 4. jsconsole.com/remote/?id.onMessage = send to server, and wait for response.
 
 function sortci(a, b) {
   return a.toLowerCase() < b.toLowerCase() ? -1 : 1;
@@ -12,7 +12,7 @@ function sortci(a, b) {
 // from console.js
 function stringify(o, simple) {
   var json = '', i, type = ({}).toString.call(o), parts = [], names = [];
-  
+
   if (type == '[object String]') {
     json = '"' + o.replace(/\n/g, '\\n').replace(/"/g, '\\"') + '"';
   } else if (type == '[object Array]') {
@@ -75,7 +75,7 @@ function getRemoteScript() {
       break;
     }
   }
-  
+
   return remoteScript;
 }
 
@@ -83,11 +83,11 @@ var last = getRemoteScript();
 
 // if (last.getAttribute('id') == '_firebugConsole') { // if Firebug is open, this all goes to crap
 //   last = last.previousElementSibling;
-// } 
+// }
 
 var lastSrc = last.getAttribute('src'),
     id = lastSrc.replace(/.*\?/, ''),
-    origin = 'http://' + lastSrc.substr(7).replace(/\/.*$/, ''),
+    origin = lastSrc.replace(/^(\w+:\/\/.*\/).*/, '$1'); // only keep the domain and path.
     remoteWindow = null,
     queue = [],
     msgType = '';
@@ -132,7 +132,7 @@ var remote = {
     } else {
       queue.push(msg);
     }
-    
+
     msgType = '';
   },
   info: function () {
@@ -186,9 +186,9 @@ remote.warn = remote.info;
 remoteFrame.onload = function () {
   remoteWindow = remoteFrame.contentWindow;
   remoteWindow.postMessage('__init__', origin);
-  
+
   remoteWindow.postMessage(stringify({ response: 'Connection established with ' + window.location.toString() + '\n' + navigator.userAgent, type: 'info' }), origin);
-  
+
   for (var i = 0; i < queue.length; i++) {
     remoteWindow.postMessage(queue[i], origin);
   }
