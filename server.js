@@ -1,6 +1,11 @@
 'use strict';
 // pending connect exposing static.mime (not available in npm yet)
-var mime = require('connect/node_modules/mime');
+var mime;
+try{
+  mime = require('connect/node_modules/mime');
+} catch (err) {
+  mime = require('mime');
+}
 mime.define({ 'text/cache-manifest': ['appcache'] });
 
 var connect = require('connect'),
