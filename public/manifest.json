@@ -1,0 +1,15 @@
+{
+  "name": "JavaScript Console",
+  "short_name": "jsconsole",
+  "icons": [{
+        "src": "images/assets/favicon-192.png",
+        "type": "image/png",
+        "sizes": "192x192"
+      }
+  ],
+  "start_url": "/?homescreen=1",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#E6E8F2",
+  "theme_color": "#E6E8F2"
+}

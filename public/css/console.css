@@ -1,0 +1,230 @@
+* {
+  -webkit-touch-callout: none; /* prevent callout to copy image, etc when tap to hold */
+/* make transparent link selection, adjust last value opacity 0 to 1.0 */
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  margin: 0;
+  padding: 0;
+}
+
+html  { height: 100%; background: #fff; }
+body { height: 100%; overflow: hidden; border: 0; margin: 0; padding: 0; font-family: "helvetica neue", arial, helvetica; width: 100%; overflow-x: hidden; }
+input, textarea { margin: 0; padding: 0; position: relative; font-size: 18px; width: 100%; -webkit-border-radius: 0; -webkit-appearance: none; } /* webkit-mobile adds rounded corners :( */
+input { padding: 2px; }
+
+/*#console { position: absolute; left: 0; right: 0; width: 100%; bottom: 0; overflow: auto; border-bottom: 1px solid #5B5C5B; }*/
+
+/* HACK attempt to allow multiline */
+body { overflow: auto; }
+#console { bottom: 35px; left: 0; right: 0; width: 100%; margin-bottom: 35px; overflow: auto; /*border-bottom: 1px solid #5B5C5B;*/ }
+
+#output { list-style: none; }
+#output li { margin: 5px 0; padding: 5px; border-top: 1px solid #EEEFEE; white-space: pre-wrap; }
+#output li:last-child { border-bottom: 0;}
+#output > li > div { margin-left: 20px; line-height: 20px; }
+#console span.gutter { float: left; display: block; width: 5px; }
+
+#output li div { position: relative; }
+#output .echo .permalink {position: absolute;right: 0;overflow: hidden;/* display: block; */background: url(/assets/share.svg) no-repeat center;height: 20px;width: 18px;text-indent: -200px;top: 0;opacity: 0.2;background-size: contain;/* display: none; */}
+#output .echo:hover .permalink {display: block; }
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+  -webkit-text-size-adjust: none; /* prevent webkit from resizing text to fit */
+
+  #output .echo .permalink {
+    background: url(link@2x.png) no-repeat center;
+    background-size: 16px 16px;
+  }
+}
+
+
+#output .echo .permalink:hover { opacity: 1; }
+
+/* log types */
+#output span.gutter:before { position: absolute; }
+#output .echo span.gutter:before {content: '';color: #3583FC;font-size: 18px;font-weight: bold;background: url(/assets/prompt.svg) no-repeat;background-size: contain;width: 16px;height: 20px;scale: 0.75;background-position: 50% 50%;}
+#output .info span.gutter:before {content: '';color: #27A700;font-size: 18px;font-weight: bold;background: url(/assets/info.svg) no-repeat;height: 20px;width: 16px;background-size: contain;background-position: 50%;}
+#output .error span.gutter:before {content: ' ';color: #E81D20;font-size: 28px;font-weight: bold;margin-right: -10px;line-height: 24px;background: url(/assets/error.svg) no-repeat;background-size: contain;height: 19px;background-position: 50%;}
+#output .response span.gutter:before {content: '';color: #BDC3CD;font-size: 18px;font-weight: normal;margin-right: -10px;line-height: 18px;height: 19px;width: 16px;background: url(/assets/out.svg) no-repeat;background-size: contain;scale: 0.75;}
+
+/* if response is directly next to echo, don't give it a line - only consoles get lines */
+#output li.echo + li.response { border-width: 0px; }
+
+/* hard line on new echo */
+#output li.response + li.echo { border-width: 2px; border-color: #DFDFDF; }
+#output li.error + li.echo { border-width: 2px; border-color: #DFDFDF; }
+#output li.log + li.echo { border-width: 2px; border-color: #DFDFDF; }
+#output li.info + li.echo { border-width: 2px; border-color: #DFDFDF; }
+/*#output li.info .response span { line-height: 30px; }*/
+
+#output li.echo:first-child { border-width: 0;}
+#output li:first-child { border-width: 0; padding-top: 0; }
+
+iframe { display: none; }
+
+/* input style - note: moz-shadow purposely omitted because it affects layout */
+form { padding: 5px; border-bottom: 1px solid #AAABB8; background: #E6E8F2; -webkit-box-shadow: 0px 2px 10px rgba(0,0,0,.3); -o-box-shadow: 0px 2px 10px rgba(0,0,0,.3); box-shadow: 0px 2px 10px rgba(0,0,0,.3); }
+#exec, .fakeInput { resize: none; position: absolute; left: 0; right: 0; border: 0; /*padding: 5px; */outline: 0; background: #E6E8F2; color: #000; height: 24px; line-height: 24px; overflow: hidden; }
+
+/* HACK */
+form { position: fixed; top: 0; width: 100%; z-index: 2; }
+#console { padding-top: 35px; }
+#exec, .fakeInput { position: relative; height: auto; }
+
+/* bottom position */
+.bottom form { bottom: 0; top: auto; }
+.bottom form { border-bottom: 0; border-top: 1px solid #AAABB8; background: #E6E8F2; -webkit-box-shadow: 0px -2px 10px rgba(0,0,0,.3); -o-box-shadow: 0px -2px 10px rgba(0,0,0,.3); box-shadow: 0px -2px 10px rgba(0,0,0,.3); }
+
+/* footer, credit, etc */
+#footer { position: fixed; bottom: 0; left: 0; right: 0; height: 34px; background-color: #9E9E9E; color: #9E9F9E; color: rgba(158, 158, 158, 0.5); width: 100%; color: #fff;  text-shadow: 1px 1px 0 #000; line-height: 24px; border-top: 1px solid #CED1CE; -webkit-transition: background-color ease-out 100ms; -moz-transition: background-color ease-out 100ms; -o-transition: background-color ease-out 100ms; transition: background-color ease-out 100ms; }
+#footer:hover { background: #727372; }
+#footer a { line-height: 34px; text-transform: lowercase; margin: 0 5px; color: #fff; text-decoration: none; text-shadow: 1px 1px 0 #000; }
+
+/* font size control */
+/*#console { top: 35px; bottom: 35px; }*/
+#output li, #exec, .fakeInput { min-height: 20px; font-size: 15px; font-family: "Menlo", consolas, monospace; }
+
+/* code complete visual tweaks */
+#cursor { display: inline-block; height: 24px; min-width: 1px; outline: 0; top: 0; left: 0; z-index: 999;}
+
+/* HACK */
+#cursor { height: auto; white-space: pre-wrap; }
+
+#exec, .fakeInput { cursor: text; }
+#exec .suggest { color: #999; }
+
+/* large command input */
+body.large #console { top: 0; padding-top: 0; bottom: 0; margin-bottom: 0; right: 40%; width: auto; position: absolute; }
+body.large form { right: 0; width: 40%; bottom: 0; background: none; border: 0; padding: 0; }
+body.large #exec { position: absolute; width: 100%; padding: 0; border-bottom: 0; top: 0; bottom: 0; height: 100%; z-index: 10; background: #E6E8F2; color: #000; -webkit-box-shadow: none; border-left: 1px solid #AAABB8; left: auto; }
+body.large #cursor { padding: 5px; }
+/* with footer - which I've removed temporarily */
+/* body.large #console {
+  bottom: 35px;
+} */
+
+/* syntax highlighting */
+/** Pretty printing styles. Used with prettify.js. */
+
+.str { color: #080; }
+.kwd { color: #008; }
+.com { color: #800; }
+.typ { color: #606; }
+.lit { color: #066; }
+.pun { color: #660; }
+.pln { color: #000; }
+.tag { color: #008; }
+.atn { color: #606; }
+.atv { color: #080; }
+.dec { color: #606; }
+.error span { color: #E81D20;}
+
+/* hide the footer after a short amount of time */
+#footer {
+  transition: opacity 200ms ease-out;
+  -webkit-transition: opacity 200ms ease-out;
+  -moz-transition: opacity 200ms ease-out;
+  -o-transition: opacity 200ms ease-out;
+  -ms-transition: opacity 200ms ease-out;
+  opacity: 1;
+}
+
+#footer.hidden {
+  opacity: 0;
+}
+
+#footer:hover {
+  opacity: 1;
+}
+
+.fakeInput {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 5px;
+  border: 0;
+  color: red;
+  opacity: 0;
+  /* pointer-events: auto !important;*/
+}
+
+/*#footer {
+  -webkit-animation-name: hidefooter;
+  -webkit-animation-duration: 200ms;
+  -webkit-animation-delay: 1s;
+  -webkit-animation-iteration-count: 1;
+  -webkit-animation-fill-mode: none;
+  -webkit-transition: opacity 200ms ease-out;
+  opacity: 1;
+}
+
+#footer:hover {
+  opacity: 1 !important;
+}
+
+@-webkit-keyframes hidefooter {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+*/
+/* difference display types */
+
+/* iPhone type display */
+@media screen and (max-device-width: 480px) {
+  -webkit-text-size-adjust: none; /* prevent webkit from resizing text to fit */
+
+  html, body { height: auto; overflow-y: auto; overflow-x: hidden; }
+  #console { overflow: auto; bottom: 0; border-bottom: 0; margin-bottom: 0; padding-top: 5px; }
+  #console { margin-top: 35px; }
+  #output .echo .permalink { width: 18px; height: 20px; }
+  #footer { display: none; }
+
+  #exec, .fakeInput { font-weight: bold; padding-right: 10px; }
+
+  #output li { min-height: 20px; font-size: 14px; padding: 2px 5px 0 5px; }
+  #output > li > div { margin-left: 12px; line-height: 20px; }
+
+  #output > li:last-child { padding-bottom: 0; margin-bottom: 0; }
+
+  #output .gutter { line-height: 20px; }
+  #output .echo { padding-top: 5px; }
+  #output .echo span.gutter:before,
+  #output .info span.gutter:before,
+  #output .response span.gutter:before {font-size: 14px;line-height: 18px;height: 20px;width: 14px;scale: 0.6;margin-left: -2px;}
+
+#output .response span.gutter:before {
+  font-size: 10px;
+  scale: 0.65 !important;
+  height: 35px;
+}
+  #output .error span.gutter:before {font-size: 18px;line-height: 18px;margin-left: -1px;}
+
+/*  .info span { line-height: 30px; }*/
+}
+
+@media screen and (max-device-width: 768px) {
+  #footer { display: none; }
+}
+
+/* allow the debug to be printed */
+@media print {
+  body { overflow: auto; }
+  #console { overflow: visible; }
+}
+
+@media print {
+  .str { color: #060; }
+  .kwd { color: #006; font-weight: bold; }
+  .com { color: #600; font-style: italic; }
+  .typ { color: #404; font-weight: bold; }
+  .lit { color: #044; }
+  .pun { color: #440; }
+  .pln { color: #000; }
+  .tag { color: #006; font-weight: bold; }
+  .atn { color: #404; }
+  .atv { color: #060; }
+}

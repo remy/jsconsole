@@ -1,0 +1,26 @@
+{
+  "name": "jsconsole",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/app.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jscs": "^2.11.0",
+    "jshint": "^2.9.1",
+    "tap": "^5.7.0",
+    "tap-only": "0.0.5"
+  },
+  "dependencies": {
+    "node-uuid": "^1.4.7",
+    "restify": "^4.0.4",
+    "restify-eventsource": "^2.0.0"
+  }
+}
