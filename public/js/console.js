@@ -1,3 +1,10 @@
+window.addEventListener('beforeinstallprompt', function(event) {
+  if (window.matchMedia('(display-mode: standalone)').matches) {
+    console.log('this should not fire when in app mode: crbug...');
+    return event.preventDefault();
+  }
+});
+
 (function (window) {
 
 function sortci(a, b) {
