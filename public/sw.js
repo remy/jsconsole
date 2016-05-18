@@ -1,5 +1,5 @@
 /* global self, caches, fetch, URL */
-const version = 'v1.01::';
+const version = 'v1.02::';
 const staticCacheName = version + 'static';
 
 self.addEventListener('install', e => {

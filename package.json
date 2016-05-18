@@ -2,6 +2,9 @@
   "name": "jsconsole",
   "version": "1.0.0",
   "description": "",
+  "engines": {
+    "node": 6
+  },
   "main": "lib/app.js",
   "directories": {
     "test": "test"
