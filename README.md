@@ -1,9 +1,6 @@
 # JS Console
 
-A JavaScript (and [CoffeeScript](http://coffeescript.com)) web console, useful
-for quick experimentation, debugging, presentations (for live coding) and workshops.
-
-Also available as a [native iOS app](http://jsconsole.com/app/) from the iTunes store.
+A JavaScript web console, useful for quick experimentation, debugging, presentations (for live coding) and workshops.
 
 # Features
 
@@ -17,9 +14,7 @@ Also available as a [native iOS app](http://jsconsole.com/app/) from the iTunes 
 
 # Hosting jsconsole yourself
 
-This requires that you install [node.js](http://nodejs.org). Once installed,
-download this project (or clone it using git)
-and inside the new `jsconsole` directory run:
+This requires that you install [node.js](http://nodejs.org). Once installed, download this project (or clone it using git) and inside the new `jsconsole` directory run:
 
     npm install
 
@@ -33,8 +28,6 @@ Or to run on a specific port (like 8080):
 
     node server.js 8080
 
-Then check your own ip address of the machine it's running on (using `ipconfig`
-for windows or `ifconfig` for mac and linux). Then on the mobile phone, just
-visit that IP address and port you're running jsconsole on:
+Then check your own ip address of the machine it's running on (using `ipconfig` for windows or `ifconfig` for mac and linux). Then on the mobile phone, just visit that IP address and port you're running jsconsole on:
 
 ![jsconsole running locally](http://i.imgur.com/hyRF5.png)
