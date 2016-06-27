@@ -79,7 +79,9 @@ var last = getRemoteScript();
 
 var lastSrc = last.getAttribute('src'),
     id = lastSrc.replace(/.*\?/, ''),
-    origin = document.location.protocol + '//' + lastSrc.substr(7).replace(/\/.*$/, ''),
+    // in PhoneGap apps default protocol HTTP is used
+    protocol = (document.location.protocol == 'file:') ? 'http:' : document.location.protocol,
+    origin = protocol + '//' + lastSrc.substr(7).replace(/\/.*$/, ''),
     remoteWindow = null,
     queue = [],
     msgType = '';
