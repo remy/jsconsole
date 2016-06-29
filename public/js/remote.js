@@ -79,7 +79,7 @@ var last = getRemoteScript();
 
 var lastSrc = last.getAttribute('src'),
     id = lastSrc.replace(/.*\?/, ''),
-    origin = document.location.protocol + '//' + lastSrc.substr(7).replace(/\/.*$/, ''),
+    origin = lastSrc.substr(0, lastSrc.indexOf('/js/remote.js')),
     remoteWindow = null,
     queue = [],
     msgType = '';
