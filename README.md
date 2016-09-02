@@ -31,3 +31,9 @@ Or to run on a specific port (like 8080):
 Then check your own ip address of the machine it's running on (using `ipconfig` for windows or `ifconfig` for mac and linux). Then on the mobile phone, just visit that IP address and port you're running jsconsole on:
 
 ![jsconsole running locally](http://i.imgur.com/hyRF5.png)
+
+
+用法:
+1 运行`node server ${port}`
+2 在打开的页面输入`:listen ${debug_id}`
+3 将提示注入的脚本添加到待调试的页面中
