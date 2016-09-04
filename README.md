@@ -34,6 +34,6 @@ Then check your own ip address of the machine it's running on (using `ipconfig` 
 
 
 用法:
-1 运行`node server ${port}`
-2 在打开的页面输入`:listen ${debug_id}`
-3 将提示注入的脚本添加到待调试的页面中
+1.  运行`node server ${port}`
+2.  在打开的页面输入`:listen ${debug_id}`
+3.  将提示注入的脚本添加到待调试的页面中
