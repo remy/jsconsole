@@ -1,6 +1,6 @@
 window.addEventListener('beforeinstallprompt', function(event) {
   if (window.matchMedia('(display-mode: standalone)').matches) {
-    console.log('this should not fire when in app mode: crbug...');
+    console.log('this should not fire when in app mode: crbug......');
     return event.preventDefault();
   }
 });
@@ -177,12 +177,37 @@ function post(cmd, blind, response /* passed in when echoing from remote console
   pos = history.length;
 }
 
-function log(msg, className) {
+function getFormatValue(value) {
+  try {
+    var json = JSON.parse(value);
+    return formatJson(json, 2);
+  } catch(e) {
+    return value;
+  }
+}
+
+function log(msg, className) { 
   var li = document.createElement('li'),
       div = document.createElement('div');
+  var result = [];
+  if(Array.isArray(msg)) {
+    result = msg.map(function(v) {
+      return getFormatValue(v);
+    });
+  }
 
-  div.innerHTML = typeof msg==='string' ? cleanse(msg): msg;
-  prettyPrint([div]);
+  // div.innerHTML = typeof result==='string' ? cleanse(result): result;
+  // try {
+  //   var json = JSON.parse(div.innerText);
+  //   div.innerHTML = formatJson(json, 2);
+  // } catch(e) {
+  //   prettyPrint([div]);
+  //   console.log(e)
+  // }
+  // prettyPrint([div]);
+  result.forEach(function(v) {
+    div.innerHTML += v + '<br>';
+  });
   li.className = className || 'log';
   li.innerHTML = '<span class="gutter"></span>';
   li.appendChild(div);
