@@ -20,7 +20,7 @@ body { overflow: auto; }
 #output { list-style: none; }
 #output li { margin: 5px 0; padding: 5px; border-top: 1px solid #EEEFEE; white-space: pre-wrap; }
 #output li:last-child { border-bottom: 0;}
-#output > li > div { margin-left: 20px; line-height: 20px; }
+#output > li > div { margin-left: 30px; line-height: 25px; }
 #console span.gutter { float: left; display: block; width: 5px; }
 
 #output li div { position: relative; }
