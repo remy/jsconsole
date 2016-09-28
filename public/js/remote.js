@@ -181,6 +181,17 @@ var remote = {
     } else {
       queue.push(msg);
     }
+  },
+  assert: function(condition, object){
+    if(!condition) {
+      remote.log(arguments.length);
+      var message = 'Assertion failed';
+      if (object) {
+        message += ': ' + stringify(object);
+      }
+      remote.log(message)
+      remote.error({ message: message });
+    }
   }
 };
 
