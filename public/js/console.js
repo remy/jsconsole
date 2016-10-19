@@ -116,9 +116,13 @@ function run(cmd) {
     return ['info', 'sent remote command'];
   } else {
     try {
-      if ('CoffeeScript' in sandboxframe.contentWindow) cmd = sandboxframe.contentWindow.CoffeeScript.compile(cmd, {bare:true});
+      if ('CoffeeScript' in sandboxframe.contentWindow) {
+        cmd = sandboxframe.contentWindow.CoffeeScript.compile(cmd, {bare:true});
+      }
       rawoutput = sandboxframe.contentWindow.eval(cmd);
+      sandboxframe.contentWindow.$_ = rawoutput;
     } catch (e) {
+      console.error(e);
       rawoutput = e.message;
       className = 'error';
     }
@@ -279,13 +283,15 @@ function noop() {}
 
 function showhelp() {
   var commands = [
-    ':load &lt;url&gt; - to inject new DOM',
-    ':load &lt;script_url&gt; - to inject external library',
-    '      load also supports following shortcuts: <br />      jquery, underscore, prototype, mootools, dojo, rightjs, coffeescript, yui.<br />      eg. :load jquery',
     ':listen [id] - to start <a href="/remote-debugging.html">remote debugging</a> session',
+    ':load &lt;script_url&gt; - to inject',
+    '      load also supports shortcuts, like jquery or lodash:<br />',
+    '      eg. :load jquery',
+    ':load &lt;url&gt; - to inject new DOM',
     ':clear - to clear the history (accessed using cursor keys)',
     ':history - list current session history',
     ':about',
+    'copy(&lt;value&gt;) and $_ for last value',
     '',
     'Directions to <a href="/inject.html">inject</a> JS Console in to any page (useful for mobile debugging)'
   ];
@@ -593,13 +599,17 @@ function setHistory(history) {
 }
 
 function about() {
-  return 'Built by <a target="_new" href="http://twitter.com/rem">@rem</a>';
+  return 'Built by <a target="_blank" href="http://twitter.com/rem">@rem</a> • <a target="_blank" href="https://github.com/remy/jsconsole">open source</a>';
 }
 
 
 document.addEventListener ?
   window.addEventListener('message', function (event) {
     if (typeof event.data === 'string') {
+      if (event.origin.indexOf('chrome-ext') === 0) {
+        return;
+      }
+
       post(event.data);
     }
   }, false) :
@@ -619,13 +629,14 @@ var exec = document.getElementById('exec'),
     liveHistory = (window.history.pushState !== undefined),
     pos = 0,
     libraries = {
-        jquery: 'http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js',
+        jquery: 'https://code.jquery.com/jquery.min.js',
         prototype: 'http://ajax.googleapis.com/ajax/libs/prototype/1/prototype.js',
         dojo: 'http://ajax.googleapis.com/ajax/libs/dojo/1/dojo/dojo.xd.js',
         mootools: 'http://ajax.googleapis.com/ajax/libs/mootools/1/mootools-yui-compressed.js',
-        underscore: 'http://documentcloud.github.com/underscore/underscore-min.js',
+        underscore: 'https://cdn.jsdelivr.net/underscorejs/latest/underscore-min.js',
+        lodash: 'https://cdn.jsdelivr.net/lodash/latest/lodash.min.js',
         rightjs: 'http://rightjs.org/hotlink/right.js',
-        coffeescript: 'http://jashkenas.github.com/coffee-script/extras/coffee-script.js',
+        coffeescript: 'https://cdn.jsdelivr.net/coffeescript/latest/coffee-script.min.js',
         yui: 'http://yui.yahooapis.com/3.2.0/build/yui/yui-min.js'
     },
     body = document.getElementsByTagName('body')[0],
@@ -729,10 +740,10 @@ sandbox = sandboxframe.contentDocument || sandboxframe.contentWindow.document;
 if (!injected) {
   sandbox.open();
   // stupid jumping through hoops if Firebug is open, since overwriting console throws error
-  sandbox.write('<script>(function () { var fakeConsole = ' + fakeConsole + '; if (console != undefined) { for (var k in fakeConsole) { console[k] = fakeConsole[k]; } } else { console = fakeConsole; } })();</script>');
+  sandbox.write('<script>var copy = window.top.copy; (function () { var fakeConsole = ' + fakeConsole + '; if (console != undefined) { for (var k in fakeConsole) { console[k] = fakeConsole[k]; } } else { console = fakeConsole; } })();</script>');
   sandbox.close();
 } else {
-  sandboxframe.contentWindow.eval('(function () { var fakeConsole = ' + fakeConsole + '; if (console != undefined) { for (var k in fakeConsole) { console[k] = fakeConsole[k]; } } else { console = fakeConsole; } })();');
+  sandboxframe.contentWindow.eval('copy = window.top.copy; (function () { var fakeConsole = ' + fakeConsole + '; if (console != undefined) { for (var k in fakeConsole) { console[k] = fakeConsole[k]; } } else { console = fakeConsole; } })();');
 }
 
 // tweaks to interface to allow focus
@@ -744,7 +755,7 @@ function whichKey(event) {
   var keys = {38:1, 40:1, Up:38, Down:40, Enter:10, 'U+0009':9, 'U+0008':8, 'U+0190':190, 'Right':39,
       // these two are ignored
       'U+0028': 57, 'U+0026': 55 };
-  return keys[event.keyIdentifier] || event.which || event.keyCode;
+  return event.which || event.keyCode || keys[event.keyIdentifier];
 }
 
 function setCursorTo(str) {
