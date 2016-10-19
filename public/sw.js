@@ -1,5 +1,5 @@
 /* global self, caches, fetch, URL */
-const version = 'v1.1.0::';
+const version = 'v1.2.0::';
 const staticCacheName = version + 'static';
 
 self.addEventListener('install', e => {
@@ -15,6 +15,7 @@ self.addEventListener('install', e => {
         '/assets/out.svg',
         '/assets/prompt.svg',
         '/assets/error.svg',
+        '/js/copy.js',
         '/js/console.js',
         '/js/EventSource.js',
         '/js/prettify.packed.js',
