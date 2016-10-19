@@ -293,7 +293,9 @@ function showhelp() {
     ':about',
     'copy(&lt;value&gt;) and $_ for last value',
     '',
-    'Directions to <a href="/inject.html">inject</a> JS Console in to any page (useful for mobile debugging)'
+    'Directions to <a href="/inject.html">inject</a> JS Console in to any page (useful for mobile debugging)',
+    '',
+    '<span style="color: green">version: ' + version + '</span>',
   ];
 
   if (injected) {

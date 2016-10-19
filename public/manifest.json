@@ -7,7 +7,7 @@
         "sizes": "192x192"
       }
   ],
-  "start_url": "/#homescreen",
+  "start_url": "/?utm_source=web_app_manifest",
   "display": "standalone",
   "background_color": "#E6E8F2",
   "theme_color": "#E6E8F2"
