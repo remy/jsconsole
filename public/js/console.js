@@ -637,6 +637,7 @@ var exec = document.getElementById('exec'),
         mootools: 'http://ajax.googleapis.com/ajax/libs/mootools/1/mootools-yui-compressed.js',
         underscore: 'https://cdn.jsdelivr.net/underscorejs/latest/underscore-min.js',
         lodash: 'https://cdn.jsdelivr.net/lodash/latest/lodash.min.js',
+        moment: 'https://cdn.jsdelivr.net/momentjs/latest/moment.min.js',
         rightjs: 'http://rightjs.org/hotlink/right.js',
         coffeescript: 'https://cdn.jsdelivr.net/coffeescript/latest/coffee-script.min.js',
         yui: 'http://yui.yahooapis.com/3.2.0/build/yui/yui-min.js'
