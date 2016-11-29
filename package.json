@@ -1,9 +1,12 @@
 {
   "name": "jsconsole",
-  "version": "1.2.1",
+  "version": "1.4.0",
   "description": "",
   "engines": {
-    "node": 6
+    "node": 7
+  },
+  "now": {
+    "alias": "jsconsole.com"
   },
   "main": "lib/app.js",
   "directories": {
@@ -17,14 +20,16 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "jscs": "^2.11.0",
+    "jscs": "latest",
     "jshint": "^2.9.1",
-    "tap": "^5.7.0",
+    "tap": "latest",
     "tap-only": "0.0.5"
   },
   "dependencies": {
-    "node-uuid": "^1.4.7",
-    "restify": "^4.0.4",
-    "restify-eventsource": "^2.0.0"
+    "body-parser": "^1.15.2",
+    "compression": "^1.6.2",
+    "express": "^4.14.0",
+    "intercept-stdout": "^0.1.2",
+    "node-uuid": "^1.4.7"
   }
 }
