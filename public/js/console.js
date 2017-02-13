@@ -348,7 +348,7 @@ function loadDOM(url) {
       script = document.createElement('script'),
       cb = 'loadDOM' + +new Date;
 
-  script.src = 'http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22' + encodeURIComponent(url) + '%22&format=xml&callback=' + cb;
+  script.src = 'https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22' + encodeURIComponent(url) + '%22&format=xml&callback=' + cb;
 
   window[cb] = function (yql) {
     if (yql.results.length) {
@@ -601,7 +601,7 @@ function setHistory(history) {
 }
 
 function about() {
-  return 'Built by <a target="_blank" href="http://twitter.com/rem">@rem</a> • <a target="_blank" href="https://github.com/remy/jsconsole">open source</a>';
+  return 'Built by <a target="_blank" href="https://twitter.com/rem">@rem</a> • <a target="_blank" href="https://github.com/remy/jsconsole">open source</a>';
 }
 
 
@@ -632,15 +632,15 @@ var exec = document.getElementById('exec'),
     pos = 0,
     libraries = {
         jquery: 'https://code.jquery.com/jquery.min.js',
-        prototype: 'http://ajax.googleapis.com/ajax/libs/prototype/1/prototype.js',
-        dojo: 'http://ajax.googleapis.com/ajax/libs/dojo/1/dojo/dojo.xd.js',
-        mootools: 'http://ajax.googleapis.com/ajax/libs/mootools/1/mootools-yui-compressed.js',
+        prototype: 'https://ajax.googleapis.com/ajax/libs/prototype/1/prototype.js',
+        dojo: 'https://ajax.googleapis.com/ajax/libs/dojo/1/dojo/dojo.xd.js',
+        mootools: 'https://ajax.googleapis.com/ajax/libs/mootools/1/mootools-yui-compressed.js',
         underscore: 'https://cdn.jsdelivr.net/underscorejs/latest/underscore-min.js',
         lodash: 'https://cdn.jsdelivr.net/lodash/latest/lodash.min.js',
         moment: 'https://cdn.jsdelivr.net/momentjs/latest/moment.min.js',
         rightjs: 'http://rightjs.org/hotlink/right.js',
         coffeescript: 'https://cdn.jsdelivr.net/coffeescript/latest/coffee-script.min.js',
-        yui: 'http://yui.yahooapis.com/3.2.0/build/yui/yui-min.js'
+        yui: 'https://yui.yahooapis.com/3.2.0/build/yui/yui-min.js'
     },
     body = document.getElementsByTagName('body')[0],
     logAfter = null,

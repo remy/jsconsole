@@ -4,7 +4,7 @@ A JavaScript web console, useful for quick experimentation, debugging, presentat
 
 # Features
 
-- Remote device debugging using "listen" command ([more info](http://jsconsole.com/remote-debugging.html))
+- Remote device debugging using "listen" command ([more info](https://jsconsole.com/remote-debugging.html))
 - Resizable font (yep, biggest issue with Firebug in workshops)
 - Autocomplete in WebKit desktop browsers
 - Shift + up/down for bigger console
@@ -14,7 +14,7 @@ A JavaScript web console, useful for quick experimentation, debugging, presentat
 
 # Hosting jsconsole yourself
 
-This requires that you install [node.js](http://nodejs.org). Once installed, download this project (or clone it using git) and inside the new `jsconsole` directory run:
+This requires that you install [node.js](https://nodejs.org). Once installed, download this project (or clone it using git) and inside the new `jsconsole` directory run:
 
     npm install
 
@@ -30,4 +30,4 @@ Or to run on a specific port (like 8080):
 
 Then check your own ip address of the machine it's running on (using `ipconfig` for windows or `ifconfig` for mac and linux). Then on the mobile phone, just visit that IP address and port you're running jsconsole on:
 
-![jsconsole running locally](http://i.imgur.com/hyRF5.png)
+![jsconsole running locally](https://i.imgur.com/hyRF5.png)
