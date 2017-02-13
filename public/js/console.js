@@ -331,7 +331,7 @@ function loadScript() {
       var script = document.createElement('script');
       script.src = url
       script.onload = function () {
-        window.top.info('Loaded ' + url, 'http://' + window.location.hostname);
+        window.top.info('Loaded ' + url);
         if (url == libraries.coffeescript) window.top.info('Now you can type CoffeeScript instead of plain old JS!');
       };
       script.onerror = function () {
