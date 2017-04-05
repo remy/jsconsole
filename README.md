@@ -10,5 +10,5 @@ Fork from https://github.com/remy/jsconsole
 
 在原有项目上添加了`server.js`，并且对输出的json数据进行的友好的展示
 
-###Issue
+### Issue
 * 只能支持`console.log`方法
