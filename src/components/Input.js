@@ -16,6 +16,11 @@ class Line extends Component {
   onKeyPress(e) {
     const code = keycodes[e.keyCode];
 
+    if (e.ctrlKey && code === 'l') {
+      this.props.onClear();
+      return;
+    }
+
     if (code === 'enter') {
       console.log('sending command');
       this.props.onRun(e.target.value);
