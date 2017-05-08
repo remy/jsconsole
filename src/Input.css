@@ -1,0 +1,17 @@
+.Input {
+  display: block;
+  background: #E6E8F2;
+  border-bottom: 1px solid #aaabb8;
+  box-shadow: 0px 2px 10px rgba(0,0,0,.3);
+}
+
+.Input input {
+  font-family: "Menlo", consolas, monospace;
+  background: none;
+  border: 0;
+  padding: .8rem;
+  font-size: inherit;
+  display: block;
+  width: 100%;
+  outline: none;
+}

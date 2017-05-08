@@ -1,0 +1,20 @@
+.type {
+  display: inline-block;
+}
+
+.string {
+  color: #4CAF50
+}
+
+.number {
+  color: #0000c0;
+}
+
+.bool {
+  color: #E91E63;
+}
+
+.undefined,
+.null {
+  color: pink;
+}

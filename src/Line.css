@@ -1,0 +1,70 @@
+.Line {
+  display: block;
+  line-height: 1.4rem;
+  padding: 0.8rem;
+  border-bottom: 1px solid #eee;
+  position: relative;
+}
+
+.Line.out:before {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 2px;
+  height: calc(100% - 2rem);
+  background: blue;
+  left: 0.5rem;
+}
+
+.Line .type em {
+  user-select: none;
+  padding-right: 5px;
+  cursor: pointer;
+  color: #2196F3;
+}
+
+.Line .sep {
+  padding-right: 1ch;
+}
+
+.Line .type em:hover {
+  text-decoration: underline;
+}
+
+.ArrayType.closed {
+  cursor: pointer;
+}
+
+.Line .type.closed * em:hover {
+  text-decoration: none;
+}
+
+.ArrayType.closed > div {
+  display: inline-block;
+}
+
+.group {
+  margin-left: 0.5rem;
+}
+
+.key-value {
+  line-height: 1.2rem;
+  padding: 0.1rem;
+  display: flex;
+}
+
+.index {
+  user-select: none;
+  vertical-align: text-bottom;
+}
+
+.key, .index {
+  line-height: 1.2rem;
+  color: #979797;
+  margin-right: .5rem;
+}
+
+
+.arb-info {
+  color: #999;
+}
