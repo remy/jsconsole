@@ -3,6 +3,10 @@ import which from '../lib/which-type';
 import '../Line.css';
 
 class Line extends Component {
+  constructor(props) {
+    super(props);
+  }
+
   render() {
     const { value, open = false } = this.props
 

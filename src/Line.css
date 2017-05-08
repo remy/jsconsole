@@ -16,7 +16,7 @@
   left: 0.5rem;
 }
 
-.Line .type em {
+.Line em {
   user-select: none;
   padding-right: 5px;
   cursor: pointer;

@@ -21,9 +21,8 @@ class App extends Component {
     super(props);
     const foo = function (a, b, c) { console.log("ok") };
     const bar = (name, ...rest) => console.log("ok");
-    this.state = {
-      commands: [
-        { value: { _: window._ }, open: true, },
+    this.state = Object.assign({}, [
+        { value: document, open: true, },
         // { value: foo },
         // { value: bar },
         // { value: [1,2,3 ]},
@@ -31,26 +30,31 @@ class App extends Component {
         // { open: true, value: { a: 1, b: true, c: document.body }},
         // { open: false, value: ["remy", 1, , [1,2,3,4,,,4], null, , , , "four", true, 2, { a: 1, b: "two" }] },
         { open: false, value: ["remy", 1, , undefined, null, , , , "four", true, 2, { a: 1, b: "two" }]}
-      ],
-    };
+    ]);
   }
   render() {
-    const { commands } = this.state;
+    const commands = this.state || {};
     return (
       <div className="App">
         <Input
           onRun={string => {
             const value = run(string);
-            this.setState({ commands: [ {
+            const next = (Object.keys(commands).slice(-1).pop() || 0) * 1;
+            this.setState({ [next + 1]: {
               value,
               command: string,
-            }, ...commands ] })
+            }})
           }}
           onClear={() => {
-            this.setState({ commands: [] })
+            this.state = {};
+            this.forceUpdate();
           }}
         />
-        { commands.map((_, i) => <Line key={`line-${i}`} {... _ } />)}
+        { Object
+            .keys(commands)
+            .reverse()
+            .map((_, i) => <Line key={`line-${_}`} {... commands[_] } />)
+        }
       </div>
     );
   }

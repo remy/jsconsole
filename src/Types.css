@@ -14,6 +14,10 @@
   color: #E91E63;
 }
 
+.function.function em {
+  color: #1976D2;
+}
+
 .undefined,
 .null {
   color: pink;

@@ -18,12 +18,15 @@ class ObjectType extends Component {
 
   render() {
     const { open } = this.state;
-    const { value, shallow = true } = this.props;
+    const { value, shallow = true, type = 'object' } = this.props;
+    let { displayName } = this.props;
 
-    const displayName = value.constructor ? value.constructor.name : 'Object';
+    if (!displayName) {
+      displayName = value.constructor ? value.constructor.name : 'Object';
+    }
 
     if (!open || shallow) {
-      return <div className="type object"><em onClick={this.toggle}>{ displayName }</em></div>
+      return <div className={`type ${type}`}><em onClick={this.toggle}>{ displayName }</em></div>
     }
 
     const types = Object.keys(value).map((key, i) => {
@@ -34,8 +37,19 @@ class ObjectType extends Component {
       };
     });
 
+    // then try to find more keys
+    // Object.keys(value.__proto__).forEach((key, i) => {
+    //   if (value[key] !== value.__proto__[key]) {
+    //     const Type = which(value.__proto__[key]);
+    //     types.push({
+    //       key,
+    //       value: <Type key={`arrayType-${types.length+1}`} shallow={shallow} value={value.__proto__[key]}>{ value.__proto__[key] }</Type>
+    //     })
+    //   }
+    // });
+
     return (
-    <div className="type object">
+    <div className={`type ${type}`}>
       <div className="header">
         <em onClick={this.toggle}>{ displayName }</em>
         <span className="abr-info">{'{'}</span>

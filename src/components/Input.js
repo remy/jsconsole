@@ -31,7 +31,7 @@ class Line extends Component {
 
   render() {
     return (<div className="Input">
-      <input ref={e=>this.input=e} type="text" onChange={this.onChange} onKeyDown={this.onKeyPress} />
+      <input autoFocus ref={e=>this.input=e} type="text" onChange={this.onChange} onKeyDown={this.onKeyPress} />
     </div>);
   }
 }

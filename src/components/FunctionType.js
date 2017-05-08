@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import which from '../lib/which-type';
+import ObjectType from './ObjectType';
 
 class FunctionType extends Component {
   constructor(props) {
@@ -20,12 +20,22 @@ class FunctionType extends Component {
     const { value, shallow = true } = this.props;
     const { open } = this.state;
 
-    const code = (Function).toString.call(value);
-    const native = code.indexOf('[native code') !== -1;
+    // this gets the source of the function, regadless of whether
+    // it has a function called ".toString", like lodash has!
+    const code = Function.toString.call(value);
+    // const native = code.indexOf('[native code') !== -1;
     const sig = code.substring(0, code.indexOf(')') + 1).replace(/\s/g, ' ');
-    const props = Object.keys(value);
+    for (let f in value) {
+      console.log(f);
+    }
 
-    return <div className="function type">{ sig }</div>
+    const props = Object.getOwnPropertyNames(value);
+    const object = props.reduce((acc, curr) => {
+      acc[curr] = props[curr];
+      return acc;
+    }, {});
+
+    return <div><ObjectType type="function" shallow={shallow} open={open} value={object} displayName={ sig } /></div>;
   }
 }
 
