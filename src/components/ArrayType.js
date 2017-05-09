@@ -25,7 +25,7 @@ class ArrayType extends Component {
     let length = value.length;
 
     if (shallow && !open) {
-      return <div className="type ArrayType closed" onClick={this.toggle}><em>Array</em>({ length })</div>;
+      return <div className="type ArrayType closed" onClick={this.toggle}><em>Array</em><span className="arb-info">({ length })</span></div>;
     }
 
     let types = value.slice(0, open ? value.length : 10).map((_, i) => {
@@ -33,12 +33,10 @@ class ArrayType extends Component {
       return <Type key={`arrayType-${i+1}`} shallow={true} value={_}>{ _ }</Type>
     });
 
-    // FIXME this doesn't work anymore :sad:
     // expose holes in the collapsed mode
     if (!open) {
       let count = 0;
       const newTypes = [];
-      console.log('counting holes');
       for (let i = 0; i < types.length; i++) {
         const hole = !(i in types);
 
@@ -54,11 +52,17 @@ class ArrayType extends Component {
         }
       }
 
+      // if there are holes at the end
+      if (count !== 0) {
+        newTypes.push(<span key={`hole-${types.length}`} className="arb-info">&lt;undefined × { count }&gt;</span>);
+      }
+
+
       types = newTypes;
     }
 
     if (!open && value.length > 10) {
-      types.push(<span key="arrayType-0" className="more">…</span>);
+      types.push(<span key="arrayType-0" className="more arb-info">…</span>);
     }
 
     if (!open) {

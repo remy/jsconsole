@@ -68,7 +68,7 @@ class ObjectType extends Component {
     if (!open) {
       if (displayName !== 'Object') {
         // just show the summary
-        return <div className={`type ${type}`}><em onClick={this.toggle}>{ displayName }</em><span className="arb-info">{'{ … }'}</span></div>;
+        return <div className={`type ${type}`}><em onClick={this.toggle}>{ displayName }</em><span>{'{ … }'}</span></div>;
       }
 
       // intersperce with commas
@@ -87,7 +87,7 @@ class ObjectType extends Component {
       return (
         <div className="type object closed" onClick={this.toggle}>
           <em>{ displayName }</em>
-          <span className="arb-info">{'{'} </span>
+          <span>{'{'} </span>
           { types.map((obj, i) => {
             if (obj && obj.key && obj.value) {
               return (
@@ -100,7 +100,7 @@ class ObjectType extends Component {
 
             return obj;
           }) }
-          <span className="arb-info"> {'}'}</span>
+          <span> {'}'}</span>
         </div>
       );
     }
@@ -110,7 +110,7 @@ class ObjectType extends Component {
     <div className={`type ${type} ${open ? '' : 'closed'}`}>
       <div className="header">
         <em onClick={this.toggle}>{ displayName }</em>
-        <span className="arb-info">{'{'}</span>
+        <span>{'{'}</span>
       </div>
       <div className="group">{
         types.map((obj, i) => {
@@ -122,7 +122,7 @@ class ObjectType extends Component {
           )
         })
       }</div>
-      <span className="arb-info">{'}'}</span>
+      <span>{'}'}</span>
     </div>
     )
   }

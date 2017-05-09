@@ -6,6 +6,33 @@
   position: relative;
 }
 
+.Line .input,
+.Line .output {
+  position: relative;
+  padding-left: 1rem;
+}
+
+.Line .prompt:before {
+  position: absolute;
+  content: '';
+  background-size: contain;
+  top: 4px;
+  left: -.25rem;
+  width: 16px;
+  height: 12px;
+  scale: 0.75;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+}
+
+.Line .input:before {
+  background-image: url(/prompt.svg);
+}
+
+.Line .output:before {
+  background-image: url(/out.svg);
+}
+
 .Line .LineNav {
   display: none;
 }
