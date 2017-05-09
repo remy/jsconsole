@@ -34,12 +34,12 @@ class App extends Component {
     // const bar = (name, ...rest) => console.log("ok");
     this.state = Object.assign({}, [
         { value: { body: document.body, foo }, open: true, },
-        { value: { a: { b: 1 } } },
         // { value: foo },
         // { value: bar },
         { value: [1,2,3,,,, ]},
         // { value: { a: true } },
         { open: false, value: { a: 1, b: true, c: document.body }},
+        { value: { a: { b: 1 } }, open: true },
         // { open: false, value: ["remy", 1, , [1,2,3,4,,,4], null, , , , "four", true, 2, { a: 1, b: "two" }] },
         // { open: false, value: [{ a: 1, b: "two" }, "remy", 1, , undefined, null, , , , "four", true, 2, ]}
     ]);

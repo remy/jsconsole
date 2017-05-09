@@ -47,7 +47,7 @@ class ObjectType extends Component {
     }
 
     if (!open && shallow) {
-      return <div className={`type ${type}`}><em>{ displayName }</em></div>;
+      return <div onClick={this.toggle} className={`type ${type}`}><em>{ displayName }</em></div>;
     }
 
     const props = open ? [...enumerate(value)] : Object.keys(value).slice(0, 10);
@@ -87,7 +87,7 @@ class ObjectType extends Component {
       return (
         <div className="type object closed" onClick={this.toggle}>
           <em>{ displayName }</em>
-          <span className="arb-info">{'{'}</span>
+          <span className="arb-info">{'{'} </span>
           { types.map((obj, i) => {
             if (obj && obj.key && obj.value) {
               return (
@@ -100,7 +100,7 @@ class ObjectType extends Component {
 
             return obj;
           }) }
-          <span className="arb-info">{'}'}</span>
+          <span className="arb-info"> {'}'}</span>
         </div>
       );
     }
