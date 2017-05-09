@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { zip, flatten } from 'lodash';
+import zip from 'lodash/zip';
+import flatten from 'lodash/flatten';
 import which from '../lib/which-type';
 
 class ArrayType extends Component {
@@ -32,10 +33,12 @@ class ArrayType extends Component {
       return <Type key={`arrayType-${i+1}`} shallow={true} value={_}>{ _ }</Type>
     });
 
+    // FIXME this doesn't work anymore :sad:
     // expose holes in the collapsed mode
     if (!open) {
       let count = 0;
       const newTypes = [];
+      console.log('counting holes');
       for (let i = 0; i < types.length; i++) {
         const hole = !(i in types);
 

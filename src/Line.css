@@ -6,6 +6,15 @@
   position: relative;
 }
 
+.Line .LineNav {
+  display: none;
+}
+
+.Line:hover .LineNav,
+.Line:focus .LineNav {
+  display: block;
+}
+
 .Line.out:before {
   content: '';
   display: block;
@@ -51,6 +60,10 @@
   line-height: 1.2rem;
   /*padding: 0.1rem;*/
   display: flex;
+}
+
+.closed .key-value {
+  display: inline;
 }
 
 .index {

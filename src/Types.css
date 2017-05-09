@@ -2,8 +2,15 @@
   display: inline-block;
 }
 
+.type.object.closed .header,
+.type.object.closed .group,
+.type.object.closed .group > div {
+  display: inline-block;
+}
+
 .string {
-  color: #4CAF50
+  color: #4CAF50;
+  white-space: nowrap;
 }
 
 .number {

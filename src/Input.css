@@ -1,5 +1,10 @@
 .Input {
   display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
 }
 
 .Input input {
@@ -8,9 +13,10 @@
   box-shadow: 0px 2px 10px rgba(0,0,0,.3);
   font-family: "Menlo", consolas, monospace;
   border: 0;
-  padding: .8rem;
-  font-size: inherit;
+  padding: .4rem .8rem;
   display: block;
   width: 100%;
   outline: none;
+  font-size: 1rem;
+  line-height: 1.8rem;
 }

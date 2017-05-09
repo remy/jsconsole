@@ -24,10 +24,13 @@ class FunctionType extends Component {
     // it has a function called ".toString", like lodash has!
     const code = Function.toString.call(value);
     // const native = code.indexOf('[native code') !== -1;
-    const sig = code.substring(0, code.indexOf(')') + 1).replace(/\s/g, ' ');
-    for (let f in value) {
-      console.log(f);
+    let sig = code.substring(0, code.indexOf('{') - 1).trim().replace(/\s/g, ' ');
+
+    if (!sig) { // didn't match because it's an arrow func
+      sig = code.substring(0, code.indexOf('=>')).trim() + ' =>';
     }
+
+    // FIXME: a => 'ok' (length: 2) ¯\_(ツ)_/¯
 
     const props = Object.getOwnPropertyNames(value);
     const object = props.reduce((acc, curr) => {

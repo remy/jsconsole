@@ -5,31 +5,43 @@ import './Types.css';
 import Line from './components/Line';
 import Input from './components/Input';
 
-function run(code) {
-  const fn = new Function(`return ${code}`);
-  let value = undefined;
+function run(command) {
+  const res = {
+    error: false,
+    command,
+  };
   try {
-    value = fn();
+    // trick from devtools, via
+    // https://twitter.com/RReverser/status/861922999540355072
+    if (command[0] === '{') {
+      command = `(${command})`;
+    }
+    res.value = window.eval(command);
+
+    // TODO move out
+    window.$_ = res.value;
   } catch (e) {
-    value = e;
+    res.error = true;
+    res.value = e;
   }
-  return value;
+  return res;
 }
 
 class App extends Component {
   constructor(props) {
     super(props);
     const foo = function (a, b, c) { console.log("ok") };
-    const bar = (name, ...rest) => console.log("ok");
+    // const bar = (name, ...rest) => console.log("ok");
     this.state = Object.assign({}, [
-        { value: document, open: true, },
+        { value: { body: document.body, foo }, open: true, },
+        { value: { a: { b: 1 } } },
         // { value: foo },
         // { value: bar },
-        // { value: [1,2,3 ]},
+        { value: [1,2,3,,,, ]},
         // { value: { a: true } },
-        // { open: true, value: { a: 1, b: true, c: document.body }},
+        { open: false, value: { a: 1, b: true, c: document.body }},
         // { open: false, value: ["remy", 1, , [1,2,3,4,,,4], null, , , , "four", true, 2, { a: 1, b: "two" }] },
-        { open: false, value: ["remy", 1, , undefined, null, , , , "four", true, 2, { a: 1, b: "two" }]}
+        // { open: false, value: [{ a: 1, b: "two" }, "remy", 1, , undefined, null, , , , "four", true, 2, ]}
     ]);
   }
   render() {
@@ -38,12 +50,9 @@ class App extends Component {
       <div className="App">
         <Input
           onRun={string => {
-            const value = run(string);
+            const res = run(string);
             const next = (Object.keys(commands).slice(-1).pop() || 0) * 1;
-            this.setState({ [next + 1]: {
-              value,
-              command: string,
-            }})
+            this.setState({ [next + 1]: res })
           }}
           onClear={() => {
             this.state = {};

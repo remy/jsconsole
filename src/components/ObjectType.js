@@ -1,5 +1,26 @@
 import React, { Component } from 'react';
 import which from '../lib/which-type';
+import zip from 'lodash/zip';
+import flatten from 'lodash/flatten';
+
+function* enumerate(obj) {
+  let visited = new Set();
+  while (obj) {
+    for (let key of Reflect.ownKeys(obj)) {
+      if (typeof key === 'string') {
+        let desc = Reflect.getOwnPropertyDescriptor(obj, key);
+        if (desc && !visited.has(key)) {
+          visited.add(key);
+          if (desc.enumerable) {
+            yield key;
+          }
+        }
+      }
+    }
+    obj = Reflect.getPrototypeOf(obj);
+  }
+}
+
 
 class ObjectType extends Component {
   constructor(props) {
@@ -25,34 +46,71 @@ class ObjectType extends Component {
       displayName = value.constructor ? value.constructor.name : 'Object';
     }
 
-    if (!open || shallow) {
-      return <div className={`type ${type}`}><em onClick={this.toggle}>{ displayName }</em></div>
+    if (!open && shallow) {
+      return <div className={`type ${type}`}><em>{ displayName }</em></div>;
     }
 
-    const types = Object.keys(value).map((key, i) => {
+    const props = open ? [...enumerate(value)] : Object.keys(value).slice(0, 10);
+
+    let types = props.map((key, i) => {
       const Type = which(value[key]);
       return {
         key,
-        value: <Type key={`arrayType-${i+1}`} shallow={shallow} value={value[key]}>{ value[key] }</Type>
+        value: <Type key={`objectType-${i+1}`} shallow={true} value={value[key]}>{ value[key] }</Type>
       };
     });
 
-    // then try to find more keys
-    // Object.keys(value.__proto__).forEach((key, i) => {
-    //   if (value[key] !== value.__proto__[key]) {
-    //     const Type = which(value.__proto__[key]);
-    //     types.push({
-    //       key,
-    //       value: <Type key={`arrayType-${types.length+1}`} shallow={shallow} value={value.__proto__[key]}>{ value.__proto__[key] }</Type>
-    //     })
-    //   }
-    // });
+    if (!open && Object.keys(value).length > 10) {
+      types.push(<span key="objectType-0" className="more">…</span>);
+    }
+
+
+    if (!open) {
+      if (displayName !== 'Object') {
+        // just show the summary
+        return <div className={`type ${type}`}><em onClick={this.toggle}>{ displayName }</em><span className="arb-info">{'{ … }'}</span></div>;
+      }
+
+      // intersperce with commas
+      types = flatten(
+        zip(
+          types,
+          Array.from({
+            length: types.length -1
+          }, (n, i) => {
+            return <span key={`sep-${i}`} className="sep">,</span>
+          })
+        )
+      );
+
+      // do mini output
+      return (
+        <div className="type object closed" onClick={this.toggle}>
+          <em>{ displayName }</em>
+          <span className="arb-info">{'{'}</span>
+          { types.map((obj, i) => {
+            if (obj && obj.key && obj.value) {
+              return (
+                <span className="object-item key-value" key={`subtype-${i}`}>
+                  <span className="key">{obj.key}:</span>
+                  <span className="value">{ obj.value }</span>
+                </span>
+              )
+            }
+
+            return obj;
+          }) }
+          <span className="arb-info">{'}'}</span>
+        </div>
+      );
+    }
+
 
     return (
-    <div className={`type ${type}`}>
+    <div className={`type ${type} ${open ? '' : 'closed'}`}>
       <div className="header">
         <em onClick={this.toggle}>{ displayName }</em>
-        <span className="abr-info">{'{'}</span>
+        <span className="arb-info">{'{'}</span>
       </div>
       <div className="group">{
         types.map((obj, i) => {
@@ -64,7 +122,7 @@ class ObjectType extends Component {
           )
         })
       }</div>
-      <span className="abr-info">{'}'}</span>
+      <span className="arb-info">{'}'}</span>
     </div>
     )
   }
