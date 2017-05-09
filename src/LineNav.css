@@ -6,6 +6,7 @@
 }
 
 .icon {
+  user-select: none;
   border: 0;
   background: none;
   overflow: hidden;
@@ -19,7 +20,6 @@
   vertical-align: top;
   cursor: pointer;
   opacity: 0.3;
-  /*border: 1px solid #ccc;*/
   border-radius: 100px;
   padding: 12px;
   background-color: #ddd;
@@ -49,4 +49,18 @@
 
 .icon.search {
   background-image: url(/search.svg);
+}
+
+.icon.expand {
+  background-image: url(/expand.svg);
+  padding: 0;
+  background-color: transparent;
+  margin: 0;
+  margin-left: -0.5rem;
+  margin-top: 0.15rem;
+}
+
+.icon.expand:hover {
+  background-color: transparent;
+  box-shadow: none;
 }

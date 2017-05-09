@@ -13,6 +13,10 @@
   white-space: nowrap;
 }
 
+.string.toggle {
+  white-space: pre;
+}
+
 .number {
   color: #0000c0;
 }
@@ -27,5 +31,5 @@
 
 .undefined,
 .null {
-  color: pink;
+  color: #9C27B0;
 }

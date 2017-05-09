@@ -7,6 +7,7 @@ import UndefinedType from '../components/UndefinedType';
 import NumberType from '../components/NumberType';
 import StringType from '../components/StringType';
 import BooleanType from '../components/BooleanType';
+import SetType from '../components/SetType';
 
 function whichType(value) {
   let type = '[object Object]';
@@ -34,6 +35,10 @@ function whichType(value) {
 
   if (type === '[object Boolean]') {
     return BooleanType;
+  }
+
+  if (type === '[object Set]' || type === '[object Map]') {
+    return SetType;
   }
 
   if (value === undefined) {

@@ -1,7 +1,7 @@
 .Line {
   display: block;
   line-height: 1.4rem;
-  padding: 0.8rem;
+  // padding: 0.6rem;
   border-bottom: 1px solid #eee;
   position: relative;
 }
@@ -9,18 +9,23 @@
 .Line .input,
 .Line .output {
   position: relative;
-  padding-left: 1rem;
+  padding: 0.6rem;
+  padding-left: 1.4rem;
+}
+
+.Line .input {
+  white-space: pre;
 }
 
 .Line .prompt:before {
   position: absolute;
   content: '';
   background-size: contain;
-  top: 4px;
-  left: -.25rem;
-  width: 16px;
+  top: 0.9rem;
+  left: 0.4rem;
+  width: 12px;
   height: 12px;
-  scale: 0.75;
+  // scale: 0.75 0.75;
   background-position: 50% 50%;
   background-repeat: no-repeat;
 }
@@ -29,9 +34,17 @@
   background-image: url(/prompt.svg);
 }
 
+.Line .error {
+  background: #FFEFEF;
+}
+
+.Line .error.output:before {
+  background-image: url(/error.svg);
+}
+
 .Line .output:before {
   background-image: url(/out.svg);
-  top: 5px;
+  // top: 5px;
 }
 
 .Line .LineNav {
@@ -58,6 +71,10 @@
   padding-right: 5px;
   cursor: pointer;
   color: #2196F3;
+}
+
+.Line .error em {
+  color: #F44336;
 }
 
 .Line .sep {

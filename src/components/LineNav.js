@@ -14,7 +14,8 @@ class LineNav extends Component {
 
   preCopy() {
     // work out how we should copy this thing
-    const { value } = this.props;
+    const original = this.props.value;
+    let { value } = this.props;
 
     if (this.state.copyAsHTML) {
       this.setState({ text: value.outerHTML });
@@ -24,6 +25,21 @@ class LineNav extends Component {
     if (typeof value === 'function') {
       this.setState({ text: value.toString() });
       return;
+    }
+
+    if (typeof value === 'string') {
+      this.setState({ text: value });
+      return;
+    }
+
+    if (value instanceof Error) {
+      // get real props and add the stack no matter what (FF excludes it)
+      value = Object.getOwnPropertyNames(value).reduce((acc, curr) => {
+        acc[curr] = value[curr];
+        return acc;
+      }, {});
+
+      value.stack = original.stack;
     }
 
     this.setState({ text: JSON.stringify(value, '', 2) });

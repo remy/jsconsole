@@ -14,6 +14,10 @@ class ArrayType extends Component {
   }
 
   toggle(e) {
+    if (!this.props.allowOpen) {
+      return;
+    }
+    e.stopPropagation();
     e.preventDefault();
     this.setState({ open: !this.state.open });
   }
@@ -30,7 +34,7 @@ class ArrayType extends Component {
 
     let types = value.slice(0, open ? value.length : 10).map((_, i) => {
       const Type = which(_);
-      return <Type key={`arrayType-${i+1}`} shallow={true} value={_}>{ _ }</Type>
+      return <Type allowOpen={ open } key={`arrayType-${i+1}`} shallow={true} value={_}>{ _ }</Type>
     });
 
     // expose holes in the collapsed mode

@@ -21,7 +21,6 @@ function* enumerate(obj) {
   }
 }
 
-
 class ObjectType extends Component {
   constructor(props) {
     super(props);
@@ -33,6 +32,10 @@ class ObjectType extends Component {
   }
 
   toggle(e) {
+    if (!this.props.allowOpen) {
+      return;
+    }
+    e.stopPropagation();
     e.preventDefault();
     this.setState({ open: !this.state.open });
   }
@@ -52,11 +55,17 @@ class ObjectType extends Component {
 
     const props = open ? [...enumerate(value)] : Object.keys(value).slice(0, 10);
 
+    Object.getOwnPropertyNames(value).forEach(prop => {
+      if (!props.includes(prop)) {
+        props.push(prop);
+      }
+    });
+
     let types = props.map((key, i) => {
       const Type = which(value[key]);
       return {
         key,
-        value: <Type key={`objectType-${i+1}`} shallow={true} value={value[key]}>{ value[key] }</Type>
+        value: <Type allowOpen={open} key={`objectType-${i+1}`} shallow={true} value={value[key]}>{ value[key] }</Type>
       };
     });
 
@@ -104,7 +113,6 @@ class ObjectType extends Component {
         </div>
       );
     }
-
 
     return (
     <div className={`type ${type} ${open ? '' : 'closed'}`}>

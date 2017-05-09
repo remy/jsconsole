@@ -5,12 +5,14 @@
   left: 0;
   right: 0;
   z-index: 10;
-}
-
-.Input input {
   background: #E6E8F2;
   border-bottom: 1px solid #aaabb8;
   box-shadow: 0px 2px 10px rgba(0,0,0,.3);
+}
+
+.Input .cli,
+.Autocomplete {
+  background: none;
   font-family: "Menlo", consolas, monospace;
   border: 0;
   padding: .4rem .8rem;
