@@ -32,7 +32,9 @@ class App extends Component {
     super(props);
     const foo = function (a, b, c) { console.log("ok") };
     const bar = (name, ...rest) => console.log("ok");
-    this.state = Object.assign({}, [
+    this.state = {};
+
+    Object.assign({}, [
         { value: { body: document.body, foo }, open: true, },
         { value: foo },
         { value: bar },

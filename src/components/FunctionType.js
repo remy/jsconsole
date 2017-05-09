@@ -20,6 +20,8 @@ class FunctionType extends Component {
     const { value, shallow = true } = this.props;
     const { open } = this.state;
 
+    console.log('fn.length: %s', value.length);
+
     // this gets the source of the function, regadless of whether
     // it has a function called ".toString", like lodash has!
     const code = Function.toString.call(value);
@@ -32,9 +34,8 @@ class FunctionType extends Component {
 
     // FIXME: a => 'ok' (length: 2) ¯\_(ツ)_/¯
 
-    const props = Object.getOwnPropertyNames(value);
-    const object = props.reduce((acc, curr) => {
-      acc[curr] = props[curr];
+    const object = Object.getOwnPropertyNames(value).reduce((acc, curr) => {
+      acc[curr] = value[curr];
       return acc;
     }, {});
 
