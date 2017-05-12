@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import which from '../lib/which-type';
+import StringType from './StringType';
 import zip from 'lodash/zip';
 import flatten from 'lodash/flatten';
+
+const LIMIT_CLOSED = 5;
 
 function* enumerate(obj) {
   let visited = new Set();
@@ -42,7 +45,7 @@ class ObjectType extends Component {
 
   render() {
     const { open } = this.state;
-    const { value, shallow = true, type = 'object' } = this.props;
+    const { value, shallow = true, type = ({}).toString.call(value) } = this.props;
     let { displayName } = this.props;
 
     if (!displayName) {
@@ -53,7 +56,7 @@ class ObjectType extends Component {
       return <div onClick={this.toggle} className={`type ${type}`}><em>{ displayName }</em></div>;
     }
 
-    const props = open ? [...enumerate(value)] : Object.keys(value).slice(0, 10);
+    const props = open ? [...enumerate(value)] : Object.keys(value);
 
     Object.getOwnPropertyNames(value).forEach(prop => {
       if (!props.includes(prop)) {
@@ -61,20 +64,27 @@ class ObjectType extends Component {
       }
     });
 
+    if (!open) {
+      props.splice(LIMIT_CLOSED);
+    }
+
     let types = props.map((key, i) => {
       const Type = which(value[key]);
       return {
         key,
-        value: <Type allowOpen={open} key={`objectType-${i+1}`} shallow={true} value={value[key]}>{ value[key] }</Type>
+        value: <Type allowOpen={open} key={`objectType-${i+1}`} shallow={true} value={value[key]} />
       };
     });
 
-    if (!open && Object.keys(value).length > 10) {
+    if (!open && Object.keys(value).length > LIMIT_CLOSED) {
       types.push(<span key="objectType-0" className="more">…</span>);
     }
 
 
     if (!open) {
+      if (type === '[object Error]') {
+        return <div className={`type ${type}`}><em onClick={this.toggle}>{ displayName }</em><span>{'{'} <StringType value={value.message} /> {'}'}</span></div>;
+      }
       if (displayName !== 'Object') {
         // just show the summary
         return <div className={`type ${type}`}><em onClick={this.toggle}>{ displayName }</em><span>{'{ … }'}</span></div>;
@@ -87,7 +97,7 @@ class ObjectType extends Component {
           Array.from({
             length: types.length -1
           }, (n, i) => {
-            return <span key={`sep-${i}`} className="sep">,</span>
+            return <span key={`sep-${i}`} className="sep">,</span>;
           })
         )
       );
@@ -104,7 +114,7 @@ class ObjectType extends Component {
                   <span className="key">{obj.key}:</span>
                   <span className="value">{ obj.value }</span>
                 </span>
-              )
+              );
             }
 
             return obj;
@@ -127,12 +137,12 @@ class ObjectType extends Component {
               <span className="key">{obj.key}:</span>
               <span className="value">{ obj.value }</span>
             </div>
-          )
+          );
         })
       }</div>
       <span>{'}'}</span>
     </div>
-    )
+    );
   }
 }
 

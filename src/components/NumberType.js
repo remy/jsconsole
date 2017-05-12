@@ -1,2 +1,2 @@
 import React from 'react';
-export default ({ children }) => <div className="type number">{ children }</div>
+export default ({ children, value }) => <div className="type number">{ value }</div>

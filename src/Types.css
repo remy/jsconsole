@@ -2,6 +2,10 @@
   display: inline-block;
 }
 
+.type + .type {
+  margin-left: 0.75rem;
+}
+
 .type.object.closed .header,
 .type.object.closed .group,
 .type.object.closed .group > div {

@@ -2,10 +2,16 @@
   box-sizing: border-box;
 }
 
+body, html, #root {
+  height: 100%;
+}
+
 .App {
+  height: 100%;
   font-size: 0.85rem;
+  line-height: 1.4rem;
   font-family: "Menlo", consolas, monospace;
-  padding-top: 3rem;
+  // padding-top: 3rem;
 }
 
 em {

@@ -1,5 +1,4 @@
 import ArrayType from '../components/ArrayType';
-// import PrimativeType from '../components/PrimativeType';
 import ObjectType from '../components/ObjectType';
 import FunctionType from '../components/FunctionType';
 import NullType from '../components/NullType';
@@ -8,6 +7,7 @@ import NumberType from '../components/NumberType';
 import StringType from '../components/StringType';
 import BooleanType from '../components/BooleanType';
 import SetType from '../components/SetType';
+import PromiseType from '../components/PromiseType';
 
 function whichType(value) {
   let type = '[object Object]';
@@ -15,15 +15,6 @@ function whichType(value) {
     type = ({}).toString.call(value);
   } catch (e) { // only happens when typeof is protected (...randomly)
   }
-
-  // if (type === '[object String]' ||
-  //     type === '[object Number]' ||
-  //     type === '[object Boolean]' ||
-  //     value === null ||
-  //     value === undefined
-  //     ) {
-  //   return PrimativeType;
-  // }
 
   if (type === '[object String]') {
     return StringType;
@@ -39,6 +30,10 @@ function whichType(value) {
 
   if (type === '[object Set]' || type === '[object Map]') {
     return SetType;
+  }
+
+  if (type === '[object Promise]') {
+    return PromiseType;
   }
 
   if (value === undefined) {
@@ -57,7 +52,7 @@ function whichType(value) {
     return FunctionType;
   }
 
-  // TODO Map, DOM nodes, etc.
+  // TODO DOM nodes, etc.
 
   // everything is eventually an object!
   return ObjectType;

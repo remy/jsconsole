@@ -21,7 +21,7 @@ class EntryType extends Component {
   }
 
   render() {
-    const { shallow = true } = this.props;
+    // const { shallow = true } = this.props;
     const entry = this.props.value;
     const { open } = this.state;
 

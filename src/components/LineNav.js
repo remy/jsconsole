@@ -12,7 +12,7 @@ class LineNav extends Component {
     }
   }
 
-  preCopy() {
+  async preCopy() {
     // work out how we should copy this thing
     const original = this.props.value;
     let { value } = this.props;
@@ -30,6 +30,10 @@ class LineNav extends Component {
     if (typeof value === 'string') {
       this.setState({ text: value });
       return;
+    }
+
+    if (value instanceof Promise) {
+
     }
 
     if (value instanceof Error) {

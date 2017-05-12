@@ -1,10 +1,24 @@
+/*global document top */
 const container = document.createElement('iframe');
 container.width = container.height = 1;
 container.style.opacity = 0;
 container.style.border = 0;
 container.style.position = 'absolute';
 container.style.top = '-100px';
+container.setAttribute('name', '<proxy>');
 document.body.appendChild(container);
+
+export const bindConsole = __console => {
+  container.contentWindow.console.log = (...args) => {
+    top.console.log.apply(top.console, args);
+    __console.log.apply(__console, args);
+  };
+
+  container.contentWindow.console.clear = () => {
+    top.console.clear();
+    __console.clear();
+  };
+};
 
 export default function run(command) {
   const res = {
@@ -18,9 +32,7 @@ export default function run(command) {
       command = `(${command})`;
     }
     res.value = container.contentWindow.eval(command);
-
-    // TODO move out
-    window.$_ = res.value;
+    container.contentWindow.$_ = res.value;
   } catch (e) {
     res.error = true;
     console.log(e);

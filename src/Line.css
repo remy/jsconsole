@@ -31,7 +31,7 @@
 }
 
 .Line .input:before {
-  background-image: url(/prompt.svg);
+  background-image: url(/in.svg);
 }
 
 .Line .error {
@@ -44,7 +44,10 @@
 
 .Line .output:before {
   background-image: url(/out.svg);
-  // top: 5px;
+}
+
+.Line .output.log:before {
+  background-image: none;
 }
 
 .Line .LineNav {
@@ -125,4 +128,8 @@
 
 .arb-info {
   color: #999;
+}
+
+.header {
+  // display: inline-block;
 }

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Entry from './EntryType';
 import zip from 'lodash/zip';
 import flatten from 'lodash/flatten';
-import which from '../lib/which-type';
 
 class SetType extends Component {
   constructor(props) {
@@ -24,7 +23,7 @@ class SetType extends Component {
   }
 
   render() {
-    const { value, shallow = true, type } = this.props;
+    const { value, shallow = true } = this.props;
     const { open } = this.state;
     let { displayName } = this.props;
 

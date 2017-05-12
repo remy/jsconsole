@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Autocomplete from './Autocomplete'
+// import Autocomplete from './Autocomplete'
 import keycodes from '../lib/keycodes';
 import '../Input.css';
 
@@ -7,6 +7,7 @@ import '../Input.css';
 const history = [];
 let historyCursor = 0;
 
+/*
 const getCursor = field => {
   if (field.selectionStart) {
     return field.selectionStart;
@@ -16,6 +17,7 @@ const getCursor = field => {
     return range.startOffset;
   }
 };
+*/
 
 
 class Line extends Component {
@@ -27,6 +29,7 @@ class Line extends Component {
     };
     this.onChange = this.onChange.bind(this);
     this.onKeyPress = this.onKeyPress.bind(this);
+    this.focus = this.focus.bind(this);
   }
 
   onChange() {
@@ -40,9 +43,8 @@ class Line extends Component {
     const code = keycodes[e.keyCode];
     const { multiline } = this.state;
 
-    const cursor = getCursor(this.input);
-
-    console.log(cursor);
+    // FIXME in multiline, cursor up when we're at the top
+    // const cursor = getCursor(this.input);
 
     if (e.ctrlKey && code === 'l') {
       this.props.onClear();
@@ -79,6 +81,12 @@ class Line extends Component {
       if (e.shiftKey) {
         return;
       }
+
+      if (!command) {
+        e.preventDefault();
+        return;
+      }
+
       history.push(command);
       historyCursor = history.length;
       this.input.value = '';
@@ -89,8 +97,18 @@ class Line extends Component {
     }
   }
 
+  focus() {
+    this.input.focus();
+  }
+
+  componentDidUpdate() {
+    // wonder if this is a noop?
+    this.input.scrollIntoView();
+    console.log('scroll');
+  }
+
   render() {
-      // <Autocomplete value={this.state.value} />
+    // <Autocomplete value={this.state.value} />
     return (<div className="Input">
       <textarea
         className="cli"
