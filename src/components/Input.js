@@ -59,6 +59,7 @@ class Line extends Component {
           return;
         }
         this.input.value = history[historyCursor];
+        this.onChange();
         e.preventDefault();
         return;
       }
@@ -70,6 +71,7 @@ class Line extends Component {
         }
         historyCursor++;
         this.input.value = history[historyCursor];
+        this.onChange();
         e.preventDefault();
         return;
       }
@@ -104,7 +106,6 @@ class Line extends Component {
   componentDidUpdate() {
     // wonder if this is a noop?
     this.input.scrollIntoView();
-    console.log('scroll');
   }
 
   render() {

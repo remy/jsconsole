@@ -9,7 +9,7 @@ class Line extends Component {
   }
 
   render() {
-    const { type = 'response', value, open = false } = this.props;
+    const { type = 'response', error = false, value, open = false } = this.props;
     // const { command, error, value, values = null, open = false } = this.props;
 
     let line = null;
@@ -20,7 +20,7 @@ class Line extends Component {
 
     if (type === 'log') {
       line = (
-        <div className={`prompt output ${type}`}>
+        <div className={`prompt output ${type} ${error ? 'error' : ''}`}>
           <LineNav value={value} />
         {
           value.map((value, i) => {
@@ -32,10 +32,10 @@ class Line extends Component {
       );
     }
 
-    if (type === 'response' || type === 'error') {
+    if (type === 'response') {
       const Type = which(value);
       line = (
-        <div className={`prompt output ${type}`}>
+        <div className={`prompt output ${type} ${error ? 'error' : ''}`}>
           <LineNav value={value} />
           <Type allowOpen={true} value={value} shallow={false} open={open}>{ value }</Type>
         </div>

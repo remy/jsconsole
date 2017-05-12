@@ -26,7 +26,33 @@ class Console extends Component {
     this.forceUpdate();
   }
 
+  assert(test, ...rest) {
+    if (!test) { // loosy
+      this.push({
+        error: true,
+        value: rest,
+        type: 'log'
+      });
+      return;
+    }
+  }
+
   log(...args) {
+    // check for interpolation into the string
+    let [ string, ...rest ] = args;
+
+    if (typeof string === 'string' && string.includes('%') && rest.length) {
+      string = string.replace(/(%[disf])/g, (key) => { // not supporting Object type
+        if (key === '%s') { // string
+          return rest.shift();
+        }
+
+        if (key === '%i' || key === '%d') {
+          return;
+        }
+      });
+    }
+
     this.push({
       value: args,
       type: 'log',

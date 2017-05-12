@@ -15,7 +15,7 @@ class App extends Component {
     this.state = { commands: [
       // { value: new Promise((resolve) => { setTimeout(() => resolve(10), 200)}), open: false },
       // { value: { reallyLongProperty: { foo, body: document.body } }, open: true },
-      { value: new Error('foo'), open: true, type: 'error', },
+      { value: new Error('foo'), open: true, type: 'response', error: true },
       // { value: { body: document.body, foo }, open: true, },
       // { value: foo },
       // { value: bar },
@@ -38,7 +38,8 @@ class App extends Component {
     const res = run(command);
     this.console.push({
       value: res.value,
-      type: res.error ? 'error' : 'response',
+      error: res.error,
+      type: 'response',
     });
     // const commands = this.state;
     // const index = Object.keys(commands).slice(-1).pop();

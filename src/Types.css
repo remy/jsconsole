@@ -18,7 +18,8 @@
 }
 
 .string.toggle {
-  white-space: pre;
+  white-space: normal;
+  white-space: pre-wrap;
 }
 
 .number {

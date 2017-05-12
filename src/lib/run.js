@@ -14,6 +14,13 @@ export const bindConsole = __console => {
     __console.log.apply(__console, args);
   };
 
+  container.contentWindow.console.assert = (...args) => {
+    top.console.assert.apply(top.console, args);
+    __console.assert.apply(__console, args);
+  };
+
+  container.contentWindow.console.debug = container.contentWindow.console.log;
+
   container.contentWindow.console.clear = () => {
     top.console.clear();
     __console.clear();
