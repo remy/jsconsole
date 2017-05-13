@@ -1,6 +1,7 @@
 import ArrayType from '../components/ArrayType';
 import ObjectType from '../components/ObjectType';
 import FunctionType from '../components/FunctionType';
+import ErrorType from '../components/ErrorType';
 import NullType from '../components/NullType';
 import UndefinedType from '../components/UndefinedType';
 import NumberType from '../components/NumberType';
@@ -34,6 +35,10 @@ function whichType(value) {
 
   if (type === '[object Promise]') {
     return PromiseType;
+  }
+
+  if (value instanceof Error || type === '[object Error]') {
+    return ErrorType;
   }
 
   if (value === undefined) {

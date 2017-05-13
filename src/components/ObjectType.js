@@ -82,7 +82,7 @@ class ObjectType extends Component {
 
 
     if (!open) {
-      if (type === '[object Error]') {
+      if (type === 'error') {
         return <div className={`type ${type}`}><em onClick={this.toggle}>{ displayName }</em><span>{'{'} <StringType value={value.message} /> {'}'}</span></div>;
       }
       if (displayName !== 'Object') {

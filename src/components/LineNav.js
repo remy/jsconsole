@@ -5,17 +5,19 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 class LineNav extends Component {
   constructor(props) {
     super(props);
-    this.preCopy = this.preCopy.bind(this)
+    this.preCopy = this.preCopy.bind(this);
+    const type = ({}).toString.call(props.value) || 'string';
     this.state = {
       text: null,
-      copyAsHTML: props.value instanceof HTMLElement
-    }
+      type,
+      copyAsHTML: type.includes('Element'),
+    };
   }
 
   async preCopy() {
     // work out how we should copy this thing
     const original = this.props.value;
-    let { value } = this.props;
+    let { value, type } = this.props;
 
     if (this.state.copyAsHTML) {
       this.setState({ text: value.outerHTML });
@@ -32,11 +34,13 @@ class LineNav extends Component {
       return;
     }
 
-    if (value instanceof Promise) {
-
+    if (type === '[object Promise]') {
+      const text = await value;
+      this.setState({ text });
+      return;
     }
 
-    if (value instanceof Error) {
+    if (value instanceof Error || type === '[object Error]') {
       // get real props and add the stack no matter what (FF excludes it)
       value = Object.getOwnPropertyNames(value).reduce((acc, curr) => {
         acc[curr] = value[curr];
@@ -52,26 +56,26 @@ class LineNav extends Component {
   render() {
     const { command, value } = this.props;
     const { text, copyAsHTML } = this.state;
-
+    console.log(value, value instanceof Object, typeof value);
     const copyAs = typeof value === 'function' ?
       'Copy function' :
       copyAsHTML ?
         'Copy as HTML' :
         'Copy as JSON';
-
+    // onCopy={e => console.log('copied', e)}
     return (
       <div className="LineNav">
-        <button onClick={e=>e.preventDefault()} className="icon search">
+        { value instanceof Object && <button onClick={e=>e.preventDefault()} className="icon search">
           search
-        </button>
-        <CopyToClipboard text={text} onCopy={e => console.log('copied', e)}>
+        </button> }
+        { command && <a title="Permalink" className="icon link" href={`?${escape(command)}`}>link</a> }
+        <CopyToClipboard text={text}>
           <button title={copyAs} className="icon copy" onMouseDown={() => {
             if (text === null) {
-              this.preCopy()
+              this.preCopy();
             }
           }}>copy</button>
         </CopyToClipboard>
-        <a title="Permalink" className="icon link" href={`?${escape(command)}`}>link</a>
       </div>
     );
   }

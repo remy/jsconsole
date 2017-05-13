@@ -33,10 +33,12 @@ class App extends Component {
   onRun(command) {
     this.console.push({
       type: 'command',
+      command,
       value: command,
     });
     const res = run(command);
     this.console.push({
+      command,
       value: res.value,
       error: res.error,
       type: 'response',
@@ -65,7 +67,7 @@ class App extends Component {
         <Console ref={e=>this.console=e} commands={commands} reverse={false} />
         <Input
           ref={e=>this.input=e}
-          value={window.location.search.substr(1)}
+          value={decodeURIComponent(window.location.search.substr(1))}
           onRun={this.onRun}
           onClear={() => {
             this.console.clear();

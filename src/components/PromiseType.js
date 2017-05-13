@@ -50,8 +50,6 @@ class PromiseType extends Component {
       status = 'rejected';
     }
 
-    console.log(status, promiseValue);
-
     return {
       promiseValue,
       status,
@@ -65,12 +63,9 @@ class PromiseType extends Component {
 
   render() {
     const { shallow = true } = this.props;
-    const value = this.props.value;
     const { open, promiseValue, status } = this.state;
 
     const Value = which(promiseValue);
-
-    console.log('render with %s', promiseValue);
 
     if (!open) {
       return (
@@ -87,7 +82,7 @@ class PromiseType extends Component {
         </div>
         {' }'}
       </div>
-      )
+      );
     }
 
     return (
@@ -108,7 +103,7 @@ class PromiseType extends Component {
         </div>
         <span>{'}'}</span>
       </div>
-      )
+    );
   }
 }
 

@@ -4,6 +4,14 @@ import Line from './Line';
 let guid = 0;
 const getNext = () => guid++;
 
+function AssertError(message) {
+  this.name = 'Assertion fail';
+  this.message = message;
+  this.stack = (new Error()).stack;
+}
+
+AssertError.prototype = new Error();
+
 class Console extends Component {
   constructor(props) {
     super(props);
@@ -28,6 +36,11 @@ class Console extends Component {
 
   assert(test, ...rest) {
     if (!test) { // loosy
+      let msg = rest.shift();
+      if (msg === undefined) {
+        msg = 'console.assert';
+      }
+      rest.unshift(new AssertError(msg));
       this.push({
         error: true,
         value: rest,

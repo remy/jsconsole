@@ -9,9 +9,13 @@ class Line extends Component {
   }
 
   render() {
-    const { type = 'response', error = false, value, open = false } = this.props;
-    // const { command, error, value, values = null, open = false } = this.props;
-
+    const {
+      type = 'response',
+      value,
+      command = null,
+      error = false,
+      open = false,
+    } = this.props;
     let line = null;
 
     if (type === 'command') {
@@ -21,9 +25,9 @@ class Line extends Component {
     if (type === 'log') {
       line = (
         <div className={`prompt output ${type} ${error ? 'error' : ''}`}>
-          <LineNav value={value} />
+          <LineNav value={value} command={command} />
         {
-          value.map((value, i) => {
+          (Array.isArray(value) ? value : [value]).map((value, i) => {
             const Type = which(value);
             return <Type key={`type-${i}`} allowOpen={true} value={value} shallow={false} open={open}>{ value }</Type>;
           })
@@ -36,7 +40,7 @@ class Line extends Component {
       const Type = which(value);
       line = (
         <div className={`prompt output ${type} ${error ? 'error' : ''}`}>
-          <LineNav value={value} />
+          <LineNav value={value} command={command} />
           <Type allowOpen={true} value={value} shallow={false} open={open}>{ value }</Type>
         </div>
       );
