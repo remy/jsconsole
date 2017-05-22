@@ -20,7 +20,7 @@ class StringType extends Component {
   }
 
   render() {
-    const { shallow } = this.props;
+    const { bare = false } = this.props;
     const { multiline, expanded } = this.state;
     let { value } = this.state;
 
@@ -30,10 +30,10 @@ class StringType extends Component {
 
     const expand = <button onClick={this.onToggle} className="icon expand">+</button>;
 
-    const quote = shallow ? '"' : '';
+    const quote = bare ? '' : '"';
 
     return (
-    <div ref={e=>this.string=e} className={`type string ${expanded ? 'toggle' : ''} ${shallow ? '' : 'bareString'}`}>
+    <div ref={e=>this.string=e} className={`type string ${expanded ? 'toggle' : ''} ${bare ? 'bareString' : ''}`}>
       { multiline && expand }
       { `${quote}${value}${quote}` }
     </div>

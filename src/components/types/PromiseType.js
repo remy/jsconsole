@@ -62,7 +62,7 @@ class PromiseType extends Component {
   }
 
   render() {
-    const { shallow = true } = this.props;
+    // const { shallow = true } = this.props;
     const { open, promiseValue, status } = this.state;
 
     const Value = which(promiseValue);

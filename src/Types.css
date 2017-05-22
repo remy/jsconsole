@@ -13,6 +13,7 @@
 }
 
 .string {
+  line-height: 1.2rem;
   position: relative;
   color: #4CAF50;
   white-space: nowrap;

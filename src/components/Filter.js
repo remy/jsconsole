@@ -3,10 +3,6 @@ import debounce from 'lodash/debounce';
 import '../Filter.css';
 
 class Filter extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidUpdate(prevProps) {
     if (this.props.enabled !== prevProps.enabled) {
       if (this.props.enabled) {

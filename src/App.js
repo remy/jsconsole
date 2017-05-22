@@ -50,7 +50,9 @@ class App extends Component {
       return;
     }
 
-    if (!internalCommands[command.slice(1)]) {
+    const [cmd, ...args] = command.slice(1).split(' ');
+
+    if (!internalCommands[cmd]) {
       this.console.push({
         command,
         error: true,
@@ -60,7 +62,7 @@ class App extends Component {
       return;
     }
 
-    const value = await internalCommands[command.slice(1)]();
+    const value = await internalCommands[cmd].apply(null, args);
     this.console.push({
       command,
       value,
@@ -74,6 +76,8 @@ class App extends Component {
     const query = decodeURIComponent(window.location.search.substr(1));
     if (query) {
       this.onRun(query);
+    } else {
+      this.onRun(':help');
     }
   }
 

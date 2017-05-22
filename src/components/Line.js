@@ -42,7 +42,7 @@ class Line extends Component {
         {
           (Array.isArray(value) ? value : [value]).map((value, i) => {
             const Type = which(value);
-            return <Type key={`type-${i}`} allowOpen={true} value={value} shallow={false} open={open}>{ value }</Type>;
+            return <Type bare={true} key={`type-${i}`} allowOpen={true} value={value} shallow={false} open={open}>{ value }</Type>;
           })
         }
         </div>
