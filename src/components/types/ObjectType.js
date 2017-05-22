@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import which from '../lib/which-type';
+import which from '../../lib/which-type';
 import StringType from './StringType';
 import zip from 'lodash/zip';
 import flatten from 'lodash/flatten';
@@ -34,6 +34,17 @@ class ObjectType extends Component {
     };
   }
 
+  shouldComponentUpdate(nextProps) {
+    if (this.props.filter === undefined) {
+      return false; // this prevents bananas amount of rendering
+    }
+
+    if (this.props.filter === nextProps.filter) {
+      return false;
+    }
+
+    return true;
+  }
   toggle(e) {
     if (!this.props.allowOpen) {
       return;
@@ -45,7 +56,7 @@ class ObjectType extends Component {
 
   render() {
     const { open } = this.state;
-    const { value, shallow = true, type = ({}).toString.call(value) } = this.props;
+    const { filter = null, value, shallow = true, type = ({}).toString.call(value) } = this.props;
     let { displayName } = this.props;
 
     if (!displayName) {
@@ -56,13 +67,27 @@ class ObjectType extends Component {
       return <div onClick={this.toggle} className={`type ${type}`}><em>{ displayName }</em></div>;
     }
 
-    const props = open ? [...enumerate(value)] : Object.keys(value);
+    let props = open ? [...enumerate(value)] : Object.keys(value);
 
     Object.getOwnPropertyNames(value).forEach(prop => {
       if (!props.includes(prop)) {
         props.push(prop);
       }
     });
+
+    if (filter !== null) {
+      props = props.filter(prop => {
+        if ((prop + '').toLowerCase().includes(filter)) {
+          return true;
+        }
+
+        if ((value[prop] + '').toLowerCase().includes(filter)) {
+          return true;
+        }
+
+        return false;
+      });
+    }
 
     if (!open) {
       props.splice(LIMIT_CLOSED);

@@ -2,6 +2,9 @@
   "name": "jsconsole",
   "version": "0.1.0",
   "private": true,
+  "now": {
+    "alias": "2.jsconsole.com"
+  },
   "dependencies": {
     "lodash": "^4.17.4",
     "react": "^15.5.4",
@@ -17,6 +20,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "npm run build && now build/ --static"
   }
 }

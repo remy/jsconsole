@@ -11,7 +11,10 @@ body, html, #root {
   font-size: 0.85rem;
   line-height: 1.4rem;
   font-family: "Menlo", consolas, monospace;
-  // padding-top: 3rem;
+}
+
+.App.top {
+  padding-top: 2.6rem;
 }
 
 em {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import which from '../lib/which-type';
+import which from '../../lib/which-type';
 
 class EntryType extends Component {
   constructor(props) {

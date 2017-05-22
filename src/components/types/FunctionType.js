@@ -10,6 +10,10 @@ class FunctionType extends Component {
     };
   }
 
+  shouldComponentUpdate() {
+    return false; // this prevents bananas amount of rendering
+  }
+
   render() {
     const { value, shallow = true, allowOpen } = this.props;
     const { open } = this.state;

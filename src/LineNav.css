@@ -27,10 +27,17 @@
   background-position: center;
   background-size: 60%;
   outline: none;
+  z-index: 10;
 }
 
 .icon:hover {
-  opacity: 1;
+  /*
+  opacity: 0.99 =
+    this is a hack because somehow `opacity: 1` sets the
+    layer order _below_ a previous element with a lesser
+    z-index. No idea why though, suspect specific to chrome.
+  */
+  opacity: 0.99;
   background-color: #2196F3;
   box-shadow: 0 0 4px 0px #2196F3;
 }

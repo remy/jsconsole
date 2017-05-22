@@ -4,8 +4,19 @@ import which from '../lib/which-type';
 import '../Line.css';
 
 class Line extends Component {
-  shouldComponentUpdate() {
-    return false; // this preents bananas amount of rendering
+  constructor(props) {
+    super(props);
+    this.state = {
+      filter: null,
+    };
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.state.filter !== nextState.filter) {
+      return true;
+    }
+
+    return false; // this prevents bananas amount of rendering
   }
 
   render() {
@@ -17,6 +28,8 @@ class Line extends Component {
       open = false,
     } = this.props;
     let line = null;
+
+    const { filter } = this.state;
 
     if (type === 'command') {
       line = <div className="prompt input">{ value }</div>;
@@ -40,8 +53,13 @@ class Line extends Component {
       const Type = which(value);
       line = (
         <div className={`prompt output ${type} ${error ? 'error' : ''}`}>
-          <LineNav value={value} command={command} />
-          <Type allowOpen={true} value={value} shallow={false} open={open}>{ value }</Type>
+
+          <LineNav onFilter={filter => {
+            console.log('setting state');
+            this.setState({ filter });
+          }} value={value} command={command} />
+
+          <Type allowOpen={true} value={value} filter={filter} shallow={false} open={open}>{ value }</Type>
         </div>
       );
     }

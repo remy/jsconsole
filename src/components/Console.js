@@ -64,6 +64,8 @@ class Console extends Component {
           return;
         }
       });
+
+      args = [ string, ...rest ];
     }
 
     this.push({

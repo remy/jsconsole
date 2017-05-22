@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import zip from 'lodash/zip';
 import flatten from 'lodash/flatten';
-import which from '../lib/which-type';
+import which from '../../lib/which-type';
 
 class ArrayType extends Component {
   constructor(props) {
@@ -23,7 +23,7 @@ class ArrayType extends Component {
   }
 
   render() {
-    const { value, shallow = true } = this.props;
+    const { value, shallow = true, filter = null } = this.props;
     const { open } = this.state;
 
     let length = value.length;
@@ -34,7 +34,7 @@ class ArrayType extends Component {
 
     let types = value.slice(0, open ? value.length : 10).map((_, i) => {
       const Type = which(_);
-      return <Type allowOpen={ open } key={`arrayType-${i+1}`} shallow={true} value={_}>{ _ }</Type>
+      return <Type allowOpen={ open } key={`arrayType-${i+1}`} shallow={true} value={_}>{ _ }</Type>;
     });
 
     // expose holes in the collapsed mode
@@ -85,15 +85,21 @@ class ArrayType extends Component {
       </div>
       <div className="group">{
         types.map((type, i) => {
-          return (
-            <div className="key-value" key={`subtype-${i}`}>
-              <span className="index">{i}:</span>
-              { type }
-            </div>
-          )
+          if ((filter === null || filter === undefined || filter === '') ||
+            ((value[i] + '').toLowerCase().includes(filter)) ) {
+
+            return (
+              <div className="key-value" key={`subtype-${i}`}>
+                <span className="index">{i}:</span>
+                { type }
+              </div>
+            );
+          }
+
+          return null;
         })
-      }</div>]</div>
+      }</div>]</div>;
   }
 }
 
-export default ArrayType
+export default ArrayType;

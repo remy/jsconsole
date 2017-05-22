@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import which from '../lib/which-type';
+import which from '../../lib/which-type';
 
 class PromiseType extends Component {
   constructor(props) {
@@ -62,7 +62,7 @@ class PromiseType extends Component {
   }
 
   render() {
-    const { shallow = true } = this.props;
+    // const { shallow = true } = this.props;
     const { open, promiseValue, status } = this.state;
 
     const Value = which(promiseValue);

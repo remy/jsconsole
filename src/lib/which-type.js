@@ -1,14 +1,14 @@
-import ArrayType from '../components/ArrayType';
-import ObjectType from '../components/ObjectType';
-import FunctionType from '../components/FunctionType';
-import ErrorType from '../components/ErrorType';
-import NullType from '../components/NullType';
-import UndefinedType from '../components/UndefinedType';
-import NumberType from '../components/NumberType';
-import StringType from '../components/StringType';
-import BooleanType from '../components/BooleanType';
-import SetType from '../components/SetType';
-import PromiseType from '../components/PromiseType';
+import ArrayType from '../components/types/ArrayType';
+import ObjectType from '../components/types/ObjectType';
+import FunctionType from '../components/types/FunctionType';
+import ErrorType from '../components/types/ErrorType';
+import NullType from '../components/types/NullType';
+import UndefinedType from '../components/types/UndefinedType';
+import NumberType from '../components/types/NumberType';
+import StringType from '../components/types/StringType';
+import BooleanType from '../components/types/BooleanType';
+import SetType from '../components/types/SetType';
+import PromiseType from '../components/types/PromiseType';
 
 function whichType(value) {
   let type = '[object Object]';

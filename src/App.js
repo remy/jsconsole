@@ -13,9 +13,11 @@ class App extends Component {
     // const foo = function (a, b, c) { console.log("ok") };
     // const bar = (name, ...rest) => console.log("ok");
     this.state = { commands: [
+      { value: ':help for more info', type: 'log' },
+      { value: window, open: true, type: 'response' },
       // { value: new Promise((resolve) => { setTimeout(() => resolve(10), 200)}), open: false },
       // { value: { reallyLongProperty: { foo, body: document.body } }, open: true },
-      { value: new Error('foo'), open: true, type: 'response', error: true },
+      // { value: new Error('foo'), open: true, type: 'response', error: true },
       // { value: { body: document.body, foo }, open: true, },
       // { value: foo },
       // { value: bar },
@@ -55,16 +57,18 @@ class App extends Component {
 
   render() {
     const commands = this.state.commands || [];
+    const reverse = true;
     return (
       <div
-        onKeyDown={e => {
+        onKeyDown={() => {
           this.input.focus();
         }}
-        onClick={e => {
+        onClick={() => {
           this.input.focus();
-        }} className="App"
+        }}
+        className={`App ${reverse ? 'top' : 'bottom'}`}
       >
-        <Console ref={e=>this.console=e} commands={commands} reverse={false} />
+        <Console ref={e=>this.console=e} commands={commands} reverse={reverse} />
         <Input
           ref={e=>this.input=e}
           value={decodeURIComponent(window.location.search.substr(1))}
