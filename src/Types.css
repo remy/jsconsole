@@ -13,9 +13,15 @@
 }
 
 .string {
+  position: relative;
   color: #4CAF50;
   white-space: nowrap;
 }
+
+.bareString.string {
+  color: #111;
+}
+
 
 .string.toggle {
   white-space: normal;
@@ -34,7 +40,10 @@
   color: #1976D2;
 }
 
-.undefined,
+.undefined {
+  color: #aaa;
+}
+
 .null {
   color: #9C27B0;
 }

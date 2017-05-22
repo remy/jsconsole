@@ -39,7 +39,7 @@ class Line extends Component {
     this.input.rows = length < 20 ? length : 20;
   }
 
-  onKeyPress(e) {
+  async onKeyPress(e) {
     const code = keycodes[e.keyCode];
     const { multiline } = this.state;
 
@@ -91,10 +91,10 @@ class Line extends Component {
 
       history.push(command);
       historyCursor = history.length;
+      e.preventDefault();
+      await this.props.onRun(command);
       this.input.value = '';
       this.onChange();
-      this.props.onRun(command);
-      e.preventDefault();
       return;
     }
   }

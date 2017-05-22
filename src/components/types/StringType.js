@@ -6,18 +6,21 @@ class StringType extends Component {
     this.state = {
       value: props.value,
       multiline: props.value.includes('\n'),
-      expanded: false,
+      expanded: !props.shallow,
     };
     this.onToggle = this.onToggle.bind(this);
   }
 
-  onToggle() {
+  onToggle(e) {
+    e.preventDefault();
+    e.stopPropagation();
     this.setState({
       expanded: !this.state.expanded
     });
   }
 
   render() {
+    const { shallow } = this.props;
     const { multiline, expanded } = this.state;
     let { value } = this.state;
 
@@ -25,12 +28,14 @@ class StringType extends Component {
       value = value.replace(/\n/g, '↵');
     }
 
-    const expand = <button onClick={this.onToggle} className="icon expand">+</button>
+    const expand = <button onClick={this.onToggle} className="icon expand">+</button>;
+
+    const quote = shallow ? '"' : '';
 
     return (
-    <div ref={e=>this.string=e} className={`type string ${expanded ? 'toggle' : ''}`}>
+    <div ref={e=>this.string=e} className={`type string ${expanded ? 'toggle' : ''} ${shallow ? '' : 'bareString'}`}>
       { multiline && expand }
-      "{ value }"
+      { `${quote}${value}${quote}` }
     </div>
     );
   }

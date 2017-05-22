@@ -62,7 +62,7 @@ class PromiseType extends Component {
   }
 
   render() {
-    // const { shallow = true } = this.props;
+    const { shallow = true } = this.props;
     const { open, promiseValue, status } = this.state;
 
     const Value = which(promiseValue);
@@ -78,7 +78,7 @@ class PromiseType extends Component {
         <span className="arb-info">, </span>
         <div className="object-item key-value">
           <span className="key">[[PromiseValue]]:</span>
-          <span className="value"><Value allowOpen={open} value={ promiseValue } /></span>
+          <span className="value"><Value shallow={true} allowOpen={open} value={ promiseValue } /></span>
         </div>
         {' }'}
       </div>
@@ -98,7 +98,7 @@ class PromiseType extends Component {
           </div>
           <div className="object-item key-value">
             <span className="key">[[PromiseValue]]:</span>
-            <span className="value"><Value allowOpen={open} value={ promiseValue } /></span>
+            <span className="value"><Value shallow={true} allowOpen={open} value={ promiseValue } /></span>
           </div>
         </div>
         <span>{'}'}</span>

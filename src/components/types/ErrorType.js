@@ -11,13 +11,12 @@ class ErrorType extends Component {
   }
 
   render() {
-    const { value, shallow = true, allowOpen } = this.props;
+    const { value, shallow = true, filter, allowOpen } = this.props;
     const { open } = this.state;
 
     const sig = value.name || value.constructor.name;
-    console.log(sig, value.message);
 
-    return <ObjectType allowOpen={allowOpen} type="error" shallow={shallow} open={open} value={value} displayName={ sig } />;
+    return <ObjectType filter={filter} allowOpen={allowOpen} type="error" shallow={shallow} open={open} value={value} displayName={ sig } />;
   }
 }
 

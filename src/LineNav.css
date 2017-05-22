@@ -69,7 +69,11 @@
   background-color: transparent;
   margin: 0;
   margin-left: -0.5rem;
-  margin-top: 0.15rem;
+  margin-top: 0.35rem;
+  margin-right: 0.1rem;
+  background-size: contain;
+  height: 8px;
+  width: 8px;
 }
 
 .icon.expand:hover {

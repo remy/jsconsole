@@ -11,8 +11,8 @@
   left: 0;
   right: 0;
   background: #E6E8F2;
-  border-bottom: 1px solid #aaabb8;
-  box-shadow: 0px 2px 10px rgba(0,0,0,.3);
+  /*border-bottom: 1px solid #aaabb8;*/
+  box-shadow: 0px 1px 1px rgba(0,0,0,.4);
 }
 
 .Input:before {

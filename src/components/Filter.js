@@ -28,7 +28,7 @@ class Filter extends Component {
     return (
       <span className={`Filter ${className}`}>
         <span className="inner">
-          <input autofocus ref={e => this.input = e } onChange={e => {
+          <input ref={e => this.input = e } onChange={e => {
             filter(e.target.value.trim().toLowerCase());
           }} onKeyDown={e => e.stopPropagation()} type="text" />
         </span>
