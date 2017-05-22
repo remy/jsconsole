@@ -52,7 +52,7 @@
 }
 
 .Line .LineNav {
-  display: none;
+  // display: none;
 }
 
 .Line:hover .LineNav,

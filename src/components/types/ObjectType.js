@@ -34,7 +34,11 @@ class ObjectType extends Component {
     };
   }
 
-  shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.state.open !== nextState.open) {
+      return true;
+    }
+
     if (this.props.filter === undefined) {
       return false; // this prevents bananas amount of rendering
     }

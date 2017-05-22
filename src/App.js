@@ -14,7 +14,7 @@ class App extends Component {
     // const bar = (name, ...rest) => console.log("ok");
     this.state = { commands: [
       { value: ':help for more info', type: 'log' },
-      { value: window, open: true, type: 'response' },
+      { value: document.body, open: true, type: 'response' },
       // { value: new Promise((resolve) => { setTimeout(() => resolve(10), 200)}), open: false },
       // { value: { reallyLongProperty: { foo, body: document.body } }, open: true },
       // { value: new Error('foo'), open: true, type: 'response', error: true },
