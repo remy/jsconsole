@@ -3,15 +3,32 @@ import debounce from 'lodash/debounce';
 import '../Filter.css';
 
 class Filter extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.enabled !== prevProps.enabled) {
+      if (this.props.enabled) {
+        this.input.focus();
+      } else {
+        this.input.value = '';
+        this.props.onFilter(null);
+      }
+    }
+  }
+
   render() {
-    const { children, className, onFilter = ()=>{} } = this.props;
+    const { children, enabled, onFilter = ()=>{} } = this.props;
 
     const filter = debounce(onFilter, 100);
+
+    const className = enabled ? 'is-visible' : 'is-hidden';
 
     return (
       <span className={`Filter ${className}`}>
         <span className="inner">
-          <input onChange={e => {
+          <input autofocus ref={e => this.input = e } onChange={e => {
             filter(e.target.value.trim().toLowerCase());
           }} onKeyDown={e => e.stopPropagation()} type="text" />
         </span>

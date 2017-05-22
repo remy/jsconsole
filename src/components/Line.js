@@ -55,7 +55,6 @@ class Line extends Component {
         <div className={`prompt output ${type} ${error ? 'error' : ''}`}>
 
           <LineNav onFilter={filter => {
-            console.log('setting state');
             this.setState({ filter });
           }} value={value} command={command} />
 

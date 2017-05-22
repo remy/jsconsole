@@ -5,6 +5,11 @@
   z-index: 10;
 }
 
+.bottom .LineNav {
+  top: auto;
+  bottom: .5rem;
+}
+
 .icon {
   user-select: none;
   border: 0;

@@ -9,7 +9,6 @@ class LineNav extends Component {
     this.preCopy = this.preCopy.bind(this);
     this.toggleFilter = this.toggleFilter.bind(this);
     this.onPermalink = this.onPermalink.bind(this);
-    this.onFilter = this.onFilter.bind(this);
 
     const type = ({}).toString.call(props.value) || 'string';
     this.state = {
@@ -24,10 +23,6 @@ class LineNav extends Component {
     // let this throw if no support
     window.history.pushState(null, document.title, e.target.search);
     e.preventDefault();
-  }
-
-  onFilter(e) {
-
   }
 
   async preCopy() {
@@ -71,8 +66,9 @@ class LineNav extends Component {
 
   toggleFilter(e) {
     e.preventDefault();
+    const filter = !this.state.filter;
     this.setState({
-      filter: !this.state.filter,
+      filter,
     });
   }
 
@@ -86,12 +82,10 @@ class LineNav extends Component {
         'Copy as HTML' :
         'Copy as JSON';
 
-    const filterVisible = filter ? 'is-visible' : 'is-hidden';
-
     return (
       <div className="LineNav">
         { typeof value === 'object' && (
-          <Filter onFilter={onFilter} className={filterVisible}>
+          <Filter ref={e=>this.filter=e} onFilter={onFilter} enabled={filter}>
             <button onClick={this.toggleFilter} className="icon search">
               search
             </button>
