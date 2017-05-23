@@ -1,5 +1,5 @@
 /*global document top */
-const container = document.createElement('iframe');
+export const container = document.createElement('iframe');
 container.width = container.height = 1;
 container.style.opacity = 0;
 container.style.border = 0;
@@ -8,27 +8,16 @@ container.style.top = '-100px';
 container.setAttribute('name', '<proxy>');
 document.body.appendChild(container);
 
-// const container = {
-//   contentWindow: window
-// };
-
 export const bindConsole = __console => {
-  container.contentWindow.console.log = (...args) => {
-    top.console.log.apply(top.console, args);
-    __console.log.apply(__console, args);
-  };
 
-  container.contentWindow.console.assert = (...args) => {
-    top.console.assert.apply(top.console, args);
-    __console.assert.apply(__console, args);
-  };
+  const apply = ['log', 'warn', 'assert', 'debug', 'clear'];
 
-  container.contentWindow.console.debug = container.contentWindow.console.log;
-
-  container.contentWindow.console.clear = () => {
-    top.console.clear();
-    __console.clear();
-  };
+  apply.forEach(method => {
+    container.contentWindow.console[method] = (...args) => {
+      top.console[method].apply(top.console, args);
+      __console[method].apply(__console, args);
+    };
+  });
 };
 
 export default function run(command) {

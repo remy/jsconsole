@@ -1,3 +1,5 @@
+import { container } from './run';
+
 const version = '2.0.0-beta1';
 const help = async () => `:listen [id] - to start remote debugging session
 :load <script_url> - to inject
@@ -21,18 +23,14 @@ const libraries = {
   moment: 'https://cdn.jsdelivr.net/momentjs/latest/moment.min.js',
 };
 
-// FIXME incomplete port
-const load = async (...urls) => {
+const load = async ({ urls, console }) => {
+  const document = container.contentDocument;
   urls.forEach(url => {
     url = libraries[url] || url;
     const script = document.createElement('script');
     script.src = url;
-    script.onload = function () {
-      console.log('Loaded ' + url);
-    };
-    script.onerror = function () {
-      console.log('Failed to load ' + url, 'error');
-    };
+    script.onload = () => console.log(`Loaded ${url}`);
+    script.onerror = () => console.warn(`Failed to load ${url}`);
     document.body.appendChild(script);
   });
   return 'Loading script…';
@@ -41,7 +39,7 @@ const load = async (...urls) => {
 const commands = {
   help,
   about,
-  // load,
+  load,
 };
 
 export default commands;

@@ -50,6 +50,14 @@ class Console extends Component {
     }
   }
 
+  warn(...args) {
+    return this.log.apply(this, args);
+  }
+
+  debug(...args) {
+    return this.log.apply(this, args);
+  }
+
   log(...args) {
     // check for interpolation into the string
     let [ string, ...rest ] = args;
