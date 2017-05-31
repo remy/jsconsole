@@ -26,6 +26,8 @@ class Line extends Component {
       command = null,
       error = false,
       open = false,
+      styled = false,
+      onFocus = () => {},
     } = this.props;
     let line = null;
 
@@ -42,7 +44,7 @@ class Line extends Component {
         {
           (Array.isArray(value) ? value : [value]).map((value, i) => {
             const Type = which(value);
-            return <Type bare={true} key={`type-${i}`} allowOpen={true} value={value} shallow={false} open={open}>{ value }</Type>;
+            return <Type styled={styled} bare={true} key={`type-${i}`} allowOpen={true} value={value} shallow={false} open={open}>{ value }</Type>;
           })
         }
         </div>
@@ -63,7 +65,7 @@ class Line extends Component {
       );
     }
 
-    return <div className="Line">{ line }</div>;
+    return <div className="Line" onClick={onFocus}>{ line }</div>;
   }
 }
 

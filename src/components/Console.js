@@ -61,23 +61,34 @@ class Console extends Component {
   log(...args) {
     // check for interpolation into the string
     let [ string, ...rest ] = args;
+    let styled = false;
 
     if (typeof string === 'string' && string.includes('%') && rest.length) {
-      string = string.replace(/(%[disf])/g, (key) => { // not supporting Object type
+      string = string.replace(/(%[scdif])/g, (key) => { // not supporting Object type
         if (key === '%s') { // string
           return rest.shift();
         }
 
-        if (key === '%i' || key === '%d') {
+        if (key === '%c') {
+          styled = true;
+          return `</span><span style="${rest.shift()}">`; // FIXME need to style the text somehow
+        }
+
+        if (key === '%i' || key === '%d' || key === '%f') {
           return;
         }
       });
+
+      if (styled) {
+        string = `<span>${string}</span>`;
+      }
 
       args = [ string, ...rest ];
     }
 
     this.push({
       value: args,
+      styled,
       type: 'log',
     });
   }

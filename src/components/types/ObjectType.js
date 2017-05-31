@@ -97,7 +97,7 @@ class ObjectType extends Component {
       props.splice(LIMIT_CLOSED);
     }
 
-    let types = props.map((key, i) => {
+    let types = props.sort().map((key, i) => {
       const Type = which(value[key]);
       return {
         key,

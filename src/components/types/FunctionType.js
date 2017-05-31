@@ -28,6 +28,8 @@ class FunctionType extends Component {
       sig = code.substring(0, code.indexOf('=>')).trim() + ' =>';
     }
 
+    sig = sig.replace(/^function/, 'ƒ');
+
     const object = Object.getOwnPropertyNames(value).reduce((acc, curr) => {
       acc[curr] = value[curr];
       return acc;
