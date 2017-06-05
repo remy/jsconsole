@@ -1,6 +1,6 @@
 .Line {
   line-height: 1.4rem;
-  // padding: 0.6rem;
+  /* padding: 0.6rem;*/
   border-bottom: 1px solid #eee;
   position: relative;
 }
@@ -8,14 +8,19 @@
 .Line .input,
 .Line .output {
   display: flex;
+  max-width: 100%;
   position: relative;
   padding: 0.6rem;
   padding-left: 1.4rem;
-  overflow: hidden;
 }
 
 .Line .input {
   white-space: pre;
+}
+
+.Line .input.prompt {
+  white-space: pre-wrap;
+  overflow-x: scroll;
 }
 
 .Line .prompt:before {
@@ -107,7 +112,7 @@
 
 .key-value {
   line-height: 1.2rem;
-  /*padding: 0.1rem;*/
+  white-space: nowrap;
   display: flex;
 }
 

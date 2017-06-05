@@ -1,5 +1,6 @@
 .type {
   display: inline-block;
+  overflow: scroll;
 }
 
 .type + .type {
@@ -9,7 +10,11 @@
 .type.object.closed .header,
 .type.object.closed .group,
 .type.object.closed .group > div {
-  display: inline-block;
+  display: inline;
+}
+
+.type.closed .type {
+  display: inline;
 }
 
 .string {

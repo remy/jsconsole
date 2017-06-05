@@ -71,11 +71,11 @@ class Console extends Component {
 
         if (key === '%c') {
           styled = true;
-          return `</span><span style="${rest.shift()}">`; // FIXME need to style the text somehow
+          return `</span><span style="${rest.shift()}">`;
         }
 
         if (key === '%i' || key === '%d' || key === '%f') {
-          return;
+          return; // TODO support %.2f
         }
       });
 

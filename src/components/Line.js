@@ -34,7 +34,11 @@ class Line extends Component {
     const { filter } = this.state;
 
     if (type === 'command') {
-      line = <div className="prompt input">{ value }</div>;
+      line = (
+        <div className="prompt input">
+          <LineNav value={value} />
+          { value }
+        </div>);
     }
 
     if (type === 'log') {
