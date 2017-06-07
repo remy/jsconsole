@@ -26,7 +26,7 @@ class Line extends Component {
       command = null,
       error = false,
       open = false,
-      styled = false,
+      html = false,
       onFocus = () => {},
     } = this.props;
     let line = null;
@@ -53,7 +53,7 @@ class Line extends Component {
               const Type = which(value);
               return <Type
                 filter={filter}
-                styled={styled}
+                html={html}
                 value={value}
                 open={open}
                 allowOpen={true}

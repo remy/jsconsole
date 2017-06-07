@@ -1,6 +1,7 @@
 import { container } from './run';
 
-const version = '2.0.0-beta1';
+const version = process.env.REACT_APP_VERSION;
+
 const help = async () => `:listen [id] - to start remote debugging session
 :load <script_url> - to inject
       load also supports shortcuts, like jquery or lodash:
@@ -14,13 +15,17 @@ copy(<value>) and $_ for last value
 
 version: ${version}`;
 
-const about = () => 'Built by @rem • open source';
+const about = () => ({
+  value: 'Built by <a href="https://twitter.com/rem" target="_blank">@rem</a> • <a href="https://github.com/remy/jsconsole" target="_blank">open source</a>',
+  html: true
+});
 
 const libraries = {
   jquery: 'https://code.jquery.com/jquery.min.js',
   underscore: 'https://cdn.jsdelivr.net/underscorejs/latest/underscore-min.js',
   lodash: 'https://cdn.jsdelivr.net/lodash/latest/lodash.min.js',
   moment: 'https://cdn.jsdelivr.net/momentjs/latest/moment.min.js',
+  datefns: 'https://cdn.jsdelivr.net/gh/date-fns/date-fns/dist/date_fns.min.js',
 };
 
 const load = async ({ urls, console }) => {
@@ -40,6 +45,7 @@ const commands = {
   help,
   about,
   load,
+  version: () => version,
 };
 
 export default commands;

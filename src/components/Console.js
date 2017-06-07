@@ -61,7 +61,7 @@ class Console extends Component {
   log(...args) {
     // check for interpolation into the string
     let [ string, ...rest ] = args;
-    let styled = false;
+    let html = false;
 
     if (typeof string === 'string' && string.includes('%') && rest.length) {
       string = string.replace(/(%[scdif])/g, (key) => { // not supporting Object type
@@ -70,7 +70,7 @@ class Console extends Component {
         }
 
         if (key === '%c') {
-          styled = true;
+          html = true;
           return `</span><span style="${rest.shift()}">`;
         }
 
@@ -79,7 +79,7 @@ class Console extends Component {
         }
       });
 
-      if (styled) {
+      if (html) {
         string = `<span>${string}</span>`;
       }
 
@@ -88,7 +88,7 @@ class Console extends Component {
 
     this.push({
       value: args,
-      styled,
+      html,
       type: 'log',
     });
   }

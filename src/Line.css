@@ -27,20 +27,21 @@
   position: absolute;
   content: '';
   background-size: contain;
-  top: 0.9rem;
+  top: 0.8rem;
   left: 0.4rem;
   width: 12px;
   height: 12px;
-  // scale: 0.75 0.75;
+  /*scale: 0.75 0.75;*/
   background-position: 50% 50%;
   background-repeat: no-repeat;
 }
 
 .Line .input:before {
   background-image: url(/in.svg);
+  top: 0.9rem;
 }
 
-.Line .error {
+.Line .response.error {
   background: #FFEFEF;
 }
 
@@ -108,6 +109,7 @@
 
 .group {
   margin-left: 0.5rem;
+  /*margin-top: 0.5rem;*/
 }
 
 .key-value {
@@ -138,4 +140,8 @@
 
 .header {
   // display: inline-block;
+}
+
+.Line > .output > .type {
+  overflow-x: scroll;
 }

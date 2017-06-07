@@ -1,6 +1,6 @@
 .type {
   display: inline-block;
-  overflow: scroll;
+  line-height: 1.2rem;
 }
 
 .type + .type {
@@ -18,7 +18,6 @@
 }
 
 .string {
-  line-height: 1.2rem;
   position: relative;
   color: #4CAF50;
   white-space: nowrap;

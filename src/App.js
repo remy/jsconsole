@@ -62,11 +62,14 @@ class App extends Component {
       return;
     }
 
-    const value = await internalCommands[cmd].call(null, { urls: args, console: this.console });
+    let res = await internalCommands[cmd].call(null, { urls: args, console: this.console });
+    if (typeof res === 'string') {
+      res = { value: res };
+    }
     this.console.push({
       command,
-      value,
       type: 'log',
+      ...res
     });
     return;
   }

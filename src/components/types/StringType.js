@@ -20,7 +20,7 @@ class StringType extends Component {
   }
 
   render() {
-    const { bare = false, styled = false } = this.props;
+    const { bare = false, html = false } = this.props;
     const { multiline, expanded } = this.state;
     let { value } = this.state;
 
@@ -32,7 +32,7 @@ class StringType extends Component {
 
     const quote = bare ? '' : '"';
 
-    const child = styled ?
+    const child = html ?
       <span dangerouslySetInnerHTML={{ __html: value }}></span> :
       `${quote}${value}${quote}`;
 
