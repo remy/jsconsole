@@ -16,7 +16,13 @@ const doStuffKeys = /^(Digit|Key|Num|Period|Semi|Comma|Slash|IntlBackslash|Backs
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { theme: 'dark', reverse: false };
+    let theme = null;
+
+    try {
+      theme = localStorage.getItem('jsconsole.theme') || null;
+    } catch (e) {}
+
+    this.state = { theme: theme || 'light', reverse: false };
     this.onRun = this.onRun.bind(this);
     this.triggerFocus = this.triggerFocus.bind(this);
   }
@@ -71,6 +77,13 @@ class App extends Component {
     }
 
     return;
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextState.theme !== this.state.theme) {
+      localStorage.setItem('jsconsole.theme', nextState.theme);
+    }
+    return true;
   }
 
   componentDidMount() {
