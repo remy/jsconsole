@@ -29,6 +29,7 @@ class Line extends Component {
       html = false,
       onFocus = () => {},
     } = this.props;
+
     let line = null;
 
     const { filter } = this.state;
@@ -42,14 +43,16 @@ class Line extends Component {
     }
 
     if (type === 'log' || type === 'response') {
+      // for LineNav I do a bit of a giggle so if it's a log, we copy the single
+      // value, which is nicer for the user
       line = (
         <div className={`prompt output ${type} ${error ? 'error' : ''}`}>
           <LineNav onFilter={filter => {
             this.setState({ filter });
-          }} value={value} command={command} />
+          }} value={type === 'log' && value.length === 1 ? value[0] : value} command={command} />
 
           {
-            (Array.isArray(value) ? value : [value]).map((value, i) => {
+            (type === 'log' && Array.isArray(value) ? value : [value]).map((value, i) => {
               const Type = which(value);
               return <Type
                 filter={filter}

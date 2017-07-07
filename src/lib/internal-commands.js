@@ -12,7 +12,7 @@ const help = async () => `:listen [id] - to start remote debugging session
       load also supports shortcuts, like jquery or lodash:
 
       eg. :load jquery
-:clear - to clear the history (accessed using cursor keys)
+:clear - to clear the console
 :history - list current session history
 :about
 copy(<value>) and $_ for last value
