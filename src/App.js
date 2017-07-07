@@ -39,7 +39,12 @@ class App extends Component {
       return;
     }
 
-    const [cmd, ...args] = command.slice(1).split(' ');
+    let [cmd, ...args] = command.slice(1).split(' ');
+
+    if (/^\d+$/.test(cmd)) {
+      args = [parseInt(cmd, 10)];
+      cmd = 'history';
+    }
 
     if (!internalCommands[cmd]) {
       console.push({

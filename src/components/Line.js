@@ -49,7 +49,7 @@ class Line extends Component {
         <div className={`prompt output ${type} ${error ? 'error' : ''}`}>
           <LineNav onFilter={filter => {
             this.setState({ filter });
-          }} value={type === 'log' && value.length === 1 ? value[0] : value} command={command} />
+          }} value={type === 'log' && Array.isArray(value) && value.length === 1 ? value[0] : value} command={command} />
 
           {
             (type === 'log' && Array.isArray(value) ? value : [value]).map((value, i) => {

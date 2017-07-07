@@ -54,9 +54,18 @@ const theme = async ({ args: [theme], app }) => {
   return `Try ":theme dark" or ":theme light"`;
 };
 
-const history = async ({ app }) => {
-  console.log(app.input.state.history);
-  return app.input.state.history;
+const history = async ({ app, args: [n=null] }) => {
+  if (n === null) {
+    return app.input.state.history.map((item, i) => `${i}: ${item.trim()}`).join('\n');
+  }
+
+  // try to re-issue the historical command
+  const command = app.input.state.history.find((item, i) => i === n);
+  if (command) {
+    app.onRun(command);
+  }
+
+  return;
 };
 
 const clear = ({ console }) => {
