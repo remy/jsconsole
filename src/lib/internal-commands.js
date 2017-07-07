@@ -1,13 +1,16 @@
+/*global window EventSource fetch */
 import { container } from './run';
 
 const version = process.env.REACT_APP_VERSION;
+
+// Missing support
+// :load <url> - to inject new DOM
 
 const help = async () => `:listen [id] - to start remote debugging session
 :load <script_url> - to inject
       load also supports shortcuts, like jquery or lodash:
 
       eg. :load jquery
-:load <url> - to inject new DOM
 :clear - to clear the history (accessed using cursor keys)
 :history - list current session history
 :about
@@ -28,7 +31,7 @@ const libraries = {
   datefns: 'https://cdn.jsdelivr.net/gh/date-fns/date-fns/dist/date_fns.min.js',
 };
 
-const load = async ({ urls, console }) => {
+const load = async ({ args:urls, console }) => {
   const document = container.contentDocument;
   urls.forEach(url => {
     url = libraries[url] || url;
@@ -41,10 +44,46 @@ const load = async ({ urls, console }) => {
   return 'Loading script…';
 };
 
+const theme = async ({ args: [theme], app }) => {
+  if (['light', 'dark'].includes(theme)) {
+    app.setState({ theme });
+    return `Theme set to ${theme}`;
+  }
+
+  return `Unknown theme "${theme}"`;
+};
+
+const listen = async ({ args: [id], console:internalConsole }) => {
+  // create new eventsocket
+  const res = await fetch(`/remote/${id || ''}`);
+  id = await res.json();
+
+  return new Promise(resolve => {
+    const sse = new EventSource(`http://localhost:3001/remote/${id}/log`);
+    sse.onopen = () => {
+      resolve(`Connected to "${id}"\n\n<script src="${window.location.origin}/js/remote.js?${id}"></script>`);
+    };
+
+    sse.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data.response) {
+        const res = data.response.map(_ => JSON.parse(_));
+        internalConsole.log(...res);
+      }
+    };
+
+    sse.onclose = function () {
+      internalConsole.log('Remote connection closed');
+    };
+  });
+};
+
 const commands = {
   help,
   about,
   load,
+  listen,
+  theme,
   version: () => version,
 };
 

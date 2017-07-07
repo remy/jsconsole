@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import classnames from 'classnames';
 import './App.css';
+import './DarkTheme.css';
 import './Types.css';
 
 import Console from './components/Console';
@@ -8,44 +10,31 @@ import Input from './components/Input';
 import run, { bindConsole } from './lib/run';
 import internalCommands from './lib/internal-commands';
 
+// this is lame, but it's a list of key.code that do stuff in the input that we _want_.
+const doStuffKeys = /^(Digit|Key|Num|Period|Semi|Comma|Slash|IntlBackslash|Backspace|Delete|Enter)/;
+
 class App extends Component {
   constructor(props) {
     super(props);
-    // const foo = function (a, b, c) { console.log("ok") };
-    // const bar = (name, ...rest) => console.log("ok");
-    this.state = { commands: [] };
-      // { value: internalCommands.help(), type: 'log' },
-      // { value: document, open: true, type: 'response' },
-      // { value: new Promise((resolve) => { setTimeout(() => resolve(10), 200)}), open: false },
-      // { value: { reallyLongProperty: { foo, body: document.body } }, open: true },
-      // { value: new Error('foo'), open: true, type: 'response', error: true },
-      // { value: { body: document.body, foo }, open: true, },
-      // { value: foo },
-      // { value: bar },
-      // { value: [1,2,3,,,, ]},
-      // { value: { a: true } },
-      // { open: false, value: { a: 1, b: true, c: document.body }},
-      // { value: { a: { b: 1 } }, open: true },
-      // { open: false, value: ["remy", 1, , [1,2,3,4,,,4], null, , , , "four", true, 2, { a: 1, b: "two" }] },
-      // { open: false, value: [{ a: 1, b: "two" }, "remy", 1, , undefined, null, , , , "four", true, 2, ]}
-    // ] };
-
+    this.state = { theme: 'dark', reverse: false };
     this.onRun = this.onRun.bind(this);
+    this.triggerFocus = this.triggerFocus.bind(this);
   }
 
   async onRun(command) {
-    if (!command.startsWith(':')) {
-      this.console.push({
+    const console = this.console;
+
+    if (command[0] !== ':') {
+      console.push({
         type: 'command',
         command,
         value: command,
       });
-      const res = run(command);
-      this.console.push({
+      const res = await run(command);
+      console.push({
         command,
-        value: res.value,
-        error: res.error,
         type: 'response',
+        ...res,
       });
       return;
     }
@@ -53,7 +42,7 @@ class App extends Component {
     const [cmd, ...args] = command.slice(1).split(' ');
 
     if (!internalCommands[cmd]) {
-      this.console.push({
+      console.push({
         command,
         error: true,
         value: new Error(`No such jsconsole command "${command}"`),
@@ -62,15 +51,18 @@ class App extends Component {
       return;
     }
 
-    let res = await internalCommands[cmd].call(null, { urls: args, console: this.console });
+    let res = await internalCommands[cmd]({ args, console, app: this });
+
     if (typeof res === 'string') {
       res = { value: res };
     }
-    this.console.push({
+
+    console.push({
       command,
       type: 'log',
       ...res
     });
+
     return;
   }
 
@@ -84,19 +76,24 @@ class App extends Component {
     }
   }
 
+  triggerFocus(e) {
+    if (e.target.nodeName === 'INPUT') return;
+    if (e.code && !doStuffKeys.test(e.code)) return;
+
+    this.input.focus();
+  }
+
   render() {
-    const commands = this.state.commands || [];
-    const reverse = false;
+    const { commands = [] } = this.props;
+    const { theme, reverse } = this.state;
+
+    const className = classnames(['App', `theme-${theme}`, {
+      top: reverse,
+      bottom: !reverse,
+    }]);
+
     return (
-      <div
-        onKeyDown={() => {
-          this.input.focus();
-        }}
-        onClick={() => {
-          this.input.focus();
-        }}
-        className={`App ${reverse ? 'top' : 'bottom'}`}
-      >
+      <div tabIndex="-1" onKeyDown={this.triggerFocus} ref={e=>this.app=e} className={className}>
         <Console ref={e=>this.console=e} commands={commands} reverse={reverse} />
         <Input
           ref={e=>this.input=e}

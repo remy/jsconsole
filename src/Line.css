@@ -57,10 +57,6 @@
   background-image: none;
 }
 
-.Line .LineNav {
-  // display: none;
-}
-
 .Line:hover .LineNav,
 .Line:focus .LineNav {
   display: block;
@@ -136,10 +132,6 @@
 
 .arb-info {
   color: #999;
-}
-
-.header {
-  // display: inline-block;
 }
 
 .Line > .output > .type {

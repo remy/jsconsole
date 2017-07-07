@@ -86,6 +86,12 @@ class Console extends Component {
       args = [ string, ...rest ];
     }
 
+    // if there's a single element in the log, then let's drop that into the
+    // console, otherwise when we copy it, we get ["foo"] instead of "foo"
+    if (args.length === 1) {
+      args = args.pop();
+    }
+
     this.push({
       value: args,
       html,

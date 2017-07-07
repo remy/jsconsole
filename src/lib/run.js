@@ -1,4 +1,6 @@
-/*global document top */
+/*global document window */
+import copy from 'copy-to-clipboard';
+
 export const container = document.createElement('iframe');
 container.width = container.height = 1;
 container.style.opacity = 0;
@@ -8,19 +10,22 @@ container.style.top = '-100px';
 container.setAttribute('name', '<proxy>');
 document.body.appendChild(container);
 
+// add the copy function
+container.contentWindow.copy = copy;
+
 export const bindConsole = __console => {
 
   const apply = ['log', 'warn', 'assert', 'debug', 'clear'];
 
   apply.forEach(method => {
     container.contentWindow.console[method] = (...args) => {
-      top.console[method].apply(top.console, args);
+      window.top.console[method].apply(window.top.console, args);
       __console[method].apply(__console, args);
     };
   });
 };
 
-export default function run(command) {
+export default async function run(command) {
   const res = {
     error: false,
     command,
