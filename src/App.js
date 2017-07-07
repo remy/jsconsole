@@ -57,11 +57,13 @@ class App extends Component {
       res = { value: res };
     }
 
-    console.push({
-      command,
-      type: 'log',
-      ...res
-    });
+    if (res !== undefined) {
+      console.push({
+        command,
+        type: 'log',
+        ...res
+      });
+    }
 
     return;
   }

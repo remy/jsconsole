@@ -1,35 +1,22 @@
 import React, { Component } from 'react';
+
 // import Autocomplete from './Autocomplete'
 import keycodes from '../lib/keycodes';
 import '../Input.css';
 
-// not in state because we don't want a re-render on change
-// const history = [];
-// let historyCursor = 0;
+const storageKey = 'jsconsole.history';
 
-/*
-const getCursor = field => {
-  if (field.selectionStart) {
-    return field.selectionStart;
-  }
-  if (field.createTextRange) {
-    var range = field.createTextRange();
-    return range.startOffset;
-  }
-};
-*/
-
-
-class Line extends Component {
+class Input extends Component {
   constructor(props) {
     super(props);
+
+    // history is set in the componentDidMount
     this.state = {
-      history: [],
-      historyCursor: 0,
       value: props.value || '',
       multiline: false,
     };
     this.onChange = this.onChange.bind(this);
+    // this.syncHistory = this.syncHistory.bind(this)
     this.onKeyPress = this.onKeyPress.bind(this);
     this.focus = this.focus.bind(this);
   }
@@ -39,6 +26,35 @@ class Line extends Component {
     const length = value.split('\n').length;
     this.setState({ value, multiline: length > 1 });
     this.input.rows = length < 20 ? length : 20;
+  }
+
+  // syncHistory(e) {
+  //   if (e.key === storageKey) {
+  //     try {
+  //       this.setState({ history: JSON.parse(e.newValue) });
+  //       console.log('history synced');
+  //     } catch (e) {}
+  //   }
+  // }
+
+  // componentDidMount() {
+  //   window.addEventListener('storage', this.syncHistory);
+  // }
+
+  // componentDidUnmout() {
+  //   window.removeEventListener('storage', this.syncHistory);
+  // }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    try {
+      sessionStorage.setItem(storageKey, JSON.stringify(nextState.history));
+    } catch (e) {}
+
+    if (this.state.value !== nextState.value) {
+      return true;
+    }
+
+    return false;
   }
 
   async onKeyPress(e) {
@@ -109,6 +125,17 @@ class Line extends Component {
     this.input.focus();
   }
 
+  componentDidMount() {
+    let history = null;
+    try {
+      history = JSON.parse(sessionStorage.getItem(storageKey) || '[]');
+    } catch (e) {
+      history = [];
+    }
+
+    this.setState({ history, historyCursor: history.length });
+  }
+
   componentDidUpdate() {
     // wonder if this is a noop?
     this.input.scrollIntoView();
@@ -130,4 +157,4 @@ class Line extends Component {
   }
 }
 
-export default Line;
+export default Input;

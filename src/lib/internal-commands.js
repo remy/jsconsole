@@ -7,6 +7,7 @@ const version = process.env.REACT_APP_VERSION;
 // :load <url> - to inject new DOM
 
 const help = async () => `:listen [id] - to start remote debugging session
+:theme dark|light
 :load <script_url> - to inject
       load also supports shortcuts, like jquery or lodash:
 
@@ -47,10 +48,19 @@ const load = async ({ args:urls, console }) => {
 const theme = async ({ args: [theme], app }) => {
   if (['light', 'dark'].includes(theme)) {
     app.setState({ theme });
-    return `Theme set to ${theme}`;
+    return;
   }
 
-  return `Unknown theme "${theme}"`;
+  return `Try ":theme dark" or ":theme light"`;
+};
+
+const history = async ({ app }) => {
+  console.log(app.input.state.history);
+  return app.input.state.history;
+};
+
+const clear = ({ console }) => {
+  console.clear();
 };
 
 const listen = async ({ args: [id], console:internalConsole }) => {
@@ -84,6 +94,8 @@ const commands = {
   load,
   listen,
   theme,
+  clear,
+  history,
   version: () => version,
 };
 
