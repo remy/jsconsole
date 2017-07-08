@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
-import './App.css';
-import './DarkTheme.css';
-import './Types.css';
+import '../App.css';
+import '../DarkTheme.css';
+import '../Types.css';
 
-import Console from './components/Console';
-import Input from './components/Input';
+import Console from './Console';
+import Input from '../containers/Input';
 
-import run, { bindConsole } from './lib/run';
-import internalCommands from './lib/internal-commands';
+import run, { bindConsole } from '../lib/run';
+import internalCommands from '../lib/internal-commands';
 
 // this is lame, but it's a list of key.code that do stuff in the input that we _want_.
 const doStuffKeys = /^(Digit|Key|Num|Period|Semi|Comma|Slash|IntlBackslash|Backspace|Delete|Enter)/;
@@ -16,13 +16,7 @@ const doStuffKeys = /^(Digit|Key|Num|Period|Semi|Comma|Slash|IntlBackslash|Backs
 class App extends Component {
   constructor(props) {
     super(props);
-    let theme = null;
-
-    try {
-      theme = localStorage.getItem('jsconsole.theme') || null;
-    } catch (e) {}
-
-    this.state = { theme: theme || 'light', reverse: false };
+    this.state = { reverse: false };
     this.onRun = this.onRun.bind(this);
     this.triggerFocus = this.triggerFocus.bind(this);
   }
@@ -79,13 +73,6 @@ class App extends Component {
     return;
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (nextState.theme !== this.state.theme) {
-      localStorage.setItem('jsconsole.theme', nextState.theme);
-    }
-    return true;
-  }
-
   componentDidMount() {
     bindConsole(this.console);
     const query = decodeURIComponent(window.location.search.substr(1));
@@ -104,8 +91,8 @@ class App extends Component {
   }
 
   render() {
-    const { commands = [] } = this.props;
-    const { theme, reverse } = this.state;
+    const { commands = [], theme } = this.props;
+    const { reverse } = this.state;
 
     const className = classnames(['App', `theme-${theme}`, {
       top: reverse,
@@ -116,7 +103,7 @@ class App extends Component {
       <div tabIndex="-1" onKeyDown={this.triggerFocus} ref={e=>this.app=e} className={className}>
         <Console ref={e=>this.console=e} commands={commands} reverse={reverse} />
         <Input
-          ref={e=>this.input=e}
+          inputRef={e=>this.input=e}
           onRun={this.onRun}
           onClear={() => {
             this.console.clear();

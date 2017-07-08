@@ -14,11 +14,10 @@ class Input extends Component {
     this.state = {
       value: props.value || '',
       multiline: false,
+      historyCursor: props.history.length,
     };
     this.onChange = this.onChange.bind(this);
-    // this.syncHistory = this.syncHistory.bind(this)
     this.onKeyPress = this.onKeyPress.bind(this);
-    this.focus = this.focus.bind(this);
   }
 
   onChange() {
@@ -28,38 +27,10 @@ class Input extends Component {
     this.input.rows = length < 20 ? length : 20;
   }
 
-  // syncHistory(e) {
-  //   if (e.key === storageKey) {
-  //     try {
-  //       this.setState({ history: JSON.parse(e.newValue) });
-  //       console.log('history synced');
-  //     } catch (e) {}
-  //   }
-  // }
-
-  // componentDidMount() {
-  //   window.addEventListener('storage', this.syncHistory);
-  // }
-
-  // componentDidUnmout() {
-  //   window.removeEventListener('storage', this.syncHistory);
-  // }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    try {
-      sessionStorage.setItem(storageKey, JSON.stringify(nextState.history));
-    } catch (e) {}
-
-    if (this.state.value !== nextState.value) {
-      return true;
-    }
-
-    return false;
-  }
-
   async onKeyPress(e) {
     const code = keycodes[e.keyCode];
-    const { multiline, history } = this.state;
+    const { multiline } = this.state;
+    const { history } = this.props;
     let { historyCursor } = this.state;
 
     // FIXME in multiline, cursor up when we're at the top
@@ -111,29 +82,14 @@ class Input extends Component {
         return;
       }
 
-      history.push(command);
-      this.setState({ historyCursor: history.length });
+      this.props.addHistory(command);
+      this.setState({ historyCursor: history.length + 1 });
       e.preventDefault();
       await this.props.onRun(command);
       this.input.value = '';
       this.onChange();
       return;
     }
-  }
-
-  focus() {
-    this.input.focus();
-  }
-
-  componentDidMount() {
-    let history = null;
-    try {
-      history = JSON.parse(sessionStorage.getItem(storageKey) || '[]');
-    } catch (e) {
-      history = [];
-    }
-
-    this.setState({ history, historyCursor: history.length });
   }
 
   componentDidUpdate() {
@@ -148,7 +104,10 @@ class Input extends Component {
         className="cli"
         rows="1"
         autoFocus
-        ref={e=>this.input=e}
+        ref={e=> {
+          this.input = e;
+          this.props.inputRef(e);
+        }}
         defaultValue={this.state.value}
         onChange={this.onChange}
         onKeyDown={this.onKeyPress}

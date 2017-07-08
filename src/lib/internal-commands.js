@@ -47,11 +47,11 @@ const load = async ({ args:urls, console }) => {
 
 const theme = async ({ args: [theme], app }) => {
   if (['light', 'dark'].includes(theme)) {
-    app.setState({ theme });
+    app.props.setTheme(theme);
     return;
   }
 
-  return `Try ":theme dark" or ":theme light"`;
+  return 'Try ":theme dark" or ":theme light"';
 };
 
 const history = async ({ app, args: [n=null] }) => {

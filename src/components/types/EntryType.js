@@ -39,7 +39,7 @@ class EntryType extends Component {
             <span className="value"><Value allowOpen={open} value={ value } /></span>
           </div>
       </div>
-      )
+      );
 
     }
 
@@ -58,7 +58,7 @@ class EntryType extends Component {
       </div>
       <span>{'}'}</span>
     </div>
-    )
+    );
   }
 }
 

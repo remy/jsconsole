@@ -1,5 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import store from './store';
+import reducers from './reducers';
 import './index.css';
 
 const rootEl = document.getElementById('root');
@@ -7,10 +10,14 @@ const rootEl = document.getElementById('root');
 // Create a reusable render method that we can call more than once
 let render = () => {
   // Dynamically import our main App component, and render it
-  const App = require('./App').default;
+  const App = require('./containers/App').default;
 
   ReactDOM.render(
-    <App />,
+    React.createElement(
+      Provider,
+      { store },
+      <App />,
+    ),
     rootEl
   );
 };
@@ -20,7 +27,7 @@ if (module.hot) {
   // and display an overlay for runtime errors
   const renderApp = render;
   const renderError = (error) => {
-    const RedBox = require("redbox-react").default;
+    const RedBox = require('redbox-react').default;
     ReactDOM.render(
       <RedBox error={error} />,
       rootEl
@@ -40,7 +47,7 @@ if (module.hot) {
 
   // Whenever the App component file or one of its dependencies
   // is changed, re-import the updated component and re-render it
-  module.hot.accept('./App', () => {
+  module.hot.accept('./containers/App', () => {
     setTimeout(render);
   });
 }
