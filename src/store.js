@@ -36,7 +36,7 @@ const finalCreateStore = compose(...middleware)(createStore);
 const defaults = {};
 try {
   defaults.settings = {
-    theme: localStorage.getItem('jsconsole.theme'),
+    theme: JSON.parse(localStorage.getItem('jsconsole.theme')),
   };
 
   defaults.history = JSON.parse(sessionStorage.getItem('jsconsole.history') || '[]');
@@ -44,7 +44,5 @@ try {
   console.log(e);
 }
 
-
-console.log(defaults);
 const store = finalCreateStore(reducers, defaults);
 export default store;

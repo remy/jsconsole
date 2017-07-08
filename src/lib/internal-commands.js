@@ -55,12 +55,13 @@ const theme = async ({ args: [theme], app }) => {
 };
 
 const history = async ({ app, args: [n=null] }) => {
+  const history = app.context.store.getState().history;
   if (n === null) {
-    return app.input.state.history.map((item, i) => `${i}: ${item.trim()}`).join('\n');
+    return history.map((item, i) => `${i}: ${item.trim()}`).join('\n');
   }
 
   // try to re-issue the historical command
-  const command = app.input.state.history.find((item, i) => i === n);
+  const command = history.find((item, i) => i === n);
   if (command) {
     app.onRun(command);
   }

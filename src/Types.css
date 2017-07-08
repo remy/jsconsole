@@ -23,6 +23,12 @@
   white-space: nowrap;
 }
 
+.string.quote:before,
+.string.quote:after {
+  content: '"';
+  color: #111;
+}
+
 .bareString.string {
   color: #111;
 }

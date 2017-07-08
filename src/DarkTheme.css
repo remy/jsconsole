@@ -5,7 +5,12 @@
   color: #abb2bf;
 }
 
-.theme-dark .bareString.string {
+.theme-dark .string.bareString {
+  color: #abb2bf;
+}
+
+.theme-dark .string.quote:before,
+.theme-dark .string.quote:after {
   color: #abb2bf;
 }
 

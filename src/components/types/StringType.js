@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import classnames from 'classnames';
 
 class StringType extends Component {
   constructor(props) {
@@ -30,14 +31,17 @@ class StringType extends Component {
 
     const expand = <button onClick={this.onToggle} className="icon expand">+</button>;
 
-    const quote = bare ? '' : '"';
-
     const child = html ?
-      <span dangerouslySetInnerHTML={{ __html: value }}></span> :
-      `${quote}${value}${quote}`;
+      <span dangerouslySetInnerHTML={{ __html: value }}></span> : value;
+
+    const className = classnames(['type', 'string', {
+      toggle: expanded,
+      bareString: bare,
+      quote: !bare,
+    }]);
 
     return (
-    <div ref={e=>this.string=e} className={`type string ${expanded ? 'toggle' : ''} ${bare ? 'bareString' : ''}`}>
+    <div ref={e=>this.string=e} className={className}>
       { multiline && expand }
       { child }
     </div>
