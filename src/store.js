@@ -13,7 +13,7 @@ const middleware = [
     store => next => action => {
       const nextAction = next(action);
       const state = store.getState(); // new state after action was applied
-      console.log(action.type);
+
       if (action.type === 'SET_THEME') {
         save('theme', state.settings.theme, 'local');
       }

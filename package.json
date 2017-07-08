@@ -38,6 +38,7 @@
     "preact": "^8.1.0",
     "preact-compat": "^3.16.0",
     "promise": "7.1.1",
+    "prop-types": "^15.5.10",
     "react": "^15.5.4",
     "react-copy-to-clipboard": "^5.0.0",
     "react-dev-utils": "^3.0.2",

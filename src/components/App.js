@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import '../App.css';
 import '../DarkTheme.css';
@@ -114,6 +115,6 @@ class App extends Component {
   }
 }
 
-App.contextTypes = { store: React.PropTypes.object };
+App.contextTypes = { store: PropTypes.object };
 
 export default App;
