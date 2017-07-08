@@ -1,5 +1,7 @@
 import reducers from './reducers';
 import { createStore, compose, applyMiddleware } from 'redux';
+import { SET_THEME, SET_LAYOUT } from './actions/Settings';
+import { ADD_HISTORY } from './actions/Input';
 
 const save = (key, value, store = 'session') => {
   try {
@@ -14,11 +16,11 @@ const middleware = [
       const nextAction = next(action);
       const state = store.getState(); // new state after action was applied
 
-      if (action.type === 'SET_THEME') {
-        save('theme', state.settings.theme, 'local');
+      if (action.type === SET_THEME || action.type === SET_LAYOUT) {
+        save('settings', state.settings, 'local');
       }
 
-      if (action.type === 'ADD_HISTORY') {
+      if (action.type === ADD_HISTORY) {
         save('history', state.history);
       }
 
@@ -35,10 +37,7 @@ const finalCreateStore = compose(...middleware)(createStore);
 
 const defaults = {};
 try {
-  defaults.settings = {
-    theme: JSON.parse(localStorage.getItem('jsconsole.theme')),
-  };
-
+  defaults.settings = JSON.parse(localStorage.getItem('jsconsole.settings') || '{}'),
   defaults.history = JSON.parse(sessionStorage.getItem('jsconsole.history') || '[]');
 } catch (e) {
   console.log(e);

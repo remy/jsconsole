@@ -5,6 +5,11 @@
   color: #abb2bf;
 }
 
+.theme-dark.top .Input {
+  background: black;
+  box-shadow: 0px 1px 1px rgba(146, 145, 145, 0.26);
+}
+
 .theme-dark .string.bareString {
   color: #abb2bf;
 }

@@ -17,7 +17,6 @@ const doStuffKeys = /^(Digit|Key|Num|Period|Semi|Comma|Slash|IntlBackslash|Backs
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { reverse: false };
     this.onRun = this.onRun.bind(this);
     this.triggerFocus = this.triggerFocus.bind(this);
   }
@@ -80,7 +79,7 @@ class App extends Component {
     if (query) {
       this.onRun(query);
     } else {
-      this.onRun(':help');
+      this.onRun(':welcome');
     }
   }
 
@@ -92,17 +91,13 @@ class App extends Component {
   }
 
   render() {
-    const { commands = [], theme } = this.props;
-    const { reverse } = this.state;
+    const { commands = [], theme, layout } = this.props;
 
-    const className = classnames(['App', `theme-${theme}`, {
-      top: reverse,
-      bottom: !reverse,
-    }]);
+    const className = classnames(['App', `theme-${theme}`, layout]);
 
     return (
       <div tabIndex="-1" onKeyDown={this.triggerFocus} ref={e=>this.app=e} className={className}>
-        <Console ref={e=>this.console=e} commands={commands} reverse={reverse} />
+        <Console ref={e=>this.console=e} commands={commands} reverse={layout === 'top'} />
         <Input
           inputRef={e=>this.input=e}
           onRun={this.onRun}

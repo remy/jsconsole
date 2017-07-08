@@ -6,25 +6,29 @@ const version = process.env.REACT_APP_VERSION;
 // Missing support
 // :load <url> - to inject new DOM
 
-const help = async () => `:listen [id] - to start remote debugging session
+const welcome = () => ({
+  value: `Use <strong>:help</strong> to show jsconsole commands
+version: ${version}`,
+  html: true,
+});
+
+const help = () => `:listen [id] - starts remote debugging session
 :theme dark|light
-:load <script_url> - to inject
-      load also supports shortcuts, like jquery or lodash:
-
-      eg. :load jquery
-:clear - to clear the console
-:history - list current session history
+:load <script_url>
+      load also supports shortcuts, like jquery or moment:
+:libraries
+:clear
+:history
 :about
-copy(<value>) and $_ for last value
-
-version: ${version}`;
+:version
+copy(<value>) and $_ for last value`;
 
 const about = () => ({
   value: 'Built by <a href="https://twitter.com/rem" target="_blank">@rem</a> • <a href="https://github.com/remy/jsconsole" target="_blank">open source</a>',
   html: true
 });
 
-const libraries = {
+const libs = {
   jquery: 'https://code.jquery.com/jquery.min.js',
   underscore: 'https://cdn.jsdelivr.net/underscorejs/latest/underscore-min.js',
   lodash: 'https://cdn.jsdelivr.net/lodash/latest/lodash.min.js',
@@ -35,7 +39,7 @@ const libraries = {
 const load = async ({ args:urls, console }) => {
   const document = container.contentDocument;
   urls.forEach(url => {
-    url = libraries[url] || url;
+    url = libs[url] || url;
     const script = document.createElement('script');
     script.src = url;
     script.onload = () => console.log(`Loaded ${url}`);
@@ -43,6 +47,26 @@ const load = async ({ args:urls, console }) => {
     document.body.appendChild(script);
   });
   return 'Loading script…';
+};
+
+const libraries = () => {
+  return {
+    value: Object.keys(libs).map(name => `<strong>${name}</strong>: ${libs[name]}`).join('\n'),
+    html: true,
+  };
+};
+
+const set = async ({ args: [key, value], app }) => {
+  switch (key) {
+  case 'theme':
+    if (['light', 'dark'].includes(value)) {
+      app.props.setTheme(value);
+    }
+  case 'layout':
+    if (['top', 'bottom'].includes(value)) {
+      app.props.setLayout(value);
+    }
+  }
 };
 
 const theme = async ({ args: [theme], app }) => {
@@ -99,6 +123,7 @@ const listen = async ({ args: [id], console:internalConsole }) => {
 };
 
 const commands = {
+  libraries,
   help,
   about,
   load,
@@ -106,6 +131,8 @@ const commands = {
   theme,
   clear,
   history,
+  set,
+  welcome,
   version: () => version,
 };
 
