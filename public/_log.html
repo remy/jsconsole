@@ -39,7 +39,6 @@ const log = document.getElementById('log');
 const sse = new EventSource('/_log');
 
 sse.onmessage = function (event) {
-  console.log('event');
   const li = document.createElement('li');
   const data = JSON.parse(event.data);
   li.innerHTML = `<span class="txt">${data.txt}</span><time>${data.timestamp}</time>`;
