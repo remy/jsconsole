@@ -6,7 +6,7 @@ class Autocomplete extends Component {
     return <div className="Autocomplete">
       <span className="matching">doc</span>
       <span className="preview">ument</span>
-    </div>
+    </div>;
   }
 }
 

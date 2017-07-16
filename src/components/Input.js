@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-// import Autocomplete from './Autocomplete'
+import Autocomplete from './Autocomplete';
 import keycodes from '../lib/keycodes';
 import '../Input.css';
 
@@ -98,8 +98,8 @@ class Input extends Component {
   }
 
   render() {
-    // <Autocomplete value={this.state.value} />
     return (<div className="Input">
+      {/*<Autocomplete value={this.state.value} />*/}
       <textarea
         className="cli"
         rows="1"

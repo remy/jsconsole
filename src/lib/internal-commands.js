@@ -109,9 +109,26 @@ const listen = async ({ args: [id], console:internalConsole }) => {
     };
 
     sse.onmessage = (event) => {
+      console.log(event);
       const data = JSON.parse(event.data);
       if (data.response) {
-        const res = data.response.map(_ => JSON.parse(_));
+        if (typeof data.response === 'string') {
+          internalConsole.log(data.response);
+          return;
+        }
+
+        const res = data.response.map(_ => {
+          if (_.startsWith('Error:')) {
+            return new Error(_.split('Error: ', 2).pop());
+          }
+
+          if (_ === 'undefined') { // yes, the string
+            return undefined;
+          }
+
+
+          return JSON.parse(_);
+        });
         internalConsole.log(...res);
       }
     };

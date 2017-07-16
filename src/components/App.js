@@ -85,6 +85,7 @@ class App extends Component {
 
   triggerFocus(e) {
     if (e.target.nodeName === 'INPUT') return;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
     if (e.code && !doStuffKeys.test(e.code)) return;
 
     this.input.focus();
