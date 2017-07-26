@@ -1,7 +1,7 @@
 {
-  "name": "jsconsole",
-  "version": "2.0.0-beta.2",
-  "private": true,
+  "name": "@remy/jsconsole",
+  "version": "2.0.0-beta.6",
+  "_private": true,
   "now": {
     "alias": "2.jsconsole.com"
   },
@@ -55,6 +55,10 @@
     "whatwg-fetch": "2.0.3"
   },
   "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
     "redbox-react": "^1.4.3",
     "redux-devtools": "^3.4.0",
     "webpack-bundle-analyzer": "^2.8.2"
@@ -65,15 +69,14 @@
     "start": "REACT_APP_VERSION=$npm_package_version node scripts/start.js",
     "build": "REACT_APP_VERSION=$npm_package_version node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
-    "deploy": "npm run build && now build/ --static --name jsconsole2"
+    "lib": "rm -rf dist; NODE_ENV=production babel src/node_modules --out-dir dist --copy-files",
+    "deploy": "npm run build && now build/ --static --name jsconsole2",
+    "prepublish": "npm run lib"
   },
+  "main": "dist/index.js",
   "jest": {
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx}"
-    ],
-    "setupFiles": [
-      "<rootDir>/config/polyfills.js"
-    ],
+    "collectCoverageFrom": ["src/**/*.{js,jsx}"],
+    "setupFiles": ["<rootDir>/config/polyfills.js"],
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.js?(x)",
       "<rootDir>/src/**/?(*.)(spec|test).js?(x)"
@@ -85,26 +88,16 @@
       "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
       "^(?!.*\\.(js|jsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
     },
-    "transformIgnorePatterns": [
-      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"
-    ],
+    "transformIgnorePatterns": ["[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"],
     "moduleNameMapper": {
       "^react-native$": "react-native-web"
     },
-    "moduleFileExtensions": [
-      "web.js",
-      "js",
-      "json",
-      "web.jsx",
-      "jsx"
-    ]
+    "moduleFileExtensions": ["web.js", "js", "json", "web.jsx", "jsx"]
   },
   "babel": {
-    "presets": [
-      "react-app"
-    ]
+    "presets": ["react-app"]
   },
-  "eslintConfig": {
+  "_eslintConfig": {
     "extends": "react-app"
   }
 }
