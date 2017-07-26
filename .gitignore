@@ -9,6 +9,7 @@
 # production
 /build
 /dist
+src/node_modules/jsconsole.css
 
 # misc
 .DS_Store

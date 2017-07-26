@@ -1,6 +1,6 @@
 {
   "name": "@remy/jsconsole",
-  "version": "2.0.0-beta.6",
+  "version": "2.0.0-beta.7",
   "_private": true,
   "now": {
     "alias": "2.jsconsole.com"
@@ -69,7 +69,8 @@
     "start": "REACT_APP_VERSION=$npm_package_version node scripts/start.js",
     "build": "REACT_APP_VERSION=$npm_package_version node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
-    "lib": "rm -rf dist; NODE_ENV=production babel src/node_modules --out-dir dist --copy-files",
+    "styles": "cat src/*.css > src/node_modules/jsconsole.css",
+    "lib": "rm -rf dist; npm run styles; NODE_ENV=production babel src/node_modules --out-dir dist --copy-files",
     "deploy": "npm run build && now build/ --static --name jsconsole2",
     "prepublish": "npm run lib"
   },
@@ -95,7 +96,7 @@
     "moduleFileExtensions": ["web.js", "js", "json", "web.jsx", "jsx"]
   },
   "babel": {
-    "presets": ["react-app"]
+    "presets": ["react-app", "stage-0", "es2015"]
   },
   "_eslintConfig": {
     "extends": "react-app"

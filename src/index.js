@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import store from 'store';
 import reducers from 'reducers';
 import './index.css';
+import './node_modules/jsconsole.css';
 
 const rootEl = document.getElementById('root');
 
