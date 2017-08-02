@@ -1,6 +1,6 @@
 {
   "name": "@remy/jsconsole",
-  "version": "2.0.0-beta.10",
+  "version": "2.0.0-beta.11",
   "_private": true,
   "now": {
     "alias": "2.jsconsole.com"
