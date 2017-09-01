@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset=utf-8 />
+  <title>remote</title>
+</head>
+
+<body>
+  <script src="/js/EventSource.js"></script>
+  <script>
+    /* jshint browser:true */
+    var id = window.location.search.replace(/.*\?/, '');
+    var origin = null;
+    window.addEventListener('message', function (event) {
+      origin = event.origin;
+      if (event.data === '__init__' || typeof event.data !== 'string') {
+        return;
+      }
+      var xhr = new XMLHttpRequest();
+      var params = 'data=' + encodeURIComponent(event.data);
+      xhr.open('POST', '/remote/' + id + '/log', true);
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      xhr.send(params);
+    }, false);
+    setTimeout(function () {
+      var sse = new EventSource('/remote/' + id + '/run');
+      sse.onmessage = function (event) {
+        window.top.postMessage(event.data, origin);
+      };
+    }, 13);
+
+  </script>
+</body>
+
+</html>
