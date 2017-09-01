@@ -49,3 +49,7 @@
 .theme-dark .Line .response.error {
   background: rgb(39, 5, 5);
 }
+
+.theme-dark a {
+  color: #c678dd;
+}
