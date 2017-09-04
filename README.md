@@ -1,5 +1,7 @@
 # JS Console
 
+<a href="https://app.codesponsor.io/link/wnz2te8CdfKZ8wMjGUpi8EZG/remy/jsconsole" rel="nofollow"><img src="https://app.codesponsor.io/embed/wnz2te8CdfKZ8wMjGUpi8EZG/remy/jsconsole.svg" style="width: 888px; height: 68px;" alt="Sponsor" /></a>
+
 A JavaScript web console, useful for quick experimentation, debugging, presentations (for live coding) and workshops.
 
 # Features
