@@ -1,7 +1,5 @@
 # JS Console
 
-<a href="https://app.codesponsor.io/link/wnz2te8CdfKZ8wMjGUpi8EZG/remy/jsconsole" rel="nofollow"><img src="https://app.codesponsor.io/embed/wnz2te8CdfKZ8wMjGUpi8EZG/remy/jsconsole.svg" style="width: 888px; height: 68px;" alt="Sponsor" /></a>
-
 A JavaScript web console, useful for quick experimentation, debugging, presentations (for live coding) and workshops.
 
 # Features
@@ -33,3 +31,5 @@ Or to run on a specific port (like 8080):
 Then check your own ip address of the machine it's running on (using `ipconfig` for windows or `ifconfig` for mac and linux). Then on the mobile phone, just visit that IP address and port you're running jsconsole on:
 
 ![jsconsole running locally](https://i.imgur.com/hyRF5.png)
+
+<a href="https://app.codesponsor.io/link/wnz2te8CdfKZ8wMjGUpi8EZG/remy/jsconsole" rel="nofollow"><img src="https://app.codesponsor.io/embed/wnz2te8CdfKZ8wMjGUpi8EZG/remy/jsconsole.svg" style="width: 888px; height: 68px;" alt="Sponsor" /></a>
