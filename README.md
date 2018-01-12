@@ -30,4 +30,8 @@ Or to run on a specific port (like 8080):
 
 Then check your own ip address of the machine it's running on (using `ipconfig` for windows or `ifconfig` for mac and linux). Then on the mobile phone, just visit that IP address and port you're running jsconsole on:
 
+Run with docker:
+
+    docker run -p ${PORT}:8000 implementsio/jsconsole
+
 ![jsconsole running locally](https://i.imgur.com/hyRF5.png)
