@@ -1,14 +1,15 @@
 {
-  "name": "JavaScript Console",
   "short_name": "jsconsole",
-  "icons": [{
-        "src": "/assets/favicon-192.png",
-        "type": "image/png",
-        "sizes": "192x192"
-      }
+  "name": "jsconsole",
+  "icons": [
+    {
+      "src": "favicon-192.png",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/png"
+    }
   ],
-  "start_url": "/?utm_source=web_app_manifest",
+  "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#E6E8F2",
-  "theme_color": "#E6E8F2"
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
 }

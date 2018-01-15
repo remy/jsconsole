@@ -1,69 +1,38 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8" />
-<title>JavaScript console - for debugging JavaScript and remote debugging mobile web apps</title>
-<link rel="manifest" href="manifest.json">
-<meta name="mobile-web-app-capable" content="yes">
-<meta id="meta" name="viewport" content="width=device-width, user-scalable=no, initial-scale=1" />
-<!--
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="%PUBLIC_URL%/favicon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="%PUBLIC_URL%/favicon-192.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+  <!--
+      Notice the use of %PUBLIC_URL% in the tag above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
 
- Hey there fellow JavaScript lover - I assume you've got a soft spot
- for the JavaScript, otherwise what use would a console be to you?
-
- This was primarily built out of a demo I wrote for my upcoming book
- introducinghtml5.com as a way to introspect what was going on inside
- a web worker, since the environment is sandboxed. Then I realised,
- I need a sandbox environment/console that I could increase the font
- size - and having seen something similar-ish by @thomasfuchs, I went
- about tweaking my worker demo to this. About 3 hours work one late
- Sunday afternoon.
-
- The way this works, is I generate an iframe on the fly, an run the
- commands through an eval *inside* the iframe, so it's a fairly good
- enviroment to run tests. Then I've got a custom stringify function
- because JSON.stringify doesn't decode native DOM objects, like the
- DOMWindow object.
-
- There's more I want to do with this, so watch the github account
- or even contribute: https://github.com/remy/jsconsole
-
- Otherwise, hope you enjoy this app. Any questions or issues, drop
- me a message on github or Twitter: https://twitter.com/rem
-
- - Cheers, @rem
-
--->
-<link rel="icon" href="/assets/favicon-192.png" type="image/png">
-<link rel="apple-touch-icon" href="/assets/favicon-192.png" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black" />
-<link rel="stylesheet" href="/css/console.css" />
-<script>
-  /* jshint browser:true */
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js', { scope: '/' });
-  }
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-  ga('create', 'UA-1656750-21', 'auto');
-  ga('send', 'pageview');
-</script>
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+  <title>jsconsole</title>
 </head>
+
 <body>
-<form>
-  <textarea autofocus id="exec" spellcheck="false" autocapitalize="off" rows="1" autocorrect="off"></textarea>
-</form>
-<div id="console">
-  <ul id="output"></ul>
-</div>
-<div id="footer"><a href="#">Install app</a> &bull; <a href="https://github.com/remy/jsconsole">Fork on Github</a> &bull; <a href="https://twitter.com/rem">Built by @rem</a></div>
-<script src="/js/prettify.packed.js"></script>
-<script src="/js/EventSource.js"></script>
-<script src="/js/copy.js"></script>
-<script src="/js/version.js"></script>
-<script src="/js/console.js"></script>
+  <div id="root"></div>
+  <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start`.
+      To create a production bundle, use `npm run build`.
+    -->
 </body>
+
 </html>

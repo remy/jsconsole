@@ -5,15 +5,10 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "protocol": "inspector",
-      "env":{
-        "PORT": 3001
-      },
-      "_runtimeArgs": "--harmony", // object spread
       "type": "node",
       "request": "launch",
       "name": "Launch Program",
-      "program": "${workspaceRoot}/lib/app.js"
+      "program": "${file}"
     }
   ]
 }

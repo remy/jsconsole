@@ -1,0 +1,19 @@
+* {
+  box-sizing: border-box;
+}
+
+body, html, #root {
+  height: 100%;
+}
+
+.App {
+  outline: none;
+  height: 100%;
+  font-size: 0.85rem;
+  line-height: 1.4rem;
+  font-family: "Menlo", consolas, monospace;
+}
+
+.App.top {
+  padding-top: 2.6rem;
+}

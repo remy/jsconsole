@@ -1,0 +1,11 @@
+- [ ] Remote send
+- [ ] Filter doesn't quite work (try on `window` and filter for `url`)
+- [ ] Autocomplete on input
+- [ ] Expand objects should nest closet to left
+- [ ] Service worker
+- [ ] Tests
+- [ ] Support numeric interpolation
+- [x] Remote listen
+- [x] Fix history cycling
+- [x] Dark theme
+- [x] Start typing and it works (or ctrl+l when focus is lost)

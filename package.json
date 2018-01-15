@@ -1,35 +1,120 @@
 {
-  "name": "jsconsole",
-  "version": "1.5.0",
-  "description": "",
+  "name": "@remy/jsconsole",
+  "version": "2.0.0-beta.14",
+  "_private": true,
   "engines": {
-    "node": 8
+    "node": "8.x.x"
   },
   "now": {
-    "alias": "jsconsole.com"
-  },
-  "main": "lib/app.js",
-  "directories": {
-    "test": "test"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node lib/app"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "jscs": "latest",
-    "jshint": "^2.9.1",
-    "tap": "latest",
-    "tap-only": "0.0.5"
+    "alias": "2.jsconsole.com"
   },
   "dependencies": {
-    "body-parser": "^1.15.2",
-    "compression": "^1.6.2",
-    "express": "^4.14.0",
-    "intercept-stdout": "^0.1.2",
-    "node-uuid": "^1.4.7"
+    "@remy/eslint": "^1.0.0",
+    "autoprefixer": "7.1.1",
+    "babel-core": "6.25.0",
+    "babel-eslint": "7.2.3",
+    "babel-loader": "7.0.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react-app": "^3.0.2",
+    "babel-runtime": "6.23.0",
+    "babylon": "^6.18.0",
+    "babylon-walk": "^1.0.2",
+    "body-parser": "^1.17.2",
+    "case-sensitive-paths-webpack-plugin": "2.1.1",
+    "chalk": "1.1.3",
+    "classnames": "^2.2.5",
+    "copy-to-clipboard": "^3.0.8",
+    "css-loader": "0.28.4",
+    "dotenv": "4.0.0",
+    "eslint": "3.19.0",
+    "eslint-config-react-app": "^1.0.5",
+    "eslint-loader": "1.7.1",
+    "eslint-plugin-flowtype": "2.34.0",
+    "eslint-plugin-import": "2.2.0",
+    "eslint-plugin-jsx-a11y": "5.0.3",
+    "eslint-plugin-react": "7.1.0",
+    "extract-text-webpack-plugin": "2.1.2",
+    "file-loader": "0.11.2",
+    "fs-extra": "3.0.1",
+    "html-webpack-plugin": "2.29.0",
+    "lodash": "^4.17.4",
+    "node-uuid": "^1.4.8",
+    "object-assign": "4.1.1",
+    "postcss-flexbugs-fixes": "3.0.0",
+    "postcss-loader": "2.0.6",
+    "preact": "^8.2.5",
+    "preact-compat": "^3.17.0",
+    "promise": "7.1.1",
+    "prop-types": "^15.5.10",
+    "react": "^15.5.4",
+    "react-copy-to-clipboard": "^5.0.0",
+    "react-dev-utils": "^3.1.1",
+    "react-dom": "^15.6.1",
+    "react-error-overlay": "^1.0.10",
+    "react-redux": "^5.0.6",
+    "redux": "^3.7.2",
+    "style-loader": "0.18.2",
+    "sw-precache-webpack-plugin": "0.11.3",
+    "url-loader": "0.5.9",
+    "webpack": "2.6.1",
+    "webpack-dev-server": "2.5.0",
+    "webpack-manifest-plugin": "1.1.0",
+    "whatwg-fetch": "2.0.3"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-jest": "^20.0.3",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "jest": "^21.2.1",
+    "react-test-renderer": "^16.1.1",
+    "redbox-react": "^1.5.0",
+    "redux-devtools": "^3.4.0",
+    "webpack-bundle-analyzer": "^2.9.0"
+  },
+  "_proxy": "http://localhost:3001",
+  "scripts": {
+    "env": "env",
+    "start": "REACT_APP_VERSION=$npm_package_version node scripts/start.js",
+    "build":
+      "rm -rf build; REACT_APP_VERSION=$npm_package_version node scripts/build.js",
+    "test": "node scripts/test.js --env=jsdom",
+    "styles": "cat src/*.css > src/node_modules/jsconsole.css",
+    "lib":
+      "rm -rf dist; npm run styles; NODE_ENV=production babel src/node_modules --out-dir dist --copy-files",
+    "deploy": "npm run build && s3_website push",
+    "prepare": "npm run lib"
+  },
+  "main": "dist/index.js",
+  "files": ["dist/"],
+  "jest": {
+    "collectCoverageFrom": ["src/**/*.{js,jsx}"],
+    "setupFiles": ["<rootDir>/config/polyfills.js"],
+    "testMatch": [
+      "<rootDir>/src/**/__tests__/**/*.js?(x)",
+      "<rootDir>/src/**/?(*.)(spec|test).js?(x)"
+    ],
+    "testPathIgnorePatterns": ["<rootDir>/node_modules/"],
+    "testEnvironment": "node",
+    "testURL": "http://localhost",
+    "transform": {
+      "^.+\\.(js|jsx)$": "<rootDir>/node_modules/babel-jest",
+      "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
+      "^(?!.*\\.(js|jsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
+    },
+    "transformIgnorePatterns": [
+      "<rootDir>[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"
+    ],
+    "moduleNameMapper": {
+      "^react-native$": "react-native-web"
+    },
+    "moduleFileExtensions": ["web.js", "js", "json", "web.jsx", "jsx"]
+  },
+  "babel": {
+    "presets": ["react-app", "stage-0", "es2015"]
+  },
+  "__eslintConfig": {
+    "extends": "react-app"
   }
 }
