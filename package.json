@@ -83,7 +83,7 @@
     "styles": "cat src/*.css > src/node_modules/jsconsole.css",
     "lib":
       "rm -rf dist; npm run styles; NODE_ENV=production babel src/node_modules --out-dir dist --copy-files",
-    "deploy": "npm run build && now build/ --static --name jsconsole2",
+    "deploy": "npm run build && s3_website push",
     "prepare": "npm run lib"
   },
   "main": "dist/index.js",
