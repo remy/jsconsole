@@ -1,7 +1,6 @@
 {
   "name": "@remy/jsconsole",
-  "version": "2.0.0-beta.14",
-  "_private": true,
+  "version": "2.0.0",
   "engines": {
     "node": "8.x.x"
   },
@@ -151,5 +150,17 @@
   },
   "__eslintConfig": {
     "extends": "react-app"
-  }
+  },
+  "description": "Web based console - for presentations, workshops and jsbin",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/remy/jsconsole.git"
+  },
+  "keywords": [],
+  "author": "Remy Sharp <remy@leftlogic.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/remy/jsconsole/issues"
+  },
+  "homepage": "https://github.com/remy/jsconsole#readme"
 }
