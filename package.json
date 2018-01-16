@@ -95,7 +95,7 @@
   "scripts": {
     "env": "env",
     "start": "REACT_APP_VERSION=$npm_package_version node scripts/start.js",
-    "build": "rm -rf build; REACT_APP_VERSION=$npm_package_version node scripts/build.js",
+    "build": "rm -rf build; PUBLIC_URL=/ REACT_APP_VERSION=$npm_package_version node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
     "styles": "cat src/*.css > src/node_modules/jsconsole.css",
     "lib": "rm -rf dist; npm run styles; NODE_ENV=production babel src/node_modules --out-dir dist --copy-files",
