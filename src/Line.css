@@ -20,7 +20,7 @@
 
 .Line .input.prompt {
   white-space: pre-wrap;
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 
 .Line .prompt:before {
@@ -135,5 +135,5 @@
 }
 
 .Line > .output > .type {
-  overflow-x: scroll;
+  overflow-x: auto;
 }
