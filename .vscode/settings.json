@@ -1,8 +1,8 @@
 {
   "files.exclude": {
-    "**/src/node_modules": false,
+    "!**/src": false
   },
   "search.exclude": {
-    "**/src/node_modules": false
+    "!**/src": false
   }
 }
