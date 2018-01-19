@@ -1,6 +1,7 @@
 .type {
   display: inline-block;
   line-height: 1.2rem;
+  min-height: 1.2rem;
 }
 
 .type + .type {
