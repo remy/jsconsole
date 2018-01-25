@@ -3,6 +3,7 @@
   right: .25rem;
   top: .5rem;
   z-index: 10;
+  user-select: none;
 }
 
 .bottom .LineNav {

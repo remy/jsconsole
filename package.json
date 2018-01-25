@@ -143,9 +143,7 @@
   },
   "babel": {
     "presets": [
-      "react-app",
-      "stage-0",
-      "es2015"
+      "react-app"
     ]
   },
   "__eslintConfig": {
