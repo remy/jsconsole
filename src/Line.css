@@ -41,12 +41,8 @@
   top: 0.9rem;
 }
 
-.Line .response.error {
+.Line .prompt.error {
   background: #FFEFEF;
-}
-
-.Line .error.output:before {
-  background-image: url(/error.svg);
 }
 
 .Line .output:before {
@@ -55,6 +51,10 @@
 
 .Line .output.log:before {
   background-image: none;
+}
+
+.Line .error.output:before {
+  background-image: url(/error.svg);
 }
 
 .Line:hover .LineNav,
@@ -79,7 +79,8 @@
   color: #2196F3;
 }
 
-.Line .error em {
+.Line .error em,
+.Line .error .bareString {
   color: #F44336;
 }
 

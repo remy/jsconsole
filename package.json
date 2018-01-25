@@ -98,6 +98,7 @@
     "build": "rm -rf build; PUBLIC_URL=/ REACT_APP_VERSION=$npm_package_version node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
     "styles": "cat src/*.css > src/node_modules/jsconsole.css",
+    "watch": "nodemon -w src/ -e css -x 'npm run styles'",
     "lib": "rm -rf dist; npm run styles; NODE_ENV=production babel src/node_modules --out-dir dist --copy-files",
     "deploy": "npm run build && s3_website push",
     "prepare": "npm run lib"
