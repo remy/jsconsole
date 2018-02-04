@@ -1,6 +1,6 @@
 {
   "name": "@remy/jsconsole",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "engines": {
     "node": "8.x.x"
   },
@@ -99,7 +99,7 @@
     "test": "node scripts/test.js --env=jsdom",
     "styles": "cat src/*.css > src/core/jsconsole.css",
     "watch": "nodemon -w src/ -e css -x 'npm run styles'",
-    "lib": "rm -rf dist; npm run styles; NODE_ENV=production babel src/core --out-dir dist --copy-files",
+    "lib": "rm -rf dist; npm run styles; NODE_ENV=production babel src/core --out-dir dist --copy-files --ignore '__tests__'",
     "deploy": "npm run build && s3_website push",
     "prepare": "npm run lib"
   },
