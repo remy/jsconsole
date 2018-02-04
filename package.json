@@ -1,6 +1,6 @@
 {
   "name": "@remy/jsconsole",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "engines": {
     "node": "8.x.x"
   },
@@ -97,9 +97,9 @@
     "start": "REACT_APP_VERSION=$npm_package_version node scripts/start.js",
     "build": "rm -rf build; PUBLIC_URL=/ REACT_APP_VERSION=$npm_package_version node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
-    "styles": "cat src/*.css > src/node_modules/jsconsole.css",
+    "styles": "cat src/*.css > src/core/jsconsole.css",
     "watch": "nodemon -w src/ -e css -x 'npm run styles'",
-    "lib": "rm -rf dist; npm run styles; NODE_ENV=production babel src/node_modules --out-dir dist --copy-files",
+    "lib": "rm -rf dist; npm run styles; NODE_ENV=production babel src/core --out-dir dist --copy-files",
     "deploy": "npm run build && s3_website push",
     "prepare": "npm run lib"
   },
@@ -108,6 +108,9 @@
     "dist/"
   ],
   "jest": {
+    "modulePathIgnorePatterns": [
+      "object-assign"
+    ],
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}"
     ],

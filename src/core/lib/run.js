@@ -27,6 +27,8 @@ export const bindConsole = __console => {
   });
 };
 
+export const getContainer = () => container;
+
 export function createContainer() {
   container = document.createElement('iframe');
   container.width = container.height = 1;
@@ -177,7 +179,7 @@ export function preProcess(content) {
         });
       }
       if (!onlyOneDeclaration) {
-        var last = node.declarations.peekLast();
+        const last = node.declarations[node.declarations.length - 1];
         changes.push({ text: ')', start: last.end, end: last.end });
       }
     },

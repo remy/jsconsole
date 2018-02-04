@@ -1,17 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import store from 'store';
+import store from './core/store';
 import registerServiceWorker from './registerServiceWorker';
 import './index.css';
-import './node_modules/jsconsole.css';
+import './core/jsconsole.css';
 
 const rootEl = document.getElementById('root');
 
 // Create a reusable render method that we can call more than once
 let render = () => {
   // Dynamically import our main App component, and render it
-  const App = require('containers/App').default;
+  const App = require('./core/containers/App').default;
 
   ReactDOM.render(React.createElement(Provider, { store }, <App />), rootEl);
 };
@@ -38,7 +38,7 @@ if (module.hot) {
 
   // Whenever the App component file or one of its dependencies
   // is changed, re-import the updated component and re-render it
-  module.hot.accept('containers/App', () => {
+  module.hot.accept('./core/containers/App', () => {
     setTimeout(render);
   });
 }

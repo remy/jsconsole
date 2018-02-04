@@ -1,5 +1,5 @@
 /*global window EventSource fetch */
-import { container } from './run';
+import { getContainer } from './run';
 
 const version = process.env.REACT_APP_VERSION;
 const API = process.env.REACT_APP_API || '';
@@ -43,7 +43,7 @@ const libs = {
 };
 
 const load = async ({ args: urls, console }) => {
-  const document = container.contentDocument;
+  const document = getContainer().contentDocument;
   urls.forEach(url => {
     url = libs[url] || url;
     const script = document.createElement('script');
@@ -117,8 +117,9 @@ const listen = async ({ args: [id], console: internalConsole }) => {
     const sse = new EventSource(`${API}/remote/${id}/log`);
     sse.onopen = () => {
       resolve(
-        `Connected to "${id}"\n\n<script src="${window.location
-          .origin}/js/remote.js?${id}"></script>`
+        `Connected to "${id}"\n\n<script src="${
+          window.location.origin
+        }/js/remote.js?${id}"></script>`
       );
     };
 
