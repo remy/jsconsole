@@ -66,7 +66,8 @@ function interpolate(...args) {
 class Console extends Component {
   constructor(props) {
     super(props);
-    this.state = (props.commands || []).reduce((acc, curr) => {
+    this.state = {};
+    this.state.lines = (props.commands || []).reduce((acc, curr) => {
       acc[getNext()] = curr;
       return acc;
     }, {});
@@ -77,12 +78,12 @@ class Console extends Component {
 
   push(command) {
     const next = getNext();
-    this.setState({ [next]: command });
+    const newLine = { [next]: command };
+    this.setState({ lines: Object.assign(this.state.lines, newLine) });
   }
 
   clear() {
-    this.state = {}; // eslint-disable-line react/no-direct-mutation-state
-    this.forceUpdate();
+    this.setState({ lines: {} });
   }
 
   error = (...rest) => {
@@ -147,7 +148,7 @@ class Console extends Component {
   }
 
   render() {
-    const commands = this.state || {};
+    const commands = this.state.lines || {};
     const keys = Object.keys(commands);
     if (this.props.reverse) {
       keys.reverse();
