@@ -208,11 +208,11 @@ export function preProcess(content) {
     else changes.push({ text: ')', start: last.end - 1, end: last.end - 1 });
   }
 
-  if (last.type === 'VariableDeclaration' && last.kind === 'const') {
-    additionalCode = `const ${last.declarations['0'].id.name} = $_`;
+  if (last.type === 'VariableDeclaration' && (last.kind === 'const' || last.kind === 'let')) {
+    additionalCode = `${last.kind} ${last.declarations['0'].id.name} = $_`;
 
     changes.push({
-      text: `const ${last.declarations['0'].id.name} = window.$_`,
+      text: `${last.kind} ${last.declarations['0'].id.name} = window.$_`,
       start: last.start,
       end: last.declarations['0'].id.end,
     });
