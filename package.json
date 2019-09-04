@@ -29,6 +29,7 @@
     "react-dom": "^15.6.1",
     "babylon-walk": "^1.0.2",
     "babylon": "^6.18.0",
+    "is-url": "^1.2.4",
     "lodash": "^4.17.4",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",

@@ -1,5 +1,6 @@
 /*global window EventSource fetch */
 import { getContainer } from './run';
+import isUrl from 'is-url';
 
 const version = process.env.REACT_APP_VERSION;
 const API = process.env.REACT_APP_API || '';
@@ -16,8 +17,7 @@ version: ${version}`,
 const help = () => ({
   value: `:listen [id] - starts remote debugging session
 :theme dark|light
-:load &lt;script_url&gt; load also supports shortcuts, like \`:load jquery\`
-:libraries
+:load &lt;script_url&gt; load also supports shortcuts to the default file of any npm package, like \`:load jquery\`
 :clear
 :history
 :about
@@ -34,18 +34,10 @@ const about = () => ({
   html: true,
 });
 
-const libs = {
-  jquery: 'https://code.jquery.com/jquery.min.js',
-  underscore: 'https://cdn.jsdelivr.net/underscorejs/latest/underscore-min.js',
-  lodash: 'https://cdn.jsdelivr.net/lodash/latest/lodash.min.js',
-  moment: 'https://cdn.jsdelivr.net/momentjs/latest/moment.min.js',
-  datefns: 'https://cdn.jsdelivr.net/gh/date-fns/date-fns/dist/date_fns.min.js',
-};
-
 const load = async ({ args: urls, console }) => {
   const document = getContainer().contentDocument;
   urls.forEach(url => {
-    url = libs[url] || url;
+    url = isUrl(url) ? url : `https://cdn.jsdelivr.net/npm/${url}`;
     const script = document.createElement('script');
     script.src = url;
     script.onload = () => console.log(`Loaded ${url}`);
@@ -53,15 +45,6 @@ const load = async ({ args: urls, console }) => {
     document.body.appendChild(script);
   });
   return 'Loading script…';
-};
-
-const libraries = () => {
-  return {
-    value: Object.keys(libs)
-      .map(name => `<strong>${name}</strong>: ${libs[name]}`)
-      .join('\n'),
-    html: true,
-  };
 };
 
 const set = async ({ args: [key, value], app }) => {
@@ -155,7 +138,6 @@ const listen = async ({ args: [id], console: internalConsole }) => {
 };
 
 const commands = {
-  libraries,
   help,
   about,
   load,
