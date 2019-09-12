@@ -37,7 +37,7 @@ const about = () => ({
 const load = async ({ args: urls, console }) => {
   const document = getContainer().contentDocument;
   urls.forEach(url => {
-    if (url === "datefns") url = "date-fns" // Backwards compatibility
+    if (url === "datefns") url = "date-fns"; // Backwards compatibility
     url = isUrl(url) ? url : `https://cdn.jsdelivr.net/npm/${url}`;
     const script = document.createElement('script');
     script.src = url;
