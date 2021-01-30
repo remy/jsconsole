@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import zip from 'lodash/zip';
 import flatten from 'lodash/flatten';
 import which from '../../lib/which-type';
+import {getContainer} from '../../lib/run';
+
+import ObjectType from './ObjectType';
 
 class ArrayType extends Component {
   constructor(props) {
@@ -23,7 +26,7 @@ class ArrayType extends Component {
   }
 
   render() {
-    const { value, shallow = true, filter = null } = this.props;
+    const { value, shallow = true, filter = null, allowOpen} = this.props;
     const { open } = this.state;
 
     let length = value.length;
@@ -34,6 +37,28 @@ class ArrayType extends Component {
           <em>Array</em>
           <span className="arb-info">({length})</span>
         </div>
+      );
+    }
+
+    if(getContainer().contentWindow.Array.prototype===value){
+      const object = Object.getOwnPropertyNames(value).reduce((acc, curr) => {
+        try{
+          acc[curr] = value[curr];
+        } 
+        catch(e){
+          console.log(e);
+        }
+        return acc;
+      }, {});
+      return(
+        <ObjectType
+          allowOpen={allowOpen}
+          type="object"
+          shallow={shallow}
+          open={open}
+          value={object}
+          displayName={'Array'}
+        />
       );
     }
 

@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
 
+import {getContainer} from '../../lib/run';
+
+import ObjectType from './ObjectType';
+
+
 class StringType extends Component {
   constructor(props) {
     super(props);
@@ -8,6 +13,7 @@ class StringType extends Component {
       value: props.value,
       multiline: props.value.includes('\n'),
       expanded: !props.shallow,
+      open: props.open
     };
     this.onToggle = this.onToggle.bind(this);
   }
@@ -21,12 +27,34 @@ class StringType extends Component {
   }
 
   render() {
-    const { bare = false, html = false } = this.props;
-    const { multiline, expanded } = this.state;
+    const { bare = false, shallow = true,html = false,allowOpen } = this.props;
+    const { multiline, expanded, open} = this.state;
     let { value } = this.state;
 
     if (multiline && !expanded) {
       value = value.replace(/\n/g, '↵');
+    }
+
+    if(getContainer().contentWindow.String.prototype===value){
+      const object = Object.getOwnPropertyNames(value).reduce((acc, curr) => {
+        try{
+          acc[curr] = value[curr];
+        } 
+        catch(e){
+          console.log(e);
+        }
+        return acc;
+      }, {});
+      return(
+        <ObjectType
+          allowOpen={allowOpen}
+          type="object"
+          shallow={shallow}
+          open={open}
+          value={object}
+          displayName={'String'}
+        />
+      );
     }
 
     const expand = (

@@ -40,7 +40,11 @@ class FunctionType extends Component {
     }
 
     const object = Object.getOwnPropertyNames(value).reduce((acc, curr) => {
-      acc[curr] = value[curr];
+      try {
+        acc[curr] = value[curr];
+      } catch (e) {
+        console.log(e);
+      }
       return acc;
     }, {});
 
