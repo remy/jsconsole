@@ -2,7 +2,7 @@
   "name": "@remy/jsconsole",
   "version": "2.1.2",
   "engines": {
-    "node": "8.x.x"
+    "node": "12.x.x"
   },
   "now": {
     "alias": "2.jsconsole.com"
