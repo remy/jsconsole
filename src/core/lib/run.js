@@ -1,5 +1,5 @@
 /*global document window */
-import { parse } from 'babylon';
+import { parse } from '@babel/parser';
 import * as walk from 'babylon-walk';
 
 import copy from 'copy-to-clipboard';
