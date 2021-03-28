@@ -1,0 +1,37 @@
+.Filter {
+  height: 1rem;
+  display: inline-block;
+}
+
+.Filter .inner {
+  border-radius: 20px;
+  display: inline-block;
+  border: 1px solid #2196F3;
+  background: white;
+  /*overflow: hidden;*/
+  padding-right: 1rem;
+  position: relative;
+  left: 1.75rem;
+  z-index: 0;
+  line-height: 1rem;
+}
+
+.Filter.is-hidden .inner {
+  display: none;
+}
+
+.Filter.is-visible .icon {
+  opacity: .99;
+  background-color: #2196F3;
+}
+
+.Filter input {
+  font-family: "Menlo", consolas, monospace;
+  color: #333;
+  width: 8rem;
+  outline: 0;
+  border: 0;
+  background: transparent;
+  padding: .25rem .5rem;
+  font-size: .75rem;
+}

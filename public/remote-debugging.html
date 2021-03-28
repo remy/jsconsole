@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset=utf-8 />
+<title>Remotely debugging mobile web apps</title>
+<style>
+  body {
+    max-width: 720px;
+    margin: 20px auto;
+    padding: 0 20px;
+    font: 1.0em/1.4em georgia, times;
+    color: #212112;
+  }
+
+  h1, h2 {
+    text-shadow: 0px 1px 5px #ddd;
+  }
+
+  h1 {
+    margin: 1em 0;
+  }
+
+  h2 {
+    margin-top: 1.4em;
+  }
+
+  p {
+    margin: 1.4em 0;
+  }
+
+  code {
+    font-size: 0.9em;
+  }
+
+  pre {
+    border: 1px dashed #ddd;
+    background: #f1f1f1;
+    padding: 0.8em;
+    overflow: auto;
+  }
+
+  iframe {
+    margin: 0 auto;
+    display: block;
+  }
+</style>
+</head>
+<body>
+<h1>Remotely debug a mobile web app</h1>
+<p><a href="/">jsconsole.com</a> is a simple JavaScript command line tool. However, it also provides the ability to bridge across to other browser windows to remotely control and debug that window - be it in another browser or another device altogether.</p>
+<p>In fact, mobile web app debugging is so damn tricky, that I gave up, and decided to build <em>this</em> very tool instead. See the <a href="#videos">videos examples</a> if you'd rather see this in action now.</p>
+
+<h2>Creating a session</h2>
+<p>To create a new session, in the jsconsole prompt, <a target="_blank" href="/?:listen">simply run</a>:</p>
+<pre><code>:listen</code></pre>
+<p>This will yield a unique key along the lines of <code>FAE031CD-74A0-46D3-AE36-757BAB262BEA</code>. Now using this unique key, include a <code>&lt;script&gt;</code> anywhere in the web app that you wish to debug:</p>
+<pre><code>&lt;script src=&quot;https://jsconsole.com/remote.js?FAE031CD-74A0-46D3-AE36-757BAB262BEA&quot;&gt;&lt;/script&gt;</code></pre>
+
+<p>Now any calls to <code>console.log</code> from your web app will display the result in the jsconsole session that is listening to your key. Equally, if you run a command in the jsconsole session, the code will injected in to your web app and the result returned to jsconsole.</p>
+
+<p>In addition to generating a new code with <code>:listen</code>, you can also ask jsconsole to listen to a predefined code (but for your own security, try to chose something unique that only you know):</p>
+
+<pre><code>:listen FAE031CD-74A0-46D3-AE36-757BAB262BEA</code></pre>
+
+<p>Now I can use the same remote key in my web app to avoid having to regenerate a new code each time. Note that only the last remote client (i.e. your web app) to connect to jsconsole will recieve remote debug calls - previous windows will be ignored.</p>
+
+<p>To know when the web app has connected, jsconsole will notify you by showing your the <code>userAgent</code> string for the device:</p>
+
+<pre><code>:listen FAE031CD-74A0-46D3-AE36-757BAB262BEA
+Creating connection...
+Connected to "FAE031CD-74A0-46D3-AE36-757BAB262BEA"
+Connection established with Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-GB; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8</code></pre>
+
+<h2>A word of warning</h2>
+<p>Note that this technique is also injecting code <em>directly</em> in to your web app - this tool should only be used for debugging. I can't take respibility for how you use this tool, basically: take care!</p>
+
+<h2>Current known support</h2>
+<p>Remote debugging has been developed to work on all platforms, even if the technology isn't supported. However, jsconsole remote debugging has specifically tested and working on the follow mobile devices (feel free to add to this list):</p>
+<ul>
+  <li>iOS 4.2.x - iPad, iPhone 4</li>
+  <li>Andriod 2.2.2 - Nexus One</li>
+  <li>webOS - Palm Pre</li>
+</ul>
+
+<h2 id="videos">Video exmaples</h2>
+
+<h3>Simple iOS simulator example</h3>
+<iframe title="YouTube video player" width="640" height="390" src="https://www.youtube.com/embed/Y219Ziuipvc?hd=1" frameborder="0" allowfullscreen></iframe>
+
+<h3>Full explanation and Android test</h3>
+<iframe title="YouTube video player" width="640" height="390" src="https://www.youtube.com/embed/DSH392Gxaho?hd=1" frameborder="0" allowfullscreen></iframe>
+
+
+
+</body>
+</html>

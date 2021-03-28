@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>_log</title>
+  <style>
+  * {
+    box-sizing: border-box;
+    font-family: menlo, monospace;
+    font-size: 14px;
+  }
+
+  html {
+    padding: 20px;
+    background: black;
+    color: #fefefe;
+  }
+
+  #log {
+    padding: 0
+  }
+
+  #log li {
+    list-style: none;
+    padding: 0 5px;
+    white-space: nowrap;
+    font-family: 11px Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
+  }
+
+  time {
+    color: #9e9e9e;
+    padding-left: 10px;
+  }
+  </style>
+</head>
+<body>
+<ul id="log"></ul>
+<script>
+const log = document.getElementById('log');
+const sse = new EventSource('/_log');
+
+sse.onmessage = function (event) {
+  const li = document.createElement('li');
+  const data = JSON.parse(event.data);
+  li.innerHTML = `<span class="txt">${data.txt}</span><time>${data.timestamp}</time>`;
+  log.appendChild(li);
+  // scroll
+};
+</script>
+</body>
+</html>

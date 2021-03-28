@@ -1,0 +1,9 @@
+.Autocomplete {
+  color: #BDBDBD;
+  z-index: -10;
+  position: absolute;
+}
+
+.Autocomplete .matching {
+  color: transparent;
+}

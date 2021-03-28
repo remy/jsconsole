@@ -1,0 +1,60 @@
+.type {
+  display: inline-block;
+  line-height: 1.2rem;
+  min-height: 1.2rem;
+}
+
+.type + .type {
+  margin-left: 0.75rem;
+}
+
+.type.object.closed .header,
+.type.object.closed .group,
+.type.object.closed .group > div {
+  display: inline;
+}
+
+.type.closed .type {
+  display: inline;
+}
+
+.string {
+  position: relative;
+  color: #4CAF50;
+  white-space: nowrap;
+}
+
+.string.quote:before,
+.string.quote:after {
+  content: '"';
+  color: #111;
+}
+
+.bareString.string {
+  color: #111;
+}
+
+.string.toggle {
+  white-space: normal;
+  white-space: pre-wrap;
+}
+
+.number {
+  color: #0000c0;
+}
+
+.bool {
+  color: #E91E63;
+}
+
+.function.function em {
+  color: #1976D2;
+}
+
+.undefined {
+  color: #aaa;
+}
+
+.null {
+  color: #9C27B0;
+}

@@ -1,0 +1,82 @@
+.LineNav {
+  position: absolute;
+  right: .25rem;
+  top: .5rem;
+  z-index: 10;
+  user-select: none;
+}
+
+.bottom .LineNav {
+  top: auto;
+  bottom: .5rem;
+}
+
+.icon {
+  user-select: none;
+  border: 0;
+  background: none;
+  overflow: hidden;
+  text-indent: -9999px;
+  display: inline-block;
+  border-radius: 2px;
+  width: 1rem;
+  height: 1rem;
+  margin: 0 0.25rem;
+  padding: 0;
+  vertical-align: top;
+  cursor: pointer;
+  opacity: 0.3;
+  border-radius: 100px;
+  padding: 12px;
+  background-color: #ddd;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 60%;
+  outline: none;
+  z-index: 10;
+}
+
+.icon:hover {
+  /*
+  opacity: 0.99 =
+    this is a hack because somehow `opacity: 1` sets the
+    layer order _below_ a previous element with a lesser
+    z-index. No idea why though, suspect specific to chrome.
+  */
+  opacity: 0.99;
+  background-color: #2196F3;
+  box-shadow: 0 0 4px 0px #2196F3;
+}
+
+.icon:active {
+  box-shadow: 0 0 0 1px #2196F3;
+}
+
+.icon.copy {
+  background-image: url(/copy.svg);
+}
+
+.icon.link {
+  background-image: url(/link.svg);
+}
+
+.icon.search {
+  background-image: url(/search.svg);
+}
+
+.icon.expand {
+  background-image: url(/expand.svg);
+  padding: 0;
+  background-color: transparent;
+  margin: 0;
+  margin-left: -0.5rem;
+  margin-top: 0.4rem;
+  background-size: contain;
+  height: 8px;
+  width: 8px;
+}
+
+.icon.expand:hover {
+  background-color: transparent;
+  box-shadow: none;
+}
