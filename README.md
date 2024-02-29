@@ -9,7 +9,7 @@ npm run build
 npm install serve
 serve -s build
 ~~~
-If you can't use the console without it unfocusing, then turn off Grammarly or go to incognito, if it is not fixed then open an issue, note that developers moved on and you might have to message them.
+If you can't use the console without it unfocusing, then turn off Grammarly or go to incognito, if it is not fixed then open an issue, note that developers may have moved on and you might have to message them.
 #
 ## helpers:
 -------
