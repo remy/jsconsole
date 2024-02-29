@@ -1,6 +1,6 @@
 - [ ] Remote send
 - [ ] Filter doesn't quite work (try on `window` and filter for `url`)
-- [ ] Autocomplete on input
+- [ ] Autocomplete on input (https://api.jqueryui.com/autocomplete/)
 - [ ] Expand objects should nest closet to left
 - [ ] Service worker
 - [ ] Tests
@@ -8,4 +8,4 @@
 - [x] Remote listen
 - [x] Fix history cycling
 - [x] Dark theme
-- [x] Start typing and it works (or ctrl+l when focus is lost)
+- [x] Start typing and it works (or ctrl+l when focus is lost) ((was grmmerly i think))
