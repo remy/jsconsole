@@ -160,7 +160,9 @@ class Console extends Component {
           e.stopPropagation(); // prevent the focus on the input element
         }}
       >
-        {keys.map(_ => <Line key={`line-${_}`} {...commands[_]} />)}
+        {keys.map(_ => (
+          <Line key={`line-${_}`} {...commands[_]} />
+        ))}
       </div>
     );
   }

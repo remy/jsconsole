@@ -78,11 +78,13 @@ class LineNav extends Component {
     const copyAs =
       typeof value === 'function'
         ? 'Copy function'
-        : copyAsHTML ? 'Copy as HTML' : 'Copy as JSON';
+        : copyAsHTML
+          ? 'Copy as HTML'
+          : 'Copy as JSON';
 
     return (
       <div className="LineNav">
-        {typeof value === 'object' &&
+        {typeof value === 'object' && (
           <Filter
             ref={e => (this.filter = e)}
             onFilter={onFilter}
@@ -91,8 +93,9 @@ class LineNav extends Component {
             <button onClick={this.toggleFilter} className="icon search">
               search
             </button>
-          </Filter>}
-        {command &&
+          </Filter>
+        )}
+        {command && (
           <a
             onClick={this.onPermalink}
             title="Permalink"
@@ -100,7 +103,8 @@ class LineNav extends Component {
             href={`?${escape(command)}`}
           >
             link
-          </a>}
+          </a>
+        )}
         <CopyToClipboard text={text}>
           <button
             title={copyAs}

@@ -13,8 +13,9 @@ import PromiseType from '../components/types/PromiseType';
 function whichType(value) {
   let type = '[object Object]';
   try {
-    type = ({}).toString.call(value);
-  } catch (e) { // only happens when typeof is protected (...randomly)
+    type = {}.toString.call(value);
+  } catch (e) {
+    // only happens when typeof is protected (...randomly)
   }
 
   if (type === '[object String]') {

@@ -208,7 +208,10 @@ export function preProcess(content) {
     else changes.push({ text: ')', start: last.end - 1, end: last.end - 1 });
   }
 
-  if (last.type === 'VariableDeclaration' && (last.kind === 'const' || last.kind === 'let')) {
+  if (
+    last.type === 'VariableDeclaration' &&
+    (last.kind === 'const' || last.kind === 'let')
+  ) {
     additionalCode = `${last.kind} ${last.declarations['0'].id.name} = $_`;
 
     changes.push({

@@ -23,10 +23,7 @@ class FunctionType extends Component {
     const code = Function.toString.call(value);
 
     // const native = code.indexOf('[native code') !== -1;
-    let sig = code
-      .substring(0, code.indexOf('{'))
-      .trim()
-      .replace(/\s/g, ' ');
+    let sig = code.substring(0, code.indexOf('{')).trim().replace(/\s/g, ' ');
 
     if (!sig) {
       // didn't match because it's an arrow func

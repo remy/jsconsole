@@ -26,7 +26,7 @@ class Line extends Component {
       error = false,
       open = false,
       html = false,
-      onFocus = () => { },
+      onFocus = () => {},
     } = this.props;
 
     let line = null;

@@ -141,7 +141,8 @@ class ArrayType extends Component {
 
             return null;
           })}
-        </div>]
+        </div>
+        ]
       </div>
     );
   }
