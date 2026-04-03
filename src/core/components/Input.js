@@ -69,6 +69,33 @@ class Input extends Component {
 
     const command = this.input.value;
 
+    if (code === 'tab') {
+      e.preventDefault();
+      const el = this.input;
+      const start = el.selectionStart;
+      const value = el.value;
+      const lineStart = value.lastIndexOf('\n', start - 1) + 1;
+
+      let newValue, newCursor;
+      if (e.shiftKey) {
+        const spaces = value.slice(lineStart).match(/^ {1,4}/);
+        if (spaces) {
+          newValue = value.slice(0, lineStart) + value.slice(lineStart + spaces[0].length);
+          newCursor = Math.max(lineStart, start - spaces[0].length);
+        } else {
+          return; // nothing to unindent
+        }
+      } else {
+        newValue = value.slice(0, lineStart) + '    ' + value.slice(lineStart);
+        newCursor = start + 4;
+      }
+
+      this.setState({ value: newValue }, () => {
+        el.selectionStart = el.selectionEnd = newCursor;
+      });
+      return;
+    }
+
     if (code === 'enter') {
       if (e.shiftKey) {
         return;
