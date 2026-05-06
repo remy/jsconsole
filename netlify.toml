@@ -5,7 +5,7 @@ publish = "dist"
 
 [build.environment]
 # Ensures the environment prioritizes Node.js
-NODE_VERSION = "24"
+NODE_VERSION = "22"
 
 # This tells the build system to skip installing any
 # Ruby/Python/PHP dependencies if they happen to be present
