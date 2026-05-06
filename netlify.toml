@@ -1,0 +1,19 @@
+[build]
+# Specify your build command and directory
+command = "npm run build"
+publish = "dist"
+
+[build.environment]
+# Ensures the environment prioritizes Node.js
+NODE_VERSION = "24"
+
+# This tells the build system to skip installing any
+# Ruby/Python/PHP dependencies if they happen to be present
+NETLIFY_SKIP_RUBY_INSTALL = "true"
+NETLIFY_SKIP_PYTHON_INSTALL = "true"
+NETLIFY_SKIP_PHP_INSTALL = "true"
+NETLIFY_DISABLE_NEON = "true"
+
+[functions]
+# Ensures functions are bundled specifically for the Node runtime
+node_bundler = "esbuild"
