@@ -37,7 +37,7 @@ const about = () => ({
 const load = async ({ args: urls, console }) => {
   const document = getContainer().contentDocument;
   urls.forEach(url => {
-    if (url === "datefns") url = "date-fns"; // Backwards compatibility
+    if (url === 'datefns') url = 'date-fns'; // Backwards compatibility
     url = isUrl(url) ? url : `https://cdn.jsdelivr.net/npm/${url}`;
     const script = document.createElement('script');
     script.src = url;
@@ -101,8 +101,7 @@ const listen = async ({ args: [id], console: internalConsole }) => {
     const sse = new EventSource(`${API}/remote/${id}/log`);
     sse.onopen = () => {
       resolve(
-        `Connected to "${id}"\n\n<script src="${
-          window.location.origin
+        `Connected to "${id}"\n\n<script src="${window.location.origin
         }/js/remote.js?${id}"></script>`
       );
     };
@@ -132,7 +131,7 @@ const listen = async ({ args: [id], console: internalConsole }) => {
       }
     };
 
-    sse.onclose = function() {
+    sse.onclose = function () {
       internalConsole.log('Remote connection closed');
     };
   });
