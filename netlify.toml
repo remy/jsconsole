@@ -1,11 +1,11 @@
 [build]
 # Use the flag suggested in your error log
-command = "npm install --legacy-peer-deps && npm run build"
+command = "npm install --force && npm run build"
 publish = "dist"
 
 [build.environment]
 # Ensures the environment prioritizes Node.js
-NODE_VERSION = "22"
+NODE_VERSION = "24"
 
 # This tells the build system to skip installing any
 # Ruby/Python/PHP dependencies if they happen to be present
