@@ -1,6 +1,6 @@
 [build]
-# Specify your build command and directory
-command = "npm run build"
+# Use the flag suggested in your error log
+command = "npm install --legacy-peer-deps && npm run build"
 publish = "dist"
 
 [build.environment]
