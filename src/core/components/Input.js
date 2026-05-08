@@ -39,7 +39,8 @@ class Input extends Component {
 
     if (e.ctrlKey && code === 'l') {
       this.props.onClear();
-      return;
+      e.preventDefault();
+      return false;
     }
 
     if (!multiline) {
